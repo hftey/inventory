@@ -1,0 +1,146 @@
+/* This CSS document contains effects for the slide-out menu */
+
+/* Effect 1: Reveal */
+.st-effect-1.reveal-hidden-menu .wrapper {
+  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(250px, 0, 0);
+}
+
+.st-effect-1.hidden-menu {
+  z-index: 1;
+}
+
+.st-effect-1.reveal-hidden-menu .st-effect-1.hidden-menu {
+  visibility: visible;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+}
+
+.st-effect-1.hidden-menu::after {
+  display: none;
+}
+
+/* Effect 2: Push*/
+.st-effect-2.reveal-hidden-menu .wrapper {
+  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(250px, 0, 0);
+}
+
+.st-effect-2.hidden-menu {
+  -webkit-transform: translate3d(-100%, 0, 0);
+  transform: translate3d(-100%, 0, 0);
+}
+
+.st-effect-2.reveal-hidden-menu .st-effect-2.hidden-menu {
+  visibility: visible;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+}
+
+.st-effect-2.hidden-menu::after {
+  display: none;
+}
+
+/* Effect 3: Slide along */
+.st-effect-3.reveal-hidden-menu .wrapper {
+  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(250px, 0, 0);
+}
+
+.st-effect-3.hidden-menu {
+  z-index: 1;
+  -webkit-transform: translate3d(-50%, 0, 0);
+  transform: translate3d(-50%, 0, 0);
+}
+
+.st-effect-3.reveal-hidden-menu .st-effect-3.hidden-menu {
+  visibility: visible;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+.st-effect-3.hidden-menu::after {
+  display: none;
+}
+
+/* Effect 4: Reverse slide */
+.st-effect-4.reveal-hidden-menu .wrapper {
+  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(250px, 0, 0);
+}
+
+.st-effect-4.hidden-menu {
+  z-index: 1;
+  -webkit-transform: translate3d(50%, 0, 0);
+  transform: translate3d(50%, 0, 0);
+}
+
+.st-effect-4.reveal-hidden-menu .st-effect-4.hidden-menu {
+  visibility: visible;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+/* Effect 5: Scale up */
+.st-effect-5.main-container {
+  -webkit-perspective: 1500px;
+  perspective: 1500px;
+  -webkit-perspective-origin: 0% 50%;
+  perspective-origin: 0% 50%;
+}
+
+.st-effect-5.reveal-hidden-menu .wrapper {
+  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(250px, 0, 0);
+}
+
+.st-effect-5.hidden-menu {
+  z-index: 1;
+  opacity: 1;
+  -webkit-transform: translate3d(0, 0, -250px);
+  transform: translate3d(0, 0, -250px);
+}
+
+.st-effect-5.reveal-hidden-menu .st-effect-5.hidden-menu {
+  visibility: visible;
+  -webkit-transition: -webkit-transform 0.5s;
+  transition: transform 0.5s;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+}
+
+/* Effect 6: Push down */
+.st-effect-6.main-container {
+  -webkit-perspective: 1500px;
+  perspective: 1500px;
+  -webkit-perspective-origin: 0% 50%;
+  perspective-origin: 0% 50%;
+}
+
+.st-effect-6.reveal-hidden-menu .wrapper {
+  -webkit-transform: translate3d(250px, 0, 0);
+  transform: translate3d(250px, 0, 0);
+}
+
+.st-effect-6.hidden-menu {
+  z-index: 1;
+  opacity: 1;
+  -webkit-transform: translate3d(0, -100%, 0);
+  transform: translate3d(0, -100%, 0);
+}
+
+.st-effect-6.reveal-hidden-menu .st-effect-6.hidden-menu {
+  visibility: visible;
+  -webkit-transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in-out;
+  -webkit-transition-property: -webkit-transform;
+  transition-property: transform;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transition-speed: 0.2s;
+  transition-speed: 0.2s;
+}

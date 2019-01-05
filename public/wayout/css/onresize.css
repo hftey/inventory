@@ -1,0 +1,44 @@
+/* CSS Document for Full-width navigation styles ON WINDOW RESIZE. */
+/* This is required in order to prevent ugly view of elements on smaller window sizes when browser is resized. */
+
+.top-nav-mega-full-width, .top-nav-mega-full-width p {
+  font-size: 10px;
+}
+
+.top-nav-mega-full-width h1 {
+  font-size: 20px;
+}
+
+.top-nav-mega-full-width h2 {
+  font-size: 17px;
+}
+
+.top-nav-mega-full-width h3 {
+  font-size: 16px;
+}
+
+.top-nav-mega-full-width h4 {
+  font-size: 15px;
+}
+
+.product-category h4, .product-category h4 a {
+  font-size: 12px;
+  line-height:12px;
+}
+
+.top-nav-mega-full-width h5 {
+  font-size: 14px;
+}
+
+.top-nav-mega-full-width .span2 {
+  margin: 0px;
+  margin-left: 5px;
+}
+
+.top-nav-mega-full-width h6 {
+  font-size: 13px;
+}
+
+#search-container {
+  right: 3.5%;
+}

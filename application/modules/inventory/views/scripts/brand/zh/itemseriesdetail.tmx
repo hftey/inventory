@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="Home">
+      <tuv xml:lang="ar">
+        <seg>منزل</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Inventory">
+      <tuv xml:lang="ar">
+        <seg>جرد</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Purchase Orders">
+      <tuv xml:lang="ar">
+        <seg>أوامر الشراء</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Administration">
+      <tuv xml:lang="ar">
+        <seg>إدارة</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Listing">
+      <tuv xml:lang="ar">
+        <seg>قائمة</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Manage">
+      <tuv xml:lang="ar">
+        <seg>إدارة</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Brands">
+      <tuv xml:lang="ar">
+        <seg>علامة تجارية</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Item Listing">
+      <tuv xml:lang="ar">
+        <seg>قائمة البند</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Create PO">
+      <tuv xml:lang="ar">
+        <seg>خلق</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="PO Listing">
+      <tuv xml:lang="ar">
+        <seg>قائمة</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="Administration">
+      <tuv xml:lang="ar">
+        <seg>إدارة</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="User Management">
+      <tuv xml:lang="ar">
+        <seg>إدارة المستخدم</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Settings">
+      <tuv xml:lang="ar">
+        <seg>إعدادات</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Branches">
+      <tuv xml:lang="ar">
+        <seg>الفروع</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Vendors">
+      <tuv xml:lang="ar">
+        <seg>الباعة</seg>
+      </tuv>
+    </tu>
+	
+    <tu tuid="Log Out">
+      <tuv xml:lang="ar">
+        <seg>خروج</seg>
+      </tuv>
+    </tu>	
+    <tu tuid="You are logged in as">
+      <tuv xml:lang="ar">
+        <seg>قمت بتسجيل الدخول في النحو</seg>
+      </tuv>
+    </tu>
+	
+	    <tu tuid="Last login was">
+      <tuv xml:lang="ar">
+        <seg>وكان آخر زيارة</seg>
+      </tuv>
+    </tu>
+	
+	    <tu tuid="You can change your password by using the form below">
+      <tuv xml:lang="ar">
+        <seg>يمكنك تغيير كلمة المرور الخاصة بك باستخدام النموذج التالي</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="Change Password">
+      <tuv xml:lang="ar">
+        <seg>تغيير كلمة المرور</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="Confirm Password">
+      <tuv xml:lang="ar">
+        <seg>تأكيد كلمة المرور</seg>
+      </tuv>
+    </tu>
+	
+	
+		<tu tuid="New Password">
+      <tuv xml:lang="ar">
+        <seg>كلمة المرور الجديدة</seg>
+      </tuv>
+    </tu>
+	
+	
+	
+  </body>
+</tmx>

@@ -1,0 +1,59 @@
+
+
+<script language='Javascript'>
+
+
+$(document).ready(function() { 
+
+
+$('#OrderID').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target',offsetY: 10, offsetX: 1, alignX: 'inner-left', showTimeout: 100});
+$('#ItemID').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#SeriesNumber').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+
+$('#search_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#clear').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+
+
+
+function OnDeleteItem(item_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove this item?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){ 
+			if(v){
+				document.location='/inventory/brand/item/remove_item/'+item_id;
+			}
+		}
+	  
+	});
+}
+
+})
+
+
+
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_('Inventory > Manage > Item Series')?></B><BR>
+
+<form enctype="multipart/form-data"  action='/inventory/brand/itemseries' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD colspan=2 ><B><?=$this->translate->_("Item's Series")?></B></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Purchase Orders')?></TD><TD class='form_field' valign=bottom> <select name='OrderID' id='OrderID' title="Purchase Orders."><option value=''>-<?=$this->optionPO?></select></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Branch')?><font class='required'>*</font></TD><TD class='form_field' valign=bottom> <select name='BranchID' id='BranchID' title=""><option value=''>-</option><?=$this->optionBranches?></select></TD></TR>
+
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Items')?></TD><TD class='form_field'><select name='ItemID' id='ItemID' title="Items."><option value=''>-<?=$this->optionItems?></select></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Series Number')?></TD><TD class='form_field'><input type='text' name='SeriesNumber' id='SeriesNumber' size="35" value='<?=$this->SeriesNumber?>' title="<?=$this->translate->_("Item's series number")?>."></TD></TR>
+		<TR><TD colspan=2 height=10px></TD></TR>
+
+		<TR><TD colspan=2>
+		<input type=submit name='search_series' id='search_series' value='<?=$this->translate->_('Search')?>' title='<?=$this->translate->_('Click to search for the item series')?>.'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/inventory/brand/itemseries/clear_search/1"'  title='<?=$this->translate->_('Clear all the inputs above')?>.'> | 
+		<input type=button name='add_series' id='add_series' value='<?=$this->translate->_('Add New Item Series')?>' title='<?=$this->translate->_('Add new series for this item')?>'  onclick='document.location="/inventory/brand/itemseriesdetail/f/series/add_series/1"'>		
+		
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_item?>
+<BR><BR><BR>

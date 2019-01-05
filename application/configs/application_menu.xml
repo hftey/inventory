@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<navigation>
+		<home>
+			<label>Home</label>
+			<uri>/</uri>
+			<id>home-link</id>
+			<order>1</order>
+		</home>
+		<brand>
+			<label>Inventory</label>
+			<img>/images/icons/IconYes.gif</img>
+			<uri>/#</uri>
+			<order>2</order>
+			<pages>
+				<flow>
+					<label>Flow</label>
+					<uri>/inventory/brand/flow</uri>
+				</flow>
+				<manage>
+					<label>Manage</label>
+					<uri>#</uri>
+					<pages>
+						<brand>
+							<label>Brands</label>
+							<uri>/inventory/brand</uri>
+						</brand>
+						<item>
+							<label>Item Listing</label>
+							<uri>/inventory/brand/item</uri>
+						</item>						
+						<itemseries>
+							<label>Item Series</label>
+							<uri>/inventory/brand/itemseries</uri>
+						</itemseries>
+					</pages>
+				</manage>
+			
+			
+
+				
+			</pages>
+		</brand>		
+		<po>
+		<label>Purchase Orders</label>
+		<uri>/#</uri>
+			<order>3</order>
+		<pages>
+			<brand>
+				<label>Create PO</label>
+				<uri>/inventory/po</uri>
+			</brand>
+			<products>
+				<label>PO Listing</label>
+				<uri>/inventory/po/listing</uri>
+			</products>						
+			
+			
+		</pages>
+	</po>	
+
+		<admin>
+			<label>Administration</label>
+			<uri>/#</uri>
+			<order>4</order>
+			<pages>
+				
+				<user>
+					<label>User Management</label>
+					<uri>/admin/acl/users</uri>
+				</user>
+									
+				<branches>
+					<label>Branches</label>
+					<uri>/admin/system/branches</uri>
+				</branches>			
+				
+				<vendors>
+					<label>Vendors</label>
+					<uri>/admin/system/vendors</uri>
+				</vendors>
+				
+
+			</pages>
+		</admin>
+		<Logout>
+			<label>Logout</label>
+			<uri>/auth/index/authlogout</uri>
+			<id>logout-link</id>
+			<order>5</order>
+		</Logout>
+	</navigation>
+</config>
+
+
+
+

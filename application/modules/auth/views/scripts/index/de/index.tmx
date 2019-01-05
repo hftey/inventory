@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="content">
+      <tuv xml:lang="de">
+        <seg>Ich liebe dich</seg>
+      </tuv>
+    </tu>
+    <tu tuid="content2">
+      <tuv xml:lang="de">
+        <seg>Um die Liebe ist das Risiko nicht wieder geliebt. Zu hoffen ist, um Schmerzen Risiko. Um zu versuchen, ist zum Scheitern Risiko, aber Risiken zu achten, weil die größte Gefahr im Leben ist, nichts riskieren werden.</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>

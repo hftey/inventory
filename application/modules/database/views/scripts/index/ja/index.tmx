@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="content">
+      <tuv xml:lang="ja">
+        <seg>愛しています</seg>
+      </tuv>
+    </tu>
+    <tu tuid="content2">
+      <tuv xml:lang="ja">
+        <seg>愛することはリターンで愛されていないリスクになります。希望するには、痛みを危険にさらすことです。試すには、失敗を危険にさらすことですが、人生で最も大きな危険は何も恐れがないことですので、リスクを払う必要があります。</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>

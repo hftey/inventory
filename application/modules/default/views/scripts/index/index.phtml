@@ -1,0 +1,62 @@
+<B class='PageHeader'><img src='/images/Exact-Logo.png'><?=$this->translate->_('Inventory System: Main Page')?></B><BR>
+<HR>
+<table border=0 width=1200px>
+<TR><TD width="230px"><img src='/images/main_inventory.png'></TD><TD width="170px" align=center valign=top><B class='PageHeader'><?=$this->translate->_('Inventory')?></B>
+	<HR>
+	<li><a href='/inventory/brand/flow'><?=$this->translate->_('Inventory listing')?></a></li>
+	<? 
+	$sessionUsers = new Zend_Session_Namespace('sessionUsers');	
+
+	$menuManageAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_manage", "view");
+	if ($menuManageAllow) {
+	?>
+	<li><a href='/inventory/brand'><?=$this->translate->_('Create brands')?></a></li>
+	<li><a href='/inventory/brand/item'><?=$this->translate->_('Manage items')?></a></li>
+	<li><a href='/inventory/brand/itemseries'><?=$this->translate->_('Manage item series')?></a></li>
+	<? } ?>
+</TD>
+<TD width="230px">
+	<?
+	$menuAdminAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_po", "view");
+	if ($menuAdminAllow) {?>
+	<img src='/images/purchase_orders.png'></TD><TD width="170px" valign=top><B class='PageHeader'><?=$this->translate->_('Purchase Orders')?></B><BR>
+	<HR>
+	<?
+	$menuPOCreateAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_po_create", "view");
+	if ($menuPOCreateAllow) {?>
+	<li><a href='/inventory/po'><?=$this->translate->_('Create purchase orders')?> </li>
+	<? } ?>
+	<li><a href='/inventory/po/listing'><?=$this->translate->_('Purchase orders listing')?></a></li>
+	<? } ?>
+</TD>
+<TD width="230px">
+	<?
+	$menuAdminAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_sales_order", "view");
+	if ($menuAdminAllow) {?>
+	<img src='/images/sales_orders.png'></TD><TD width="170px" valign=top><B class='PageHeader'><?=$this->translate->_('Sales Order')?></B><BR>
+	<HR>
+
+	<li><a href='/inventory/so'><?=$this->translate->_('Create sales orders')?> </li>
+	<li><a href='/inventory/so/listing'><?=$this->translate->_('Sales orders listing')?></a></li>
+	<? } ?>
+</TD>
+</TR>
+<?
+$menuAdminAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_admin", "view");
+if ($menuAdminAllow) {?>
+<TR><TD width="230px"><img src='/images/administration.png'></TD><TD width="170px" valign=top><B class='PageHeader'><?=$this->translate->_('Administration')?></B><BR>
+<HR>
+<? 
+$menuAdminAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_user_management", "view");
+if ($menuAdminAllow) {?>
+<li><a href='/admin/acl/users'><?=$this->translate->_('Manage system users account')?></a></li>
+<? } ?>
+<li><a href='/admin/system/branches'><?=$this->translate->_('Manage list of branches')?></a> </li>
+<li><a href='/admin/system/vendors'><?=$this->translate->_('Manage list of vendors')?></a> </li>
+
+</TD>
+</TR>
+<? } ?>
+</table>
+
+

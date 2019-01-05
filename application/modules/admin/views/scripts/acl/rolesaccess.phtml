@@ -1,0 +1,109 @@
+
+<script language='Javascript'>
+
+function OnDeleteRolesaccess(rolesaccess_id){
+	$.prompt(
+		"<?=$this->translate->_("Are you sure you want to remove the role's access?")?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){
+					if(v){
+						document.location='/admin/acl/rolesaccess/remove_rolesaccess/'+rolesaccess_id;
+					}
+				  }
+	});
+}
+
+
+
+$(document).ready(function() {   
+
+	$('#add_rolesaccess').click(function () {
+	
+
+        if ($('#Role').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select a Role')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Resources').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select a Resources')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Priviledges').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select a Priviledges')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Access').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select access')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+
+		return true;
+	});
+	
+	$('#save_rolesaccess').click(function () {
+        if ($('#Role').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select a Role')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Resources').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select a Resources')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Priviledges').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select a Priviledges')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Access').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please select access')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+	
+		return true;
+	});	
+});   
+</script>
+
+<form action='/admin/acl/rolesaccess' method=POST>
+	<table border=0 cellspacing=0 cellpadding=0>
+		<TR><TD colspan=2><B><?=$this->translate->_("Add New Role's Access")?></B></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Roles')?>*:</TD><TD class='form_field'>
+			<SELECT name='Role' id='Role'>
+			<option value=''>-
+			<?=$this->optionsRole?>
+			</SELECT>
+			</TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Resources')?>*:</TD><TD class='form_field'>
+			<SELECT name='Resources' id='Resources'>
+			<option value=''>-
+			<?=$this->optionsResources?>
+			</SELECT>
+
+		</TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Priviledges')?>*:</TD><TD class='form_field'>
+			<SELECT name='Priviledges' id='Priviledges'>
+			<option value=''>-
+			<?=$this->optionsPriviledges?>
+			</SELECT>
+		
+		</TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Access')?>*:</TD><TD class='form_field'>
+			<SELECT name='Access' id='Access'>
+			<?=$this->optionsAccess?>
+			</SELECT>
+		
+		</TD></TR>
+		<TR><TD colspan=2>
+		*<?=$this->translate->_("Required when add a new roles's access")?><BR>
+		<input type=submit name='search_rolesaccess' id='search_rolesaccess' value='<?=$this->translate->_('Search')?>'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/acl/rolesaccess"'>	|
+		<?if ($this->edit_rolesaccess) { ?>
+		<input type=submit name='save_rolesaccess' id='save_rolesaccess' value='<?=$this->translate->_('Save')?>'>
+		<input type=hidden name='save_rolesaccess_id' value='<?=$this->edit_rolesaccess?>'>		
+		<? } else {?>
+		<input type=submit name='add_rolesaccess' id='add_rolesaccess' value='<?=$this->translate->_('Add')?>'>
+		<? } ?>
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_rolesaccess?>
+<BR><BR><BR>

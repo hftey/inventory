@@ -1,0 +1,342 @@
+/* A Free Design by Bryant Smith (bryantsmith.com) */
+
+
+
+body {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+	font: 12px Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	background-image:url(images/background.png);
+	background-repeat:repeat-x;
+}
+*
+{
+ text-align:left;}
+
+#container
+{
+  display: block; 
+  height:auto;
+  position: relative; 
+  
+  margin: 0 auto 0 auto;
+}
+
+
+#header
+{
+margin:0px;
+height:85px;
+width:960px;	
+}
+
+#header h1
+{
+	position:absolute;
+text-align:left;
+color:#FFFFFF;
+font-size:43px;
+color:#FFF;	
+left:14px;
+top:18px;
+}
+
+
+#header h2
+{
+position:absolute;
+text-align:right;
+color:#A9D1FA;
+left:490px;
+top:38px;
+width:400px;
+}
+
+#mainpic
+{
+background-image:url(images/main.jpg);
+background-repeat:no-repeat;
+width:900px;
+height:354px;	
+}
+
+
+
+.off
+{
+color:#67A0F5;
+}
+
+
+
+#content
+{
+display:block;
+float:left;
+width:1689px;
+height:auto;
+padding-left:10px;
+padding-top:15px;
+padding-right:10px;
+padding-bottom:5px;
+}
+
+
+#content_top
+{
+	width:auto;
+	height:2px;
+}
+
+
+
+#content_main
+{
+padding-top: 10px;
+padding-bottom: 10px;
+background-repeat:repeat-y;
+width:auto;
+padding-left:10px;
+padding-right:10px;
+background-color: white;
+} 
+
+div#content_main h3 { margin: 0px;}
+
+#content_bottom
+{
+border-bottom-right-radius: 15px;
+background-repeat:no-repeat;
+width:auto;
+	height:15px;
+	margin:0px;
+}
+
+
+
+
+
+
+
+
+#footer
+{
+width:inherit;
+height:auto;
+}
+
+#footer h3 a,#footer h3 a:visited
+{
+display:block;
+text-align:center;
+font-size:12px;
+text-decoration:none;
+color:#7198E1;
+}
+
+.required
+{
+	color: #d96c74;
+}
+
+
+a {text-decoration: none;}
+
+
+h1, h2, h3 {margin: 0px;}
+
+html, body {
+text-align: center;
+}
+p {text-align: left;}
+
+input, select {
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+
+/* FORMS */
+TABLE.form_table {
+	border:0;
+}
+
+TABLE.form_table TD.form_blank{
+	border:0;
+	
+	border-bottom: 0;
+}
+
+TD.form_field{
+	padding-left: 5px;
+		border-left: 1px solid #DDD;
+	border-right: 1px solid #DDD;
+	border-bottom: 1px solid #DDD;
+	border-top: 1px solid #DDD;
+	background: #EFEFEF;
+	padding: 3px 45px 3px 5px
+}
+
+
+TD.form_label {
+	font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+	sans-serif;
+	letter-spacing: 1px;
+	color: #6D6D6D;
+	border-left: 1px solid #C1DAD7;
+	border-right: 1px solid #C1DAD7;
+	border-bottom: 1px solid #C1DAD7;
+	border-top: 1px solid #C1DAD7;
+	text-align: left;
+	padding: 6px 2px 6px 4px;
+	background: #CAE8EA url(/images/table/bg_header.jpg) no-repeat;
+}
+
+
+/* Login Containers */
+#login-container-main {
+
+  right: 3.5%;
+  width: 280px;
+  height:250px;
+  padding:20px;
+  background:#DDF0F9;
+  background: rgba(221, 240, 249, 1);
+  border:1px solid #2AA4CF;
+  border-top: none;
+  -webkit-border-bottom-right-radius: 4px;
+  -webkit-border-bottom-left-radius: 4px;
+  -moz-border-radius-bottomright: 4px;
+  -moz-border-radius-bottomleft: 4px;
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  transition: all 0.6s ease;
+  -moz-box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
+  -webkit-box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
+  box-shadow: inset 0px 0px 10px rgba(0,0,0,0.5);
+  z-index:2;
+}
+
+#login-container-main p {
+  transition-delay: 0.6s;
+}
+
+
+
+#login-container-main.login-effect {
+  visibility: visible;
+  top:44px;
+}
+
+#login-container-main form input[type="text"]{
+  background:transparent url(/wayout/img/login-username.png);
+  background-repeat: no-repeat;
+  width:240px;
+  height:40px;
+  border:none;
+  outline:none;
+  padding-left:60px;
+  color:#F2F2F2;
+  font-size:16px;
+}
+
+#login-container-main form input[type="text"]:focus,#login-container form input[type="password"]:focus{
+  border:none;
+  outline:none;	
+}
+
+#login-container-main form input[type="password"]{
+  background:transparent url(/wayout/img/login-password.png);
+  background-repeat: no-repeat;
+  width:240px;
+  height:40px;
+  border:none;
+  outline:none;
+  padding-left:60px;
+  color:#F2F2F2;
+  font-size:16px;
+  margin-top:10px;
+}
+
+#login-container-main form input:active{
+  border: 1px solid #248CB1;
+}
+
+#login-container-main form button{
+  width: 240px; height:40px; border:none; outline:none;
+  background: #2aa4cf;
+  border-radius: 5px;
+  color:#FFF;
+  font-size:20px;
+  transition: all 0.6s ease;
+  text-align:center;
+}
+
+#login-container-main form button:hover{
+  border:none; outline:none;
+  background: #57bcdd;
+}
+
+.PageHeader
+{
+	font-size: 22px;
+	 font-family: Helvetica, Sans-Serif;
+	 text-shadow: 2px 2px #DEDEDE;
+	 display:block;
+
+}
+
+input[type=button], input[type=submit] {
+	-moz-box-shadow:inset 0px 1px 0px 0px #dcecfb;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #dcecfb;
+	box-shadow:inset 0px 1px 0px 0px #dcecfb;
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #6fd9fc), color-stop(1, #50b7dc));
+	background:-moz-linear-gradient(top, #6fd9fc 5%, #50b7dc 100%);
+	background:-webkit-linear-gradient(top, #6fd9fc 5%, #50b7dc 100%);
+	background:-o-linear-gradient(top, #6fd9fc 5%, #50b7dc 100%);
+	background:-ms-linear-gradient(top, #6fd9fc 5%, #50b7dc 100%);
+	background:linear-gradient(to bottom, #6fd9fc 5%, #50b7dc 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#6fd9fc', endColorstr='#50b7dc',GradientType=0);
+	background-color:#6fd9fc;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #50b7dc;
+	display:inline-block;
+	cursor:pointer;
+	color:#ffffff;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:6px 24px;
+	text-decoration:none;
+	text-shadow:0px 1px 0px #50b7dc;
+	padding: 3px 12px 3px 12px;
+}
+input[type=button]:hover {
+	background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #50b7dc), color-stop(1, #6fd9fc));
+	background:-moz-linear-gradient(top, #50b7dc 5%, #6fd9fc 100%);
+	background:-webkit-linear-gradient(top, #50b7dc 5%, #6fd9fc 100%);
+	background:-o-linear-gradient(top, #50b7dc 5%, #6fd9fc 100%);
+	background:-ms-linear-gradient(top, #50b7dc 5%, #6fd9fc 100%);
+	background:linear-gradient(to bottom, #50b7dc 5%, #6fd9fc 100%);
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#50b7dc', endColorstr='#6fd9fc',GradientType=0);
+	background-color:#50b7dc;
+}
+input[type=button]:active {
+	position:relative;
+	top:1px;
+}
+
+input[type=button]:disabled , input[type=submit]:disabled  {
+	color: silver;
+	background:#6fd9fc;
+}
+input[type=radio]{
+	padding-right: 15px;
+	margin-right: 15px;
+}
+
+

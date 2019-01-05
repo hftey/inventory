@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="content">
+      <tuv xml:lang="zh">
+        <seg>我爱你</seg>
+      </tuv>
+    </tu>
+    <tu tuid="content2">
+      <tuv xml:lang="zh">
+        <seg>爱是风险没有回报的喜爱。希望是风险疼痛。尝试是面临失败的危险，但因为生活中的最大危险是没有风险，必须采取风险。</seg>
+      </tuv>
+    </tu>	
+  </body>
+</tmx>
