@@ -353,4 +353,40 @@ UPDATE PromoterOutlet SET DateEnd='2020-08-31' WHERE DateEnd='0000-00-00';
 /* Mar 11, 2018  */
 ALTER TABLE `Branches` Add `Code` varchar(16) DEFAULT NULL;
 
+/* ************************************************************** */
+/* Jan 07, 2019 */
+CREATE TABLE IF NOT EXISTS `RentalAsset` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `ItemSeriesID` int(12) NOT NULL,
+  `POItemsID` int(12) DEFAULT NULL,
+  `DateAsAsset` datetime NOT NULL,
+  `AssetInitialValue` float(10,2) DEFAULT NULL,
+  `AssetCurrentValue` float(10,2) DEFAULT NULL,
+  `RentalStatus` varchar(64) DEFAULT 'available',
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE IF NOT EXISTS `RentalAssetStatus` (
+  `ID` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `RentalAssetID` int(12) NOT NULL,
+  `StatusDate` date DEFAULT NULL,
+  `RentalStatus` varchar(64) DEFAULT 'available',
+  `UserIDEntry` int(11) default NULL,
+  `EntryDateTime` datetime default NULL,
+  `UserIDResp` int(11) default NULL,
+  `ClientID` int(11) default NULL,
+  `ClientName` varchar(128) default NULL,
+  `Notes` varchar(1024) default NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+
+ALTER TABLE `RentalAssetStatus` ADD `ReferenceNo` varchar(36) default NULL;
+ALTER TABLE `RentalAssetStatus` ADD `EstimatedReturnDate` date default NULL;
+ALTER TABLE `RentalAssetStatus` ADD `ActualReturnDate` date default NULL;
+
+
+ALTER TABLE `Item` ADD `MonthDepreciation` int(2) default NULL;
+
 

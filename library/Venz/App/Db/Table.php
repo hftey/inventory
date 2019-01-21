@@ -43,16 +43,20 @@ class Venz_App_Db_Table extends Zend_Db_Table_Abstract
 		return $option_string;
    }
    
-	public function getSystemOptions($table, $defaultValue = null)
+	public function getSystemOptions($table, $defaultValue = null, $arrShow = [])
    {
    
 		$systemSetting = new Zend_Session_Namespace('systemSetting');
-		$systemSetting->$table;
+		$arrTable = $systemSetting->$table;
+
+       if ($arrShow){
+           $arrTable = array_filter($systemSetting->$table, function($key) use($arrShow){
+               return in_array($key, $arrShow);
+           }, ARRAY_FILTER_USE_KEY);
+       }
 		
-		
-		foreach ($systemSetting->$table as $index => $TypeData)
+		foreach ($arrTable as $index => $TypeData)
 		{	
-		
 			if (is_array($TypeData))
 			{
 				if (!is_null($defaultValue))

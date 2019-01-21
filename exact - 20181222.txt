@@ -1,0 +1,24 @@
+1) Quotation - Relook 
+2) Exact Oil - Website
+3) Inventory - Rental - Asset - Value depreciate - Rental sub entry - Available for rental 
+	- available - Cost - value - depreciate value 
+	- Out for rental..  
+	- return from customer (available)
+	- Send for service inspection
+	- Return from inspection - available for rental
+	- Depreciated - write off
+	- link with order processing - customer
+	- estimated return date, actual return date
+
+	
+	- retal report monthly - like stock count
+	
+4) order processing)
+- receive PO - .. create job number
+- temporary cost report.
+
+
+I wanted to separate out rental units from stock units. Currently if the status is Rental (means out for rental). Then when customer return, they change it to reserve. This is not very good.
+I wanted to segragate for rental business, means units issued out from stock for rental, the stock status will be 'Issue out rental'. Then in the Rental control inventory will have 'Available'. Customer send PO for rental, then status change to 'Out for Rental'. Customer return, status is 'Return from Customer'. Then 'Send to Service Inspection'. Then 'Available'.
+One more status is 'Write Off' for damage unit.
+Those existing rental units we will have to issue out from current inventory & transfer Rental. For example, 198 units under rental, & 216 units under reserve. There is confusion whether the units are with customer on rental or customer return the units after rental period expired.

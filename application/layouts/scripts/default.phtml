@@ -224,6 +224,15 @@ $(document).ready(function() {
 							<?  } ?>
 						</ul>
 					</li>
+
+                    <li>
+                        <a href="#"><img src='/images/icons/IconRentalAssets.png'>  <?=$this->translate->_('Rental Asset')?></a>
+                        <ul>
+                            <li>
+                                <a href="/inventory/rental"> <?=$this->translate->_('Listing')?></a>
+                            </li>
+                        </ul>
+                    </li>
 					<? 
 					$menuAdminAllow = $sessionUsers->Acl->isAllowed($this->userInfo->ACLRole, "menu_po", "view");
 					if ($menuAdminAllow) {?>

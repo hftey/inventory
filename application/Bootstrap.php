@@ -10,9 +10,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         $view = $this->getResource('view');
         $view->doctype('XHTML1_STRICT');
     }
-	
-	
-	protected function _initAppAutoload()
+
+    protected function _initDbAdaptersToRegistry()
+    {
+        $this->bootstrap('multidb');
+        $resource = $this->getPluginResource('multidb');
+        $Adapter2 = $resource->getDb('jobdb');
+        Zend_Registry::set('jobdb',$Adapter2);
+    }
+
+
+    protected function _initAppAutoload()
 	{
 		// Loading Venz Libraries
 		$resourceLoader = new Zend_Loader_Autoloader_Resource(array(

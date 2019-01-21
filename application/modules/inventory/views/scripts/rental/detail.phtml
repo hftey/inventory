@@ -1,0 +1,300 @@
+
+<script language='Javascript'>
+
+    function UpdateLandedCost()
+    {
+        if (!isNaN(parseFloat($('#UnitPriceRM').val()))){
+            UnitPriceRM = parseFloat($('#UnitPriceRM').val());
+            $('#UnitPriceRM').val(parseFloat($('#UnitPriceRM').val()).toFixed(2));
+        }
+
+        if (!isNaN(parseFloat($('#UnitDeliveryCost').val()))){
+            UnitDeliveryCost = parseFloat($('#UnitDeliveryCost').val());
+            $('#UnitDeliveryCost').val(parseFloat($('#UnitDeliveryCost').val()).toFixed(2));
+        }
+
+
+        if (!isNaN(parseFloat($('#UnitTaxCost').val()))){
+            UnitTaxCost = parseFloat($('#UnitTaxCost').val());
+            $('#UnitTaxCost').val(parseFloat($('#UnitTaxCost').val()).toFixed(2));
+        }
+        var LandedCost = parseFloat(UnitPriceRM + UnitDeliveryCost + UnitTaxCost).toFixed(2);
+        $('#UnitLandedCost').val(LandedCost);
+
+        var retailPrice = parseFloat((($('#MarkupPercent').val() / 100) * LandedCost)) + parseFloat(LandedCost);
+        $('#UnitRetail').val(parseFloat(retailPrice).toFixed(2));
+
+//	var MarkupPercent = 0.00;
+//	if (parseFloat($('#RetailPrice').val()) >= parseFloat($('#UnitLandedCost').val()))
+//		MarkupPercent =  ((parseFloat($('#RetailPrice').val()) - parseFloat($('#UnitLandedCost').val())) / parseFloat($('#UnitLandedCost').val())) * 100;
+//	else
+//		MarkupPercent =  "-" + (((parseFloat($('#UnitLandedCost').val()) - parseFloat($('#RetailPrice').val())) / parseFloat($('#RetailPrice').val()))) * 100;
+//
+//	$('#MarkupPercent').val(parseFloat(MarkupPercent).toFixed(2));
+    }
+
+    function OnDeleteStatus(item_id){
+        $.prompt(
+            "<?=$this->translate->_('Are you sure you want to remove this entry?')?>",{
+                buttons: { Ok: true, Cancel: false },
+                submit:function(e,v,m,f){
+                    if(v){
+                        document.location='/inventory/rental/detail/id/<?=$this->RentalAssetID?>/remove_status/'+item_id;
+                    }
+                }
+
+            });
+    }
+
+
+
+
+    $(document).ready(function() {
+
+        $( "#StatusDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+        $( "#EstimatedReturnDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+        $( "#ActualReturnDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+
+        if ($('#StatusItem').val() == "sold" || $('#StatusItem').val() == "reserved")
+        {
+            $('#divSalesOrder').show();
+        }
+
+        $('#UnitPriceRM').change(function () {
+            UpdateLandedCost();
+        });
+
+        $('#UnitDeliveryCost').change(function () {
+            UpdateLandedCost();
+        });
+
+        $('#UnitTaxCost').change(function () {
+            UpdateLandedCost();
+        });
+
+        $('#MarkupPercent').change(function () {
+            UpdateLandedCost();
+        });
+
+
+        $("#StatusDate").change(function(){
+            if ($('#RentalStatus').val() == "returned"){
+                $('#ActualReturnDate').val($("#StatusDate").val());
+            }
+        })
+
+
+        $('#StatusItem').change(function () {
+            if ($('#StatusItem').val() == "sold")
+            {
+                $('#divSalesOrder').show();
+            }else
+                $('#divSalesOrder').hide();
+        });
+
+
+        $('#RentalStatus').change(function () {
+            if ($('#RentalStatus').val() == "out"){
+                $('.clsOutRental').show();
+                $('.clsReturnRental').hide();
+
+            }
+            else if ($('#RentalStatus').val() == "returned"){
+                $('.clsOutRental').hide();
+                $('.clsReturnRental').show();
+
+            }else{
+                $('.clsOutRental').hide();
+                $('.clsReturnRental').hide();
+            }
+
+        });
+
+
+        $('#add_status').click(function () {
+            var error = false;
+            if ($('#StatusDate').val()=='') {
+
+                $('#StatusDate').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the date')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'top',offsetX: 5, timeOnScreen: 3000});
+                $('#StatusDate').poshytip('show');
+                $('#StatusDate').css("border", "1px solid red");
+
+                error = true;
+            }
+
+            if ($('#RentalStatus').val()=='') {
+
+                $('#RentalStatus').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select the status')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+                $('#RentalStatus').poshytip('show');
+                $('#RentalStatus').css("border", "1px solid red");
+
+                error = true;
+            }
+
+            if ($('#UserIDResp').val()=='') {
+
+                $('#UserIDResp').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select the person in charge')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'top',offsetX: 5, timeOnScreen: 3000});
+                $('#UserIDResp').poshytip('show');
+                $('#UserIDResp').css("border", "1px solid red");
+
+                error = true;
+            }
+
+            if ($('#RentalStatus').val()=='out' && $('#ClientName').val()=='') {
+
+                $('#ClientName').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select the customer')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'top',offsetX: 5, timeOnScreen: 3000});
+                $('#ClientName').poshytip('show');
+                $('#ClientName').css("border", "1px solid red");
+
+                error = true;
+            }
+
+            if ($('#RentalStatus').val()=='out' && $('#EstimatedReturnDate').val()=='') {
+
+                $('#EstimatedReturnDate').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter estimated return date')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+                $('#EstimatedReturnDate').poshytip('show');
+                $('#EstimatedReturnDate').css("border", "1px solid red");
+
+                error = true;
+            }
+
+            if ($('#RentalStatus').val()=='returned' && $('#ActualReturnDate').val()=='') {
+
+                $('#ActualReturnDate').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter return date')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+                $('#ActualReturnDate').poshytip('show');
+                $('#ActualReturnDate').css("border", "1px solid red");
+
+                error = true;
+            }
+
+//		if ($('#Notes').val()=='') {
+//
+//			$('#Notes').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the notes for this entry')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+//			$('#Notes').poshytip('show');
+//			$('#Notes').css("border", "1px solid red");
+//
+//			error = true;
+//		}
+
+            if (error)
+                return false;
+            else
+                return true;
+
+        });
+
+
+    });
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_('Rental Asset Details')?></B><BR>
+
+<?
+$disableEdit = true;
+if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) {
+    $disableEdit = false;
+}
+?>
+
+<form  action='/inventory/rental/detail/id/<?=$this->RentalAssetID?>' method=POST>
+    <table border=0 cellspacing=2 cellpadding=2 width=700px>
+
+        <TR><TD colspan=2 ><B><?=$this->ItemFullName?></B></TD></TR>
+        <? if ($this->ItemImagePath) { ?>
+            <TR><TD colspan=2 ><B><img style="max-height:100px;max-width:150px;" src='<?=$this->ItemImagePath?>'></B></TD></TR>
+        <? } ?>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('PO Number')?></TD>
+            <TD  style='text-align: right;' width=150px  class='form_field' valign=bottom><?=$this->OrderNumber?></TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Date of Purchase')?></TD><TD style='text-align: right;' class='form_field'><?=$this->PurchaseDate?></TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Item')?></TD><TD style='text-align: right;' class='form_field'>
+                <select disabled name='ItemID' style="width:450px;" id='ItemID' title="Items."><option value=''>-<?=$this->optionItems?></select></TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Serial Number')?></TD><TD  style='text-align: right;' class='form_field'>
+                <input  style='text-align: right;' type=text name='SeriesNumber' ID='SeriesNumber' value='<?=$this->SeriesNumber?>' <?=$disableEdit ? "disabled" : ""?>>
+            </TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Branch')?></TD><TD class='form_field' valign=bottom  style='text-align: right;'>
+                <select disabled name='BranchID' id='BranchID' title="">
+                    <option value=''>-</option><?=$this->optionBranches?>
+                </select>
+            </TD></TR>
+
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Stock Status')?></TD><TD  style='text-align: right;' class='form_field'>
+
+                <SELECT <?=!$this->add_series ? "disabled" : ""?> name='StatusItem' id='StatusItem'><option value=''>-</option><?=$this->optionStatusItem?></SELECT>
+                <div id='divSalesOrder' style='display:none;padding-top:4px; text-align:right;'> <?=$this->translate->_('Sales Order Number')?>: <input <?=$disableEdit ? "disabled" : ""?> type=text id='SalesOrderNumber' name='SalesOrderNumber' value='<?=$this->SalesOrderNumber?>'><?=$this->SOLink?></div>
+            </TD></TR>
+
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Available Rental Stock')?></TD><TD  style='text-align: right;' class='form_field'>
+            <?=$this->NumStockAvailable?>
+        </TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Total Rental Stock')?></TD><TD  style='text-align: right;' class='form_field'>
+                <?=$this->NumStockTotal?>
+            </TD></TR>
+        <TR><TD colspan=2 class='form_field'>&nbsp;</TD></TR>
+        <TR><TD colspan=2 class='form_field'>
+                <? if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) { ?>
+                        <input type=submit id='update_item' name='update_item' value='<?=$this->translate->_('Update Details')?>'>
+                <? } ?>
+                <input type="hidden" name="ItemSeriesID" value="<?=$this->ItemSeriesID?>">
+                <input type=button id='back' name='back' value='<?=$this->translate->_('Back')?>' onclick="document.location='/inventory/rental'">
+
+            </TD></TR>
+    </table>
+</form>
+
+<?
+if (!$this->add_series) {
+?>
+
+    <form  action='/inventory/rental/detail/id/<?=$this->RentalAssetID?>' method=POST>
+        <table border="0" align="class='report_table'" id="report_table" cellspacing="0" cellpadding="3">
+            <tbody><tr>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Reference Number')?></td>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Date')?>*</td>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Status')?>*</td>
+                <td class="report_header" style="text-align:left; min-width: 250px"><?=$this->translate->_('Status Detail')?>*</td>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Person In Charge')?>*</td>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Notes')?>*</td>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Entry By')?></td>
+                <td class="report_header" style="text-align:center"><?=$this->translate->_('Entry date')?></td>
+                <td class="report_header" style="text-align:center">&nbsp;</td>
+            </tr>
+            <? if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) { ?>
+
+                <tr>
+                    <td class="report_even" style="text-align:center"><input type=text size=8 name='ReferenceNo' id='ReferenceNo'></td>
+                    <td width=180px class="report_even" style="text-align:center"><input type=text size=10 name='StatusDate' id='StatusDate'></td>
+                    <td class="report_even" style="text-align:center">
+                        <SELECT name='RentalStatus' id='RentalStatus'><option value=''>-</option><?=$this->optionRentalStatus?></SELECT>
+                    </td>
+
+                    <td class="report_even" style="text-align:center;">
+                        <div class="clsOutRental" style="display: none">
+                            Customer:<BR>
+                            <select <?=$this->userInfo->ACLRole == "User" ? "disabled" : ""?> name='ClientName' id='ClientName' title=""><option value=''>-</option><?=$this->optionCustomers?></select>
+                            Estimated Return Date:<BR>
+                            <input type=text size=10 name='EstimatedReturnDate' id='EstimatedReturnDate'>
+
+                        </div>
+                        <div class="clsReturnRental" style="display: none">
+                            Return Date:<BR>
+                            <input type=text size=10 name='ActualReturnDate' id='ActualReturnDate'>
+
+                        </div>
+
+                    </td>
+
+                    <td class="report_even" style="text-align:center"><SELECT name='UserIDResp' id='UserIDResp' ><option value=''>-</option><?=$this->optionPersonInCharge?></SELECT></td>
+                    <td class="report_even" style="text-align:center"><textarea name='Notes' id='Notes'></textarea></td>
+                    <td class="report_even" style="text-align:center">&nbsp;</td>
+                    <td class="report_even" style="text-align:center">&nbsp;</td>
+                    <td class="report_even" style="text-align:center"><input type=submit name='add_status' id='add_status' value='<?=$this->translate->_('Add New Status')?>'></td>
+                </tr>
+            <? } ?>
+
+            <?=$this->status?>
+
+            </tbody></table>
+    </form>
+
+<? } ?>
