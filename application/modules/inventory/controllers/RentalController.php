@@ -164,17 +164,34 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             $strRentalPOIDs = $libRental->getPORentalID();
             $strRentalBranchIDs = $libRental->getItemBranchID();
             //$this->view->optionBrand = $libDb->getTableOptions("Brand", "FullName", "ID", $this->view->BrandID);
-            $this->view->optionItems = $libInv->getItemOptions($this->view->ItemID, " AND Item.ID IN (".$strRentalIDs.")", 'rental_asset');
-            $this->view->optionPO = $libDb->getTableOptions("PurchaseOrders", "OrderNumber", "ID", $this->view->OrderID, "PurchaseDate", " AND PurchaseOrders.ID IN (".$strRentalPOIDs.")");
+            $this->view->optionItems = "";
+            if ($strRentalIDs){
+                $this->view->optionItems = $libInv->getItemOptions($this->view->ItemID, " AND Item.ID IN (".$strRentalIDs.")", 'rental_asset');
+            }
 
-            $this->view->optionBranches = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->BranchID, NULL, " AND Branches.ID IN (".$strRentalBranchIDs.")");
-            //$this->view->optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $this->view->Status);
+            $this->view->optionPO = "";
+            if ($strRentalPOIDs){
+                $this->view->optionPO = $libDb->getTableOptions("PurchaseOrders", "OrderNumber", "ID", $this->view->OrderID, "PurchaseDate", " AND PurchaseOrders.ID IN (".$strRentalPOIDs.")");
+            }
+
+            $this->view->optionBranches = "";
+            if ($strRentalBranchIDs){
+                $this->view->optionBranches = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->BranchID, NULL, " AND Branches.ID IN (".$strRentalBranchIDs.")");
+            }
+
             $this->view->optionStatusItem = $libDb->getSystemOptions("arrRentalStatus", $this->view->RentalStatus);
 
-            $this->view->optionBrand = $libDb->getTableOptions("Brand", "FullName", "ID", $this->view->BrandID, NULL, " AND Brand.ID IN (".$strRentalBrandIDs.")");
+            $this->view->optionBrand = "";
+            if ($strRentalBrandIDs){
+                $this->view->optionBrand = $libDb->getTableOptions("Brand", "FullName", "ID", $this->view->BrandID, NULL, " AND Brand.ID IN (".$strRentalBrandIDs.")");
+            }
 
 
-            $sqlFilterRental = " AND Item.ID IN (".$strRentalIDs.")";
+            $sqlFilterRental = "";
+            if ($strRentalIDs){
+                $sqlFilterRental = " AND Item.ID IN (".$strRentalIDs.")";
+            }
+
             $sqlFilterBrand = "";$sqlFilterItem = "";$sqlFilterModel = "";
             if ($this->view->BrandID)
                 $sqlFilterBrand .= " AND Item.BrandID=".$this->view->BrandID;
