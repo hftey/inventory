@@ -440,7 +440,7 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 
             $this->view->totalItems = $arrItem[0];
 
-            $strUpdateButton = "<BR><input type=button name='UpdateStatus' id='UpdateStatus' value='Update Status' disabled>";
+            $strUpdateButton = ""; //"<BR><input type=button name='UpdateStatus' id='UpdateStatus' value='Update Status' disabled>";
 
             $displayTable = new Venz_App_Display_Table(
                 array (
