@@ -235,7 +235,7 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             function format_initvalue($colnum, $rowdata, $export)
             {
                 if ($export){
-                    return $rowdata[35];
+                    return $rowdata[28];
                 }
 
                 $sessionInitialValue = new Zend_Session_Namespace('sessionInitialValue');
@@ -281,20 +281,20 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             $sessionCurrentValue->jsInline = "";
             function format_currentvalue($colnum, $rowdata, $export)
             {
+                if ($rowdata[30] == 'writeoff'){
+                    $rowdata[35] = 0.00;
+                }
+
                 if ($export){
-                    return $rowdata[35] < 0 ? 0 : $rowdata[35];
+                    return $rowdata[35] <= 0 ? 0 : $rowdata[35];
                 }
 
                 $dispFormat = new Venz_App_Display_Format();
 //               return $dispFormat->format_currency(($rowdata[34] / $rowdata[33]) * $rowdata[28]);
-                if ($rowdata[35]){
-                    if ($rowdata[35] <= 0){
-                        return "<div style='color: red; text-align: right'>0.00</div>";
-                    }else{
-                        return $dispFormat->format_currency($rowdata[35]);
-                    }
+                if ($rowdata[35] <= 0){
+                    return "<div style='color: red; text-align: right'>0.00</div>";
                 }else{
-                    return "";
+                    return $dispFormat->format_currency($rowdata[35]);
                 }
 
 //                $sessionCurrentValue = new Zend_Session_Namespace('sessionCurrentValue');
@@ -408,6 +408,10 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 
             function format_lifespan($colnum, $rowdata, $export)
             {
+                if ($rowdata[30] == 'writeoff'){
+                    $rowdata[34] = 0;
+                }
+
                 if ($export){
                     return $rowdata[34] . " / ".$rowdata[33]." months";
                 }
@@ -436,12 +440,12 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 
             function format_initremaining($colnum, $rowdata)
             {
-                return $rowdata[36];
+                return $rowdata[37];
             }
 
             function format_inittotal($colnum, $rowdata)
             {
-                return $rowdata[37];
+                return $rowdata[36];
             }
 
             $exportReport = new Venz_App_Report_Excel(array('exportsql'=> $exportSql, 'hiddenparam'=>'<input type=hidden name="Search" value="Search">'));
@@ -755,8 +759,9 @@ END;
                 $arrRentalDetail['RentalStatus'] == 'available' ? array('out', 'service', 'writeoff') : (
                     $arrRentalDetail['RentalStatus'] == 'out' ||  $arrRentalDetail['RentalStatus'] == 'extension' ? array('returned', 'extension') : (
                             $arrRentalDetail['RentalStatus'] == 'returned' ? array('service') : (
-                                $arrRentalDetail['RentalStatus'] == 'service' || $arrRentalDetail['RentalStatus'] == 'service_update' ? array('available', 'service_update', 'writeoff') :
-                                    array()))));
+                                $arrRentalDetail['RentalStatus'] == 'writeoff' ? array('writeoff') : (
+                                    $arrRentalDetail['RentalStatus'] == 'service' || $arrRentalDetail['RentalStatus'] == 'service_update' ? array('available', 'service_update', 'writeoff') :
+                                    array())))));
             $this->view->optionStatusItem = $libDb->getSystemOptions("arrRentalStatus", $this->view->RentalStatus);
             $this->view->optionItems = $libInv->getItemOptions($this->view->ItemID);
 

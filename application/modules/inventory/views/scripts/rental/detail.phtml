@@ -97,23 +97,20 @@
         $('#RentalStatus').change(function () {
             if ($('#RentalStatus').val() == "out"){
                 $('.clsOutRental').show();
-                $('.clsReturnRental').hide();
                 $('.clsRentalExtension').hide();
 
             }
             else if ($('#RentalStatus').val() == "returned"){
                 $('.clsOutRental').hide();
-                $('.clsReturnRental').show();
                 $('.clsRentalExtension').hide();
+
             }
             else if ($('#RentalStatus').val() == "extension"){
                 $('.clsOutRental').hide();
-                $('.clsReturnRental').hide();
                 $('.clsRentalExtension').show();
 
             }else{
                 $('.clsOutRental').hide();
-                $('.clsReturnRental').hide();
                 $('.clsRentalExtension').hide();
             }
 
@@ -392,7 +389,11 @@ if (!$this->add_series) {
 
                 <tr>
                     <td class="report_even" style="text-align:center"><input type=text size=8 name='ReferenceNo' id='ReferenceNo'></td>
-                    <td width=180px class="report_even" style="text-align:center"><input type=text size=10 name='StatusDate' id='StatusDate'></td>
+                    <td width=180px class="report_even" style="text-align:center">
+                        <div id="divStatusDate">
+                            <input type=text size=10 name='StatusDate' id='StatusDate'>
+                        </div>
+                    </td>
                     <td class="report_even" style="text-align:center">
                         <SELECT name='RentalStatus' id='RentalStatus'><option value=''>-</option><?=$this->optionRentalStatus?></SELECT>
                     </td>
@@ -403,11 +404,6 @@ if (!$this->add_series) {
                             <select <?=$this->userInfo->ACLRole == "User" ? "disabled" : ""?> name='ClientName' id='ClientName' title=""><option value=''>-</option><?=$this->optionCustomers?></select>
                             Estimated Return Date:<BR>
                             <input type=text size=10 name='EstimatedReturnDate' id='EstimatedReturnDate'>
-
-                        </div>
-                        <div class="clsReturnRental" style="display: none">
-                            Return Date:<BR>
-                            <input type=text size=10 name='ActualReturnDate' id='ActualReturnDate'>
 
                         </div>
                         <div class="clsRentalExtension" style="display: none">
