@@ -1,4 +1,3 @@
-
 <script language='Javascript'>
 
 function UpdateLandedCost()
@@ -35,7 +34,7 @@ function UpdateLandedCost()
 
 function OnDeleteStatus(item_id){
 	$.prompt(
-		"<?=$this->translate->_('Are you sure you want to remove this entry?')?>",{
+		"<?=$this->translate->_('Are you sure you want to remove this entry?<BR>The status of this item will be revert back to previous entry status.')?>",{
 		buttons: { Ok: true, Cancel: false },
 		submit:function(e,v,m,f){ 
 			if(v){
@@ -51,9 +50,9 @@ function OnDeleteStatus(item_id){
 
 $(document).ready(function() { 
 
- $( "#StatusDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
-$( "#PurchaseDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
- 
+    $( "#StatusDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+    $( "#PurchaseDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+
 if ($('#StatusItem').val() == "sold" || $('#StatusItem').val() == "reserved")
 {
 	$('#divSalesOrder').show();
@@ -90,11 +89,19 @@ if ($('#StatusItem').val() == "sold" || $('#StatusItem').val() == "reserved")
 	
 	
 	$('#Status').change(function () {
-		if ($('#Status').val() == "intransit")
-			$('#divTransferTo').show();
-		else
-			$('#divTransferTo').hide();
-		
+		if ($('#Status').val() == "intransit"){
+            $('#divTransferTo').show();
+            $('#divIssueOutRental').hide();
+        }
+		else if ($('#Status').val() == "rental_asset"){
+            $('#divTransferTo').hide();
+            $('#divIssueOutRental').show();
+        }else{
+            $('#divTransferTo').hide();
+            $('#divIssueOutRental').hide();
+
+        }
+
 	});
 	
 	
@@ -266,8 +273,12 @@ if (!$this->add_series) {
 	<td width=180px class="report_even" style="text-align:center"><input type=text size=10 name='StatusDate' id='StatusDate'></td>
 	<td class="report_even" style="text-align:center"><SELECT name='Status' id='Status'><option value=''>-</option><?=$this->optionStatus?></SELECT>
 	<div style='display: none' id='divTransferTo'><?=$this->translate->_('To')?>: <select <?=$this->userInfo->ACLRole == "User" ? "disabled" : ""?> name='TransitTo' id='TransitTo' title=""><option value=''>-</option><?=$this->optionBranchesTransit?></select></div>
-	
-	</td>
+    <div style='display: none' id='divIssueOutRental'>
+        Remaining / Total<BR>
+        <input type="text" name="MonthRemaining" placeholder="Month" size="3" > / <input type="text" name="MonthDepreciation" placeholder="Month" size="3">
+    </div>
+
+    </td>
 	<td class="report_even" style="text-align:center"><SELECT name='UserIDResp' id='UserIDResp' ><option value=''>-</option><?=$this->optionPersonInCharge?></SELECT></td>
 	<td class="report_even" style="text-align:center"><textarea name='Notes' id='Notes'></textarea></td>
 	<td class="report_even" style="text-align:center">&nbsp;</td>

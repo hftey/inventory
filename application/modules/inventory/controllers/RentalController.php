@@ -3,10 +3,14 @@
 class Inventory_RentalController extends Venz_Zend_Controller_Action
 {
     static $db = NULL;
+    private $_PathDoc = '';
+
     public function init()
     {
         parent::init(NULL);
         $this->db = Zend_Db_Table::getDefaultAdapter();
+        $this->_PathDoc = realpath($_SERVER["DOCUMENT_ROOT"] . "/..");
+
     }
 
 
@@ -230,6 +234,10 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             $sessionInitialValue->jsInline = "";
             function format_initvalue($colnum, $rowdata, $export)
             {
+                if ($export){
+                    return $rowdata[35];
+                }
+
                 $sessionInitialValue = new Zend_Session_Namespace('sessionInitialValue');
                 $sessionUserInfo = new Zend_Session_Namespace('sessionUserInfo');
                 $dispFormat = new Venz_App_Display_Format();
@@ -273,11 +281,15 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             $sessionCurrentValue->jsInline = "";
             function format_currentvalue($colnum, $rowdata, $export)
             {
+                if ($export){
+                    return $rowdata[35] < 0 ? 0 : $rowdata[35];
+                }
+
                 $dispFormat = new Venz_App_Display_Format();
 //               return $dispFormat->format_currency(($rowdata[34] / $rowdata[33]) * $rowdata[28]);
                 if ($rowdata[35]){
                     if ($rowdata[35] <= 0){
-                        return "<div style='color: red; text-align: right'>".$dispFormat->format_currency($rowdata[35])."</div>";
+                        return "<div style='color: red; text-align: right'>0.00</div>";
                     }else{
                         return $dispFormat->format_currency($rowdata[35]);
                     }
@@ -394,8 +406,12 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 
             }
 
-            function format_lifespan($colnum, $rowdata)
+            function format_lifespan($colnum, $rowdata, $export)
             {
+                if ($export){
+                    return $rowdata[34] . " / ".$rowdata[33]." months";
+                }
+
                 if ($rowdata[33]){
                     if ($rowdata[34] <= 0){
                         return "<div style='color: red; text-align: center'>".$rowdata[34] . " / ".$rowdata[33]." months</div>";
@@ -408,10 +424,24 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 
             }
 
-            function format_dateasset($colnum, $rowdata)
+            function format_dateasset($colnum, $rowdata, $export)
             {
                 $dispFormat = new Venz_App_Display_Format();
-                return $dispFormat->format_date($rowdata[32]);
+                if ($export){
+                    return $dispFormat->format_date($rowdata[32]);
+                }else{
+                    return $dispFormat->format_date($rowdata[32]);
+                }
+            }
+
+            function format_initremaining($colnum, $rowdata)
+            {
+                return $rowdata[36];
+            }
+
+            function format_inittotal($colnum, $rowdata)
+            {
+                return $rowdata[37];
             }
 
             $exportReport = new Venz_App_Report_Excel(array('exportsql'=> $exportSql, 'hiddenparam'=>'<input type=hidden name="Search" value="Search">'));
@@ -427,16 +457,25 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 //            {
 
             $arrHeader = array ('<input type=checkbox name="SelectAllItemSeries" id="SelectAllItemSeries">','#', 'PO',$this->translate->_('Item Name (Model Name)<BR>Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),
-                $this->translate->_('Date marked<BR>for rental'), $this->translate->_('Initial<BR>Asset Value'),$this->translate->_('Asset<BR>Lifespan'), $this->translate->_('Current<BR>Value'),$this->translate->_('Status'),$this->translate->_('Edit'));
+                $this->translate->_('Date marked<BR>for rental'), $this->translate->_('Initial<BR>Asset Value'),'Initial<BR>Remaining<BR>Lifespan','Initial<BR>Total<BR>Lifespan',
+                $this->translate->_('Asset<BR>Lifespan'), $this->translate->_('Current<BR>Value'),$this->translate->_('Status'),$this->translate->_('Edit'));
             $arrFormat = array('{format_checkbox}','{format_counter}','%7%','{format_itemname}','{format_seriesnumber}','{format_branch}',
-                '{format_dateasset}','{format_initvalue}', '{format_lifespan}', '{format_currentvalue}', '{format_status}','{format_action}');
+                '{format_dateasset}','{format_initvalue}', '{format_initremaining}', '{format_inittotal}', '{format_lifespan}', '{format_currentvalue}', '{format_status}','{format_action}');
             $tablewidth = "1550px";
-            $aligndata = "CCRLCCCRCRCC";
-            //$export = $exportReport->display_icon();
+            $aligndata = "CCRLCCCRCCCRCCC";
+            $export = $exportReport->display_icon();
 
 //            }
-            $arrHeaderEx = array ('#','PO', $this->translate->_('Item Name (Model Name)'),$this->translate->_('Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),  $this->translate->_('Unit Price'),$this->translate->_('Landed Cost'),$this->translate->_('Markup %'),$this->translate->_('Unit Retail'),$this->translate->_('Notes'),$this->translate->_('Status'));
-            $arrFormatEx = array('{format_counter}','%7%','{format_itemname}','{format_partnumber}','{format_seriesnumber}','{format_branch}','{format_dateasset}','{format_unitprice}', '{format_unitlandedcost}', '{format_markup}','{format_retailprice}','{format_notes}','{format_status}');
+//            $arrHeaderEx = array ('#','PO', $this->translate->_('Item Name (Model Name)'),$this->translate->_('Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),  $this->translate->_('Unit Price'),$this->translate->_('Landed Cost'),$this->translate->_('Markup %'),$this->translate->_('Unit Retail'),$this->translate->_('Notes'),$this->translate->_('Status'));
+//            $arrFormatEx = array('{format_counter}','%7%','{format_itemname}','{format_partnumber}','{format_seriesnumber}','{format_branch}','{format_dateasset}','{format_unitprice}', '{format_unitlandedcost}', '{format_markup}','{format_retailprice}','{format_notes}','{format_status}');
+
+            $arrHeaderEx = array ('#', 'PO',$this->translate->_('Item Name (Model Name) Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),
+                $this->translate->_('Date marked for rental'), $this->translate->_('Initial Asset Value'),'Initial Remaining Lifespan','Initial Total Lifespan',
+                $this->translate->_('Asset Lifespan'), $this->translate->_('Current Value'),$this->translate->_('Status'));
+            $arrFormatEx = array('{format_counter}','%7%','{format_itemname}','{format_seriesnumber}','{format_branch}',
+                '{format_dateasset}','{format_initvalue}', '{format_initremaining}', '{format_inittotal}', '{format_lifespan}', '{format_currentvalue}', '{format_status}');
+
+
 
             $this->view->totalItems = $arrItem[0];
 
@@ -451,16 +490,16 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                     'sort_column' 	=> array('','','PurchaseOrders.OrderNumber','ItemFullName','ItemSeries.SeriesNumber','BranchName','RentalAsset.DateAsAsset',
                         'RentalAsset.AssetInitialValue','Lifespan','CurrentValue','RentalAsset.RentalStatus'),
                     'alllen' 		=> $arrItem[0],
-                    'title'		=> $this->translate->_('Items Series').": ". $arrItem[0]." ".$this->translate->_('items').$strUpdateButton,
+                    'title'		    => $this->translate->_('Items Series').": ". $arrItem[0]." ".$this->translate->_('items').$strUpdateButton,
                     'aligndata' 	=> $aligndata,
                     'pagelen' 		=> $recordsPerPage,
                     'numcols' 		=> sizeof($arrHeader),
-                    'tablewidth' => $tablewidth,
-//                    'export_excel' => $export,
-                    'sortby' => $sortby,
+                    'tablewidth'    => $tablewidth,
+                    'export_excel'  => $export,
+                    'sortby'        => $sortby,
                     'colparam'      => array("","","nowrap","nowrap","nowrap","nowrap","nowrap","nowrap","nowrap","nowrap","nowrap width='100px'","nowrap width='100px'"),
-                    'ascdesc' => $ascdesc,
-                    'hiddenparam' => $strHiddenSearch,
+                    'ascdesc'       => $ascdesc,
+                    'hiddenparam'   => $strHiddenSearch,
                 )
             );
             $this->view->content_item = $displayTable->render();
@@ -527,12 +566,18 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                 $ItemID = $Request->getParam('ItemID') ? $Request->getParam('ItemID') : new Zend_Db_Expr("NULL");
                 $ItemSeriesID = $Request->getParam('ItemSeriesID');
                 $SeriesNumber = $Request->getParam('SeriesNumber') ? $Request->getParam('SeriesNumber') : new Zend_Db_Expr("NULL");
+                $MonthRemaining = $Request->getParam('MonthRemaining') ? $Request->getParam('MonthRemaining') : new Zend_Db_Expr("NULL");
+                $MonthDepreciation = $Request->getParam('MonthDepreciation') ? $Request->getParam('MonthDepreciation') : new Zend_Db_Expr("NULL");
 
                 if ($ItemSeriesID){
                     $arrUpdate = array("SeriesNumber"=>$SeriesNumber);
                     $db->update("ItemSeries", $arrUpdate, "ID=".$ItemSeriesID);
 
                 }
+
+                $arrUpdateAsset = array("MonthRemaining"=>$MonthRemaining,"MonthDepreciation"=>$MonthDepreciation);
+                $db->update("RentalAsset", $arrUpdateAsset, "ItemSeriesID=".$ItemSeriesID);
+
 
                 $this->appMessage->setNotice(1, $this->translate->_('Item series has been updated'));
                 $this->_redirect('/inventory/rental/detail/id/'.$RentalAssetID);
@@ -575,7 +620,15 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                 $Notes = $Request->getParam('Notes') ? $Request->getParam('Notes') : new Zend_Db_Expr("NULL");
 
                 $ClientName = $Request->getParam('ClientName') ? $Request->getParam('ClientName') : new Zend_Db_Expr("NULL");
-                $EstimatedReturnDate = $Request->getParam('EstimatedReturnDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('EstimatedReturnDate')) : new Zend_Db_Expr("NULL");
+                $EstimatedReturnDate = $Request->getParam('EstimatedReturnDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('EstimatedReturnDate')) :
+                    ($Request->getParam('EstimatedReturnDateExtension') ? $dispFormat->format_date_simple_to_db($Request->getParam('EstimatedReturnDateExtension')) : new Zend_Db_Expr("NULL"));
+
+
+
+//                $EstimatedReturnDateExtension = $Request->getParam('EstimatedReturnDateExtension') ? $dispFormat->format_date_simple_to_db($Request->getParam('EstimatedReturnDateExtension')) : new Zend_Db_Expr("NULL");
+
+
+
                 $ActualReturnDate = $Request->getParam('ActualReturnDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('ActualReturnDate')) : new Zend_Db_Expr("NULL");
 
 
@@ -621,6 +674,9 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                 $this->view->SalesOrderNumber = $arrRentalDetail['SalesOrderNumber'];
 
                 $this->view->ItemImagePath = $arrRentalDetail['ItemImagePath'];
+                $this->view->MonthDepreciation = $arrRentalDetail['MonthDepreciation'];
+                $this->view->MonthRemaining = $arrRentalDetail['MonthRemaining'];
+                $this->view->DateAsAsset = $displayFormat->format_date($arrRentalDetail['DateAsAsset']);
 
                 $arrStockCountAvailable = $libRental->getRentalStockDetail($RentalAssetID);
                 $this->view->NumStockTotal = $arrStockCountAvailable['NumStock'];
@@ -655,11 +711,22 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                         $strDetail = $arrItemStatus['ClientName'] ? "<B>Customer</B>:<BR><U>".$arrItemStatus['ClientName']."</U><BR>" : "";
                         $strDetail .= $arrItemStatus['EstimatedReturnDate'] ?
                             "<B>Estimated Return Date</B>:<BR><U>".$displayFormat->format_date($arrItemStatus['EstimatedReturnDate'])."</U><BR>" : "";
+                    }else if ($arrItemStatus['RentalStatus'] == "extension"){
+
+                        $strDetail .= $arrItemStatus['EstimatedReturnDate'] ?
+                            "<B>Estimated Return Date</B>:<BR><U>".$displayFormat->format_date($arrItemStatus['EstimatedReturnDate'])."</U><BR>" : "";
                     }else if ($arrItemStatus['RentalStatus'] == "returned"){
 
                         $strDetail = $arrItemStatus['ActualReturnDate'] ?
                             "<B>Return Date</B>:<BR><U>".$displayFormat->format_date($arrItemStatus['ActualReturnDate'])."</U><BR>" : "";
                     }
+
+                    $listDoc = $this->listDoc($arrItemStatus[ID]);
+                    $strDetail .= "<div>".$listDoc."</div>";
+//                    $strDetail .= "
+//                        <div style='display: inline-block'><img class='clsUploadDoc' RentalAssetStatusID=$arrItemStatus[ID] style='cursor: pointer' src='/images/icons/IconUpload2.png'> &raquo; </div>
+//						<div style='display: inline-block'> $listDoc </div>
+//                    ";
 
                     $this->view->status .= <<<END
     <tr>
@@ -686,9 +753,10 @@ END;
             $this->view->optionPersonInCharge = $libDb->getTableOptions("ACLUsers", "Name", "ID");
             $this->view->optionRentalStatus = $libDb->getSystemOptions("arrRentalStatus", NULL,
                 $arrRentalDetail['RentalStatus'] == 'available' ? array('out', 'service', 'writeoff') : (
-                    $arrRentalDetail['RentalStatus'] == 'out' ? array('returned') : (
-                        $arrRentalDetail['RentalStatus'] == 'returned' ? array('service') : (
-                            $arrRentalDetail['RentalStatus'] == 'service' ? array('available', 'writeoff') : array()))));
+                    $arrRentalDetail['RentalStatus'] == 'out' ||  $arrRentalDetail['RentalStatus'] == 'extension' ? array('returned', 'extension') : (
+                            $arrRentalDetail['RentalStatus'] == 'returned' ? array('service') : (
+                                $arrRentalDetail['RentalStatus'] == 'service' || $arrRentalDetail['RentalStatus'] == 'service_update' ? array('available', 'service_update', 'writeoff') :
+                                    array()))));
             $this->view->optionStatusItem = $libDb->getSystemOptions("arrRentalStatus", $this->view->RentalStatus);
             $this->view->optionItems = $libInv->getItemOptions($this->view->ItemID);
 
@@ -739,6 +807,276 @@ END;
         echo $dispFormat->format_currency($valNum);
         exit();
     }
+
+    public function docViewImageAction()
+    {
+        $sysHelper = new Venz_App_System_Helper();
+        $Request = $this->getRequest();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $RentalStatusDocumentsID = $Request->getParam('RentalStatusDocumentsID');
+        $arrDoc = $db->fetchRow("SELECT * FROM RentalStatusDocuments WHERE ID=".$RentalStatusDocumentsID);
+        $filename = $arrDoc['FilePath'];
+        if (exif_imagetype($filename)){
+            header('Content-Description: File Transfer');
+            header('Content-Type: content-type: image/jpeg');
+            //header('Content-Disposition: attachment; filename="'.$arrDoc['Name'].".".$ext.'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($arrDoc['FilePath']));
+        }
+        readfile($arrDoc['FilePath']);
+
+        exit();
+    }
+
+    public function docViewAction()
+    {
+        $sysHelper = new Venz_App_System_Helper();
+        $Request = $this->getRequest();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $RentalStatusDocumentsID = $Request->getParam('RentalStatusDocumentsID');
+        $arrDoc = $db->fetchRow("SELECT * FROM RentalStatusDocuments WHERE ID=".$RentalStatusDocumentsID);
+        if (is_file($arrDoc['FilePath']))
+        {
+            $arrTemp = explode(".", $arrDoc['FilePath']);
+            $ext = $arrTemp[sizeof($arrTemp) -1];
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$arrDoc['Name'].".".$ext.'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($arrDoc['FilePath']));
+            readfile($arrDoc['FilePath']);
+            exit();
+
+
+        }
+
+        exit();
+    }
+
+    public function docUploadAction()
+    {
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $RentalAssetStatusID = $Request->getParam('RentalAssetStatusID');
+        if (!$RentalAssetStatusID)
+            exit();
+
+        $Name = $Request->getParam('Name') ? $Request->getParam('Name') : new Zend_Db_Expr("NULL");
+        $Description = $Request->getParam('Description') ? $Request->getParam('Description') : new Zend_Db_Expr("NULL");
+
+        $errorFile = false;
+        if ($_FILES['DocUpload'])
+        {
+            if (!$_FILES['DocUpload']['error'])
+            {
+
+                if ($_FILES['DocUpload']['size'] > (5 * 1024 * 1024))
+                {
+                    echo "ERRORSIZE";
+                    exit();
+                }
+
+            }
+
+        }
+
+        if (!$errorFile){
+
+            $arrInsert = array("RentalAssetStatusID"=>$RentalAssetStatusID, "Description"=>$Description, "Name"=>$Name,"DateSubmitted"=>new Zend_Db_Expr("NOW()"), "SubmittedBy"=>$this->userInfo->ID);
+            $db->Insert("RentalStatusDocuments", $arrInsert);
+            $docID = $db->lastInsertId();
+
+            $filename = $_FILES['DocUpload']['tmp_name'];
+
+            if (exif_imagetype($filename) == IMAGETYPE_JPEG || exif_imagetype($filename) == IMAGETYPE_PNG )
+            {
+                ////////////
+                define('THUMBNAIL_IMAGE_MAX_WIDTH', 1200);
+                define('THUMBNAIL_IMAGE_MAX_HEIGHT', 1200);
+                list($source_image_width, $source_image_height, $source_image_type) = getimagesize($filename);
+                if (exif_imagetype($filename) == IMAGETYPE_PNG)
+                    $source_gd_image = imagecreatefrompng($filename);
+                else
+                    $source_gd_image = imagecreatefromjpeg($filename);
+                $source_aspect_ratio = $source_image_width / $source_image_height;
+                $thumbnail_aspect_ratio = THUMBNAIL_IMAGE_MAX_WIDTH / THUMBNAIL_IMAGE_MAX_HEIGHT;
+                if ($source_image_width <= THUMBNAIL_IMAGE_MAX_WIDTH && $source_image_height <= THUMBNAIL_IMAGE_MAX_HEIGHT) {
+                    $thumbnail_image_width = $source_image_width;
+                    $thumbnail_image_height = $source_image_height;
+                } elseif ($thumbnail_aspect_ratio > $source_aspect_ratio) {
+                    $thumbnail_image_width = (int) (THUMBNAIL_IMAGE_MAX_HEIGHT * $source_aspect_ratio);
+                    $thumbnail_image_height = THUMBNAIL_IMAGE_MAX_HEIGHT;
+                } else {
+                    $thumbnail_image_width = THUMBNAIL_IMAGE_MAX_WIDTH;
+                    $thumbnail_image_height = (int) (THUMBNAIL_IMAGE_MAX_WIDTH / $source_aspect_ratio);
+                }
+                $thumbnail_gd_image = imagecreatetruecolor($thumbnail_image_width, $thumbnail_image_height);
+                imagecopyresampled($thumbnail_gd_image, $source_gd_image, 0, 0, 0, 0, $thumbnail_image_width, $thumbnail_image_height, $source_image_width, $source_image_height);
+                imagejpeg($thumbnail_gd_image, $filename, 60);
+                imagedestroy($source_gd_image);
+                imagedestroy($thumbnail_gd_image);
+                ///////////////
+            }else
+            {
+                $arrTemp = explode(".", $_FILES['DocUpload']['name']);
+                $ext = strtolower($arrTemp[sizeof($arrTemp) -1]);
+                if ($ext != "pdf" && $ext != "xls" && $ext != "doc" && $ext != "docx" && $ext != "xlsx")
+                {
+                    echo "ERROR_IMAGETYPE";
+                    exit();
+                }
+            }
+
+
+            $handle = fopen($filename, "r");
+            $contents = fread($handle, filesize($filename));
+            fclose($handle);
+            $arrTemp = explode(".", $_FILES['DocUpload']['name']);
+            $ext = $arrTemp[sizeof($arrTemp) -1];
+
+            $docPath = $this->_PathDoc.'/documents/'.str_pad($RentalAssetStatusID, 6, '0', STR_PAD_LEFT);
+            mkdir($docPath);
+
+            $filepath = $docID.".".$ext;
+
+            $filepath_full = $docPath."/".$filepath;
+            $fp = fopen($filepath_full, 'w');
+            fwrite($fp, $contents);
+            fclose($fp);
+
+            $arrUpdate = array("FilePath"=>$filepath_full);
+            $db->Update("RentalStatusDocuments", $arrUpdate, "ID=".$docID);
+
+            $arrDocuments = $db->fetchRow("SELECT RentalStatusDocuments.*, ACLUsers.Name as UploaderName FROM RentalStatusDocuments, ACLUsers WHERE RentalStatusDocuments.SubmittedBy=ACLUsers.ID ".
+                "AND RentalStatusDocuments.ID=".$docID);
+            $returnString = $this->listDocDetailItem($arrDocuments);
+
+            echo $returnString;
+        }
+
+        exit();
+
+
+    }
+
+     public function docGetListAction(){
+         $layout = $this->_helper->layout();
+         $layout->setLayout("ajax");
+         $Request = $this->getRequest();
+         $db = Zend_Db_Table::getDefaultAdapter();
+         $RentalAssetStatusID = $Request->getParam('RentalAssetStatusID');
+         echo $this->listDoc($RentalAssetStatusID);
+         exit();
+
+     }
+
+    private function listDocDetailItem($arrDocuments){
+        $dispFormat = new Venz_App_Display_Format();
+        $display = "<a target='_blank' href='/inventory/rental/doc-view/RentalStatusDocumentsID/".$arrDocuments['ID']."'><img style='height: 65px;' src='/images/icons/IconViewL.png'></a>";
+
+        $filepath_full = $arrDocuments['FilePath'];
+        $Name = $arrDocuments['Name'];
+        $Description = nl2br($arrDocuments['Description']);
+        $UploaderName = $arrDocuments['UploaderName'];
+
+        if (exif_imagetype($filepath_full))
+        {
+            $display = "<a target='_blank' href='/inventory/rental/doc-view/RentalStatusDocumentsID/".$arrDocuments['ID']."'>".
+                "<img style='height: 65px; max-width: 80%' src='/inventory/rental/doc-view-image/RentalStatusDocumentsID/".$arrDocuments['ID']."'></a>";
+
+        }
+
+        $trash = "";
+        if ($arrDocuments['SubmittedBy'] == $this->userInfo->ID){
+            $trash = "<img style='height: 25px; cursor: pointer' id='idDeleteDoc' RentalStatusDocumentsID=".$arrDocuments['ID']." src='/images/icons/IconTrash.png'>";
+        }
+
+
+
+        $listUploads = "<div style='padding: 5px; text-align: center; display: inline-block; width: 33%; line-height: 11px; vertical-align: top;'>".
+            $display.
+            $trash.
+            "<BR><B style='font-size: 10px'>".$Name."</B>".
+            "<BR><span style='font-size: 10px'>".$Description."</span>".
+            "<BR><B style='font-size: 10px'>".$UploaderName."</B>".
+            "<BR><B style='font-size: 10px'>".$dispFormat->format_datetime_simple(Date("Y-m-d H:i:s", time()))."</B>".
+            "</div>";
+
+        return $listUploads;
+    }
+
+    private function getAllDocuments($RentalAssetStatusID){
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $arrDocumentsAll = $db->fetchAll("SELECT RentalStatusDocuments.*, ACLUsers.Name as UploaderName FROM RentalStatusDocuments, ACLUsers WHERE RentalStatusDocuments.SubmittedBy=ACLUsers.ID AND RentalAssetStatusID=".$RentalAssetStatusID." ORDER BY DateSubmitted DESC");
+        return $arrDocumentsAll;
+
+    }
+
+    private function listDocDetail($RentalAssetStatusID){
+        $arrDocumentsAll = $this->getAllDocuments($RentalAssetStatusID);
+        $listUploads = ""; //"<div style='display: inline-block; width: 100%;'>";
+        foreach ($arrDocumentsAll as $arrDocuments){
+            $listUploads .= $this->listDocDetailItem($arrDocuments);
+        }
+
+        //$listUploads .= "</div>";
+        return $listUploads;
+    }
+
+
+
+    private function listDoc($RentalAssetStatusID){
+        $arrDocumentsAll = $this->getAllDocuments($RentalAssetStatusID);
+        $listUploads = "<div style='display: inline-block'>
+        <img class='clsUploadDoc'  RentalAssetStatusID=$RentalAssetStatusID style='cursor: pointer' src='/images/icons/IconUpload2.png'> &raquo;</div>".
+            "<div style='display: inline-block'>";
+        foreach ($arrDocumentsAll as $arrDocuments){
+            $listUploads .= "<a target='_blank' href='/inventory/rental/doc-view/RentalStatusDocumentsID/".$arrDocuments['ID']."'>".
+                "<img title='".$arrDocuments['Description']." by ".$arrDocuments['UploaderName']."' src='/images/icons/IconViewSmall.png'></a> ".$arrDocuments['Name']."<BR>";
+        }
+        $listUploads .= "</div>";
+        return $listUploads;
+    }
+
+
+    public function docUploadFormAction()
+    {
+
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $RentalAssetStatusID = $Request->getParam('RentalAssetStatusID');
+        $this->view->RentalAssetStatusID = $RentalAssetStatusID;
+        $this->view->listUploads = $this->listDocDetail($RentalAssetStatusID, true);
+
+    }
+
+    public function docDeleteAction()
+    {
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $RentalStatusDocumentsID = $Request->getParam('RentalStatusDocumentsID');
+        $arrDoc = $db->fetchRow("SELECT * FROM RentalStatusDocuments WHERE ID=".$RentalStatusDocumentsID);
+        unlink($arrDoc['FilePath']);
+
+        $db->delete("RentalStatusDocuments", "ID=".$RentalStatusDocumentsID);
+        exit();
+
+    }
+
 
 
 }

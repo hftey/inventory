@@ -1234,8 +1234,8 @@ END;
 			$libDb = new Venz_App_Db_Table();
 			$displayFormat = new Venz_App_Display_Format();
 			$sysNotification = new Venz_App_System_Notification();
-			
-			$systemSetting = new Zend_Session_Namespace('systemSetting');		
+
+            $systemSetting = new Zend_Session_Namespace('systemSetting');
 			$this->view->currencyType = $systemSetting->arrCurrency[$systemSetting->currency][0];
 			
 			$dispFormat = new Venz_App_Display_Format();
@@ -1351,8 +1351,19 @@ END;
 			$remove_status = $Request->getParam('remove_status');	
 			if ($remove_status)
 			{
+			    $arrStatusRemove = $db->fetchRow("SELECT * FROM ItemSeriesStatus WHERE ID=".$remove_status);
+			    if ($arrStatusRemove['Status'] == 'rental_asset'){
+                    $arrRentalAsset = $db->fetchRow("SELECT * FROM RentalAsset WHERE ItemSeriesID=".$ItemSeriesID);
+                    $db->delete("RentalAssetStatus", "RentalAssetID=".$arrRentalAsset['ID']);
+                    $db->delete("RentalAsset", "ItemSeriesID=".$ItemSeriesID);
+                }
+
 				$db->delete("ItemSeriesStatus", "ID=".$remove_status);
-				$this->appMessage->setNotice(1, "The entry has been removed.");
+                $arrLatestStatus = $db->fetchRow("SELECT * FROM ItemSeriesStatus WHERE ItemSeriesID=".$ItemSeriesID." ORDER BY StatusDate Desc, EntryDateTime Desc");
+                $LatestStatus = $arrLatestStatus['Status'] ? $arrLatestStatus['Status'] : "in";
+                $db->update("ItemSeries", array("Status"=>$LatestStatus), "ID=".$ItemSeriesID);
+
+                $this->appMessage->setNotice(1, "The entry has been removed.");
 				$this->_redirect('/inventory/brand/itemseriesdetail/id/'.$ItemSeriesID.'/f/'.$this->view->accessFrom); 
 			
 	/*			$arrItemDetail = $libInv->getItemDetail($remove_item);
@@ -1374,13 +1385,15 @@ END;
 				$StatusDate = $Request->getParam('StatusDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('StatusDate')) : new Zend_Db_Expr("NULL");
 				$Status = $Request->getParam('Status') ? $Request->getParam('Status') : new Zend_Db_Expr("NULL");
 				$TransitTo = $Request->getParam('TransitTo') ? $Request->getParam('TransitTo') : new Zend_Db_Expr("NULL");
-				$UserIDResp = $Request->getParam('UserIDResp') ? $Request->getParam('UserIDResp') : new Zend_Db_Expr("NULL");
+                $MonthDepreciation = $Request->getParam('MonthDepreciation') ? $Request->getParam('MonthDepreciation') : new Zend_Db_Expr("NULL");
+                $MonthRemaining = $Request->getParam('MonthRemaining') ? $Request->getParam('MonthRemaining') : new Zend_Db_Expr("NULL");
+                $UserIDResp = $Request->getParam('UserIDResp') ? $Request->getParam('UserIDResp') : new Zend_Db_Expr("NULL");
 				$Notes = $Request->getParam('Notes') ? $Request->getParam('Notes') : new Zend_Db_Expr("NULL");
 
                 $arrItemSeriesStatus = $db->fetchRow("SELECT * FROM ItemSeriesStatus WHERE ItemSeriesID=".$ItemSeriesID." order by StatusDate desc, ID desc limit 1");
 
                 $arrInsert = array("ItemSeriesID"=>$ItemSeriesID,"StatusDate"=>$StatusDate,"Status"=>$Status,"UserIDEntry"=>$this->userInfo->ID,"EntryDateTime"=>new Zend_Db_Expr("now()"),
-					"UserIDResp"=>$UserIDResp,"Notes"=>$Notes,"ReferenceNo"=>$ReferenceNo, "TransitTo"=>$TransitTo
+					"UserIDResp"=>$UserIDResp,"Notes"=>$Notes,"ReferenceNo"=>$ReferenceNo, "TransitTo"=>$TransitTo, "MonthDepreciation"=>$MonthDepreciation, "MonthRemaining"=>$MonthRemaining
 				);
 				$db->insert("ItemSeriesStatus", $arrInsert);
 
@@ -1389,8 +1402,13 @@ END;
                     $arrUpdate['BranchID'] = $arrItemSeriesStatus['TransitTo'];
                 }
 
+
                 $db->Update("ItemSeries", $arrUpdate, "ID=".$ItemSeriesID);
 
+                if ($Status == 'rental_asset') {
+                    $arrItemSeries = $db->fetchRow("SELECT * FROM ItemSeries WHERE ID=".$ItemSeriesID);
+                    $invRental->insertAsRental($ItemSeriesID,$arrItemSeries['POItemsID'],$arrItemSeries['UnitLandedCost'],$MonthDepreciation,$MonthRemaining);
+                }
 
 				$arrItem = $libInv->getItemDetail($ItemID);
 				$NumStock = $arrItem['NumStock'];	
@@ -1466,8 +1484,9 @@ END;
 				}
 				
 				$arrItemStatusAll = $libInv->getItemsSeriesStatus($ItemSeriesID);
-				//print_r($arrItemStatus);
-				foreach ($arrItemStatusAll as $arrItemStatus){
+                $counter=0;
+                foreach ($arrItemStatusAll as $arrItemStatus){
+                    $counter++;
 					$strStatus = $systemSetting->arrStockStatus[$arrItemStatus[Status]];
 					$strTransitLocation = "";
 					if ($arrItemStatus['TransitLocation'])
@@ -1475,7 +1494,7 @@ END;
 					
 					$strEntryDateTime = $displayFormat->format_datetime($arrItemStatus['EntryDateTime']);
 					$strDeleteStatus = "";
-					if ($this->view->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales"  && $this->userInfo->ACLRole != "Account" )
+					if ($this->view->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales"  && $this->userInfo->ACLRole != "Account" && $counter == 1)
 						$strDeleteStatus = "<input type=button name='delete_status' id='delete_status' value='".$this->translate->_('Delete Entry')."' onclick='OnDeleteStatus($arrItemStatus[ID])'>";
 					
 					

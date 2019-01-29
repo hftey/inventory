@@ -559,11 +559,8 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 				foreach ($dataItems as $arrData)
 				{
 					$optionItems = $libInv->getItemOptionsEx($arrData['ItemID']);
-	
-					$optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $arrData['Status'],
-                        $arrData['Status'] == 'rental_asset' ? array('rental_asset') : array());
+					$optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $arrData['Status'],array(),array('rental_asset'));
 
-                    $optionStatusItem = ($arrData['Status'] == 'rental_asset' ? "" : "<option value=''>-</option>"). $optionStatusItem;
 
                 $StatusDate = $dispFormat->format_date_db_to_simple($arrData['StatusDate']);
 					$POItemsID=$arrData['ID'];
@@ -687,7 +684,7 @@ END;
 			$this->view->optionBranches = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->BranchID); 
 			$this->view->optionCurrency = $libDb->getSystemOptions("arrCurrency", $this->view->currencyTypeID); 
 			$this->view->optionPOStatus = $libDb->getSystemOptions("arrPOStatus", $this->view->POStatus); 			
-			$this->view->optionStatusItemOverall = $libDb->getSystemOptions("arrStockStatus"); 
+			$this->view->optionStatusItemOverall = $libDb->getSystemOptions("arrStockStatus",NULL,array(),array('rental_asset'));
 					
 			
 			

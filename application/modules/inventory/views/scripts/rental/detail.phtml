@@ -53,6 +53,7 @@
 
         $( "#StatusDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
         $( "#EstimatedReturnDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+        $( "#EstimatedReturnDateExtension" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
         $( "#ActualReturnDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
 
         if ($('#StatusItem').val() == "sold" || $('#StatusItem').val() == "reserved")
@@ -97,15 +98,23 @@
             if ($('#RentalStatus').val() == "out"){
                 $('.clsOutRental').show();
                 $('.clsReturnRental').hide();
+                $('.clsRentalExtension').hide();
 
             }
             else if ($('#RentalStatus').val() == "returned"){
                 $('.clsOutRental').hide();
                 $('.clsReturnRental').show();
+                $('.clsRentalExtension').hide();
+            }
+            else if ($('#RentalStatus').val() == "extension"){
+                $('.clsOutRental').hide();
+                $('.clsReturnRental').hide();
+                $('.clsRentalExtension').show();
 
             }else{
                 $('.clsOutRental').hide();
                 $('.clsReturnRental').hide();
+                $('.clsRentalExtension').hide();
             }
 
         });
@@ -183,11 +192,124 @@
 
         });
 
+        $(document).on("click", "#idDeleteDoc", function(event){
+            var RentalStatusDocumentsID = $(this).attr("RentalStatusDocumentsID");
+            $objDel = $(this);
+            $.prompt("<?=$this->translate->_('Delete the document?')?>",{
+                buttons: { Ok: true, Cancel: false },
+                submit:function(e,v,m,f){
+                    if(v){
+                        $.post("/inventory/rental/doc-delete",{RentalStatusDocumentsID:RentalStatusDocumentsID},function(result){
+                            $objDel.parent().remove();
+                        });
+                    }
+                }
+            });
+
+
+        });
+
+
+        $(document).on("click", ".clsUploadDoc", function(event){
+            var JobID = $(this).attr("JobID");
+            var RentalAssetStatusID = $(this).attr("RentalAssetStatusID");
+            //var objUpload = $(this).parent().parent();
+            var objUpload = $(this).parent().parent();
+
+            $('#idDialog').dialog({title: "Supporting Documents", modal: true, minWidth: 500,maxHeight: 600,
+                position: {my: "top+50%", at: "top", of: window},
+                buttons: {
+                    'Close': function() {
+                        $('#idDialog').dialog('close');
+                        objUpload.html("<img src='/images/icons/IconIndicator.gif'>");
+                        $.post("/inventory/rental/doc-get-list",{RentalAssetStatusID:RentalAssetStatusID},function(result){
+                            console.log(result);
+                            objUpload.html(result);
+                            objUpload.addClass("md-input-success");
+                        });
+
+                        //	location.reload();
+                    }
+                },
+                open: function( event, ui ) {
+                    $(this).html("<img src='/images/icons/IconIndicator.gif'>");
+                    $(this).load("/inventory/rental/doc-upload-form",{RentalAssetStatusID:RentalAssetStatusID});
+
+
+                },
+                destroy: function( event, ui ) {
+                }
+            });
+        });
+
+
+
+        $(document).on("submit", ".clsFormDoc", function(event){
+            event.preventDefault();
+            var objEntry = $(this);
+            var formData = new FormData(this);
+
+
+            var error = false;
+
+            if ($(this).find(".clsName").val() == "")
+            {
+
+                $(this).find(".clsName").poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"> Please enter document name.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+                $(this).find(".clsName").poshytip('show');
+                $(this).find(".clsName").css("border", "1px solid red");
+                error = true;
+            }
+
+            if ($(this).find(".clsDocUpload").val() == "")
+            {
+                $(this).find(".clsDocUpload").poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"> Please select a document to upload.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'center',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+                $(this).find(".clsDocUpload").poshytip('show');
+                $(this).find(".clsDocUpload").css("border", "1px solid red");
+                error = true;
+            }
+
+            if (!error){
+                objEntry.find("#UploadStatus").html("<img src='/images/icons/IconIndicator.gif'>");
+                var RentalAssetStatusID = objEntry.find("#RentalAssetStatusID").val();
+                var url=objEntry.attr("action");
+                $.ajax({
+                    url: url,
+                    type: objEntry.attr("method"),
+                    dataType: "html",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    success: function (data, status)
+                    {
+                        if (data == "ERRORSIZE")
+                        {
+                            $.prompt("Please upload file that is less than 5MB in size.", {buttons: { Ok: true}});
+                        }else if (data == "ERROR_IMAGETYPE")
+                        {
+                            $.prompt("Please upload files with jpg, png, pdf, doc, docx, xls or xlsx file types.", {buttons: { Ok: true}});
+                        }else
+                        {
+                            $("#idUploadedDoc").prepend(data);
+                        }
+                        objEntry.find("#UploadStatus").html("");
+                        objEntry.find(".clsDocUpload").val("");
+                        objEntry.find(".clsName").val("");
+                        objEntry.find(".clsDescription").val("");
+
+                    }
+
+                })
+            }
+        })
+
 
     });
 
 </script>
 
+
+<div id='idDialog'></div>
 <B class='PageHeader'><?=$this->translate->_('Rental Asset Details')?></B><BR>
 
 <?
@@ -228,7 +350,14 @@ if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" &&
             <?=$this->NumStockAvailable?>
         </TD></TR>
         <TR><TD class='form_label' width=150px><?=$this->translate->_('Total Rental Stock')?></TD><TD  style='text-align: right;' class='form_field'>
-                <?=$this->NumStockTotal?>
+            <?=$this->NumStockTotal?>
+        </TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Initial Remaining Lifespan (Months)')?></TD><TD  style='text-align: right;' class='form_field'>
+                As of: <u><?=$this->DateAsAsset?></u>
+                <input  style='text-align: right;' size=3  type=text name='MonthRemaining' ID='MonthRemaining' value='<?=$this->MonthRemaining?>' <?=$disableEdit ? "disabled" : ""?>>
+        </TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Total Lifespan (Months)')?></TD><TD  style='text-align: right;' class='form_field'>
+                <input  style='text-align: right;' size=3 type=text name='MonthDepreciation' ID='MonthDepreciation' value='<?=$this->MonthDepreciation?>' <?=$disableEdit ? "disabled" : ""?>>
             </TD></TR>
         <TR><TD colspan=2 class='form_field'>&nbsp;</TD></TR>
         <TR><TD colspan=2 class='form_field'>
@@ -279,6 +408,11 @@ if (!$this->add_series) {
                         <div class="clsReturnRental" style="display: none">
                             Return Date:<BR>
                             <input type=text size=10 name='ActualReturnDate' id='ActualReturnDate'>
+
+                        </div>
+                        <div class="clsRentalExtension" style="display: none">
+                            Estimated Return Date:<BR>
+                            <input type=text size=10 name='EstimatedReturnDateExtension' id='EstimatedReturnDateExtension'>
 
                         </div>
 

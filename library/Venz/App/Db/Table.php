@@ -43,7 +43,7 @@ class Venz_App_Db_Table extends Zend_Db_Table_Abstract
 		return $option_string;
    }
    
-	public function getSystemOptions($table, $defaultValue = null, $arrShow = [])
+	public function getSystemOptions($table, $defaultValue = null, $arrShow = [], $arrHide = [])
    {
    
 		$systemSetting = new Zend_Session_Namespace('systemSetting');
@@ -63,6 +63,13 @@ class Venz_App_Db_Table extends Zend_Db_Table_Abstract
            });
        }
 
+        if ($arrHide){
+            $arrTable = array_filter($systemSetting->$table, function($val) use($arrHide, $arrTableAll){
+                $key = array_search($val, $arrTableAll);
+                return !in_array($key, $arrHide);
+            });
+        }
+        $option_string = "";
 		foreach ($arrTable as $index => $TypeData)
 		{	
 			if (is_array($TypeData))

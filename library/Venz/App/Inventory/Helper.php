@@ -268,10 +268,25 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
             /*20*/"ItemSeries.UnitRetail, Item.ItemImagePath, PurchaseOrders.ExpectedDate, NULL, PurchaseOrders.Locked, Item.ID as ItemID, Item.PartNumber, ".
             /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
             /*31*/"ItemSeries.ID as ItemSeriesID, RentalAsset.DateAsAsset, Item.MonthDepreciation, IF (Item.MonthDepreciation, Item.MonthDepreciation - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW()), 0) as Lifespan, ".
-            /*35*/"IF (Item.MonthDepreciation, ((Item.MonthDepreciation - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / Item.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue ".
+            /*35*/"IF (Item.MonthDepreciation, ((Item.MonthDepreciation - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / Item.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue, RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining ".
             "FROM ItemSeries ".
             "LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
             "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
+
+
+
+        $sqlAll = "SELECT POItems.OrderID, POItems.ItemID as POItemsID, ItemSeries.UnitPriceRM, ItemSeries.UnitDeliveryCost, ItemSeries.UnitTaxCost, ".
+            /*5*/"ItemSeries.UnitLandedCost, ItemSeries.SeriesNumber, PurchaseOrders.OrderNumber, Item.ItemName, Item.ModelNumber, ".
+            /*10*/"Item.RetailPrice, ItemSeries.ID, CONCAT(Item.ItemName, ' (', Item.ModelNumber, ')') as ItemFullName, PurchaseOrders.ID as POID, POItems.ID as POItemsID, ".
+            /*15*/"PurchaseOrders.PurchaseDate, Branches.Name as BranchName, ItemSeries.Status, ItemSeries.MarkupPercent, ItemSeries.SalesOrderNumber, ".
+            /*20*/"ItemSeries.UnitRetail, Item.ItemImagePath, PurchaseOrders.ExpectedDate, NULL, PurchaseOrders.Locked, Item.ID as ItemID, Item.PartNumber, ".
+            /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
+            /*31*/"ItemSeries.ID as ItemSeriesID, RentalAsset.DateAsAsset, RentalAsset.MonthDepreciation, IF (RentalAsset.MonthRemaining, RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW()), 0) as Lifespan, ".
+            /*35*/"IF (RentalAsset.MonthRemaining, ((RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / RentalAsset.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue, RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining ".
+            "FROM ItemSeries ".
+            "LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
+            "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
+
 
         if ($searchString)
             $sqlAll .= $searchString;
@@ -293,7 +308,8 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
             /*10*/"Item.RetailPrice, ItemSeries.ID as ItemSeriesID, CONCAT(Item.ItemName, ' (', Item.ModelNumber, ')') as ItemFullName, PurchaseOrders.ID as POID, POItems.ID as POItemsID, ".
             /*15*/"PurchaseOrders.PurchaseDate, Branches.Name as BranchName, Branches.ID as BranchID, ItemSeries.Status, ItemSeries.MarkupPercent,  ".
             /*20*/"ItemSeries.SalesOrderNumber, ItemSeries.UnitRetail, ItemSeries.SOItemsID, Item.ItemImagePath, PurchaseOrders.Locked as POLocked, Item.ID as ItemID, Item.PartNumber, ".
-            /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus ".
+            /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
+            /*31*/"RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining, RentalAsset.DateAsAsset ".
             "FROM ItemSeries LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
             "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset  WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID  ";
 

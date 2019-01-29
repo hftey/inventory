@@ -390,3 +390,23 @@ ALTER TABLE `RentalAssetStatus` ADD `ActualReturnDate` date default NULL;
 ALTER TABLE `Item` ADD `MonthDepreciation` int(2) default NULL;
 
 
+/* Jan 25, 2019 */
+
+CREATE TABLE IF NOT EXISTS `RentalStatusDocuments` (
+  `ID` int(11) NOT NULL auto_increment,
+  `RentalAssetStatusID` int(12) DEFAULT NULL,
+  `DocType` varchar(32) DEFAULT NULL,
+  `Name` varchar(128) NOT NULL,
+  `Description` varchar(5000) DEFAULT NULL,
+  `DateSubmitted` DateTime DEFAULT NULL,
+  `SubmittedBy` int(12) DEFAULT NULL,
+  `FilePath` varchar(255) DEFAULT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+ALTER TABLE `RentalAsset` ADD MonthDepreciation int(3) DEFAULT NULL;
+ALTER TABLE `RentalAsset` ADD MonthRemaining int(3) DEFAULT NULL;
+
+ALTER TABLE `ItemSeriesStatus` ADD MonthDepreciation int(3) DEFAULT NULL;
+ALTER TABLE `ItemSeriesStatus` ADD MonthRemaining int(3) DEFAULT NULL;
+
