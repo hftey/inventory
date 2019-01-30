@@ -282,10 +282,13 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
             /*20*/"ItemSeries.UnitRetail, Item.ItemImagePath, PurchaseOrders.ExpectedDate, NULL, PurchaseOrders.Locked, Item.ID as ItemID, Item.PartNumber, ".
             /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
             /*31*/"ItemSeries.ID as ItemSeriesID, RentalAsset.DateAsAsset, RentalAsset.MonthDepreciation, IF (RentalAsset.MonthRemaining, RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW()), 0) as Lifespan, ".
-            /*35*/"IF (RentalAsset.MonthRemaining, ((RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / RentalAsset.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue, RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining ".
+            /*35*/"IF (RentalAsset.MonthRemaining, ((RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / RentalAsset.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue, RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining, ".
+            /*38*/"RentalAssetStatus.ClientName, RentalAssetStatus.StatusDate, RentalAssetStatus.EstimatedReturnDate, DATEDIFF(RentalAssetStatus.EstimatedReturnDate, now()) as DaysRemaining ".
             "FROM ItemSeries ".
             "LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
-            "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
+            "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset LEFT JOIN ".
+            " RentalAssetStatus ON (RentalAssetStatus.RentalAssetID=RentalAsset.ID AND RentalAssetStatus.StatusDate=(SELECT MAX(StatusDate) FROM RentalAssetStatus WHERE RentalAssetStatus.RentalAssetID=RentalAsset.ID))  ".
+            "WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
 
 
         if ($searchString)

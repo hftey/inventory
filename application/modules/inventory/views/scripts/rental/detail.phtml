@@ -401,7 +401,7 @@ if (!$this->add_series) {
                     <td class="report_even" style="text-align:center;">
                         <div class="clsOutRental" style="display: none">
                             Customer:<BR>
-                            <select <?=$this->userInfo->ACLRole == "User" ? "disabled" : ""?> name='ClientName' id='ClientName' title=""><option value=''>-</option><?=$this->optionCustomers?></select>
+                            <select <?=$this->userInfo->ACLRole == "User" ? "disabled" : ""?> name='ClientName' id='ClientName' title=""><option value=''>-</option><?=$this->optionCustomers?></select><BR>
                             Estimated Return Date:<BR>
                             <input type=text size=10 name='EstimatedReturnDate' id='EstimatedReturnDate'>
 

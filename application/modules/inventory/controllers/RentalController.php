@@ -438,14 +438,55 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                 }
             }
 
-            function format_initremaining($colnum, $rowdata)
+
+            function format_initlifespan($colnum, $rowdata)
             {
-                return $rowdata[37];
+                return $rowdata[37] . " / " . $rowdata[36] . " months";
             }
 
-            function format_inittotal($colnum, $rowdata)
+            function format_statusdate($colnum, $rowdata, $export)
             {
-                return $rowdata[36];
+                $dispFormat = new Venz_App_Display_Format();
+                return $dispFormat->format_date($rowdata[39]);
+            }
+            function format_returndate($colnum, $rowdata, $export)
+            {
+                $dispFormat = new Venz_App_Display_Format();
+                return $dispFormat->format_date($rowdata[40]);
+//                if ($rowdata[40]){
+//
+//                    $datetime1 = date_create(date('Y-m-d 23:59:59', strtotime($rowdata[40])));
+//                    $datetime2 = date_create(date('Y-m-d 23:59:59'));
+//                    $interval = date_diff($datetime1, $datetime2);
+//
+//                    if (strtotime($rowdata[40]) > strtotime(Date('Y-m-d 23:59:59'))){
+//                        return $dispFormat->format_date($rowdata[40]) . "<BR><span style='color: red'>-".$interval->format('%d') ." days</span>";
+//                    }else{
+//                        return $dispFormat->format_date($rowdata[40]) . "<BR>".$interval->format('%d') ." days";
+//
+//                    }
+//
+//                }else{
+//                    return "";
+//                }
+            }
+
+            function format_remainingday($colnum, $rowdata, $export)
+            {
+                if ($export){
+                    return $rowdata[41];
+                }
+
+                if ($rowdata[41]){
+                    if ($rowdata[41] < 0){
+                        return "<span style='color: red'>".$rowdata[41]." day(s)<span>";
+                    }else{
+                        return $rowdata[41]." day(s)";
+                    }
+                }else{
+                    return "";
+                }
+
             }
 
             $exportReport = new Venz_App_Report_Excel(array('exportsql'=> $exportSql, 'hiddenparam'=>'<input type=hidden name="Search" value="Search">'));
@@ -461,12 +502,14 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 //            {
 
             $arrHeader = array ('<input type=checkbox name="SelectAllItemSeries" id="SelectAllItemSeries">','#', 'PO',$this->translate->_('Item Name (Model Name)<BR>Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),
-                $this->translate->_('Date marked<BR>for rental'), $this->translate->_('Initial<BR>Asset Value'),'Initial<BR>Remaining<BR>Lifespan','Initial<BR>Total<BR>Lifespan',
-                $this->translate->_('Asset<BR>Lifespan'), $this->translate->_('Current<BR>Value'),$this->translate->_('Status'),$this->translate->_('Edit'));
+                $this->translate->_('Date marked<BR>for rental'), $this->translate->_('Initial<BR>Asset Value'),'Initial Remaining<BR>Lifespan',
+                $this->translate->_('Asset<BR>Lifespan'), $this->translate->_('Current<BR>Value'),$this->translate->_('Status'),'Status Date', 'Customer<BR>Name',
+                'Date of Return', 'Days Remaining', $this->translate->_('Edit'));
             $arrFormat = array('{format_checkbox}','{format_counter}','%7%','{format_itemname}','{format_seriesnumber}','{format_branch}',
-                '{format_dateasset}','{format_initvalue}', '{format_initremaining}', '{format_inittotal}', '{format_lifespan}', '{format_currentvalue}', '{format_status}','{format_action}');
-            $tablewidth = "1550px";
-            $aligndata = "CCRLCCCRCCCRCCC";
+                '{format_dateasset}','{format_initvalue}', '{format_initlifespan}', '{format_lifespan}', '{format_currentvalue}', '{format_status}',
+                '{format_statusdate}','%38%','{format_returndate}','{format_remainingday}','{format_action}');
+            $tablewidth = "100%";
+            $aligndata = "CCRLCCCRCCRCCLCCC";
             $export = $exportReport->display_icon();
 
 //            }
@@ -474,10 +517,12 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 //            $arrFormatEx = array('{format_counter}','%7%','{format_itemname}','{format_partnumber}','{format_seriesnumber}','{format_branch}','{format_dateasset}','{format_unitprice}', '{format_unitlandedcost}', '{format_markup}','{format_retailprice}','{format_notes}','{format_status}');
 
             $arrHeaderEx = array ('#', 'PO',$this->translate->_('Item Name (Model Name) Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),
-                $this->translate->_('Date marked for rental'), $this->translate->_('Initial Asset Value'),'Initial Remaining Lifespan','Initial Total Lifespan',
-                $this->translate->_('Asset Lifespan'), $this->translate->_('Current Value'),$this->translate->_('Status'));
+                $this->translate->_('Date marked for rental'), $this->translate->_('Initial Asset Value'),'Initial Remaining Lifespan',
+                $this->translate->_('Asset Lifespan'), $this->translate->_('Current Value'),$this->translate->_('Status'),'Status Date', 'Customer Name',
+                'Date of Return', 'Days Remaining');
             $arrFormatEx = array('{format_counter}','%7%','{format_itemname}','{format_seriesnumber}','{format_branch}',
-                '{format_dateasset}','{format_initvalue}', '{format_initremaining}', '{format_inittotal}', '{format_lifespan}', '{format_currentvalue}', '{format_status}');
+                '{format_dateasset}','{format_initvalue}', '{format_initlifespan}', '{format_lifespan}', '{format_currentvalue}', '{format_status}',
+                '{format_statusdate}','%38%','{format_returndate}','{format_remainingday}');
 
 
 
@@ -492,7 +537,8 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                     'headings' => $arrHeader,
                     'format' 		=> $arrFormat,
                     'sort_column' 	=> array('','','PurchaseOrders.OrderNumber','ItemFullName','ItemSeries.SeriesNumber','BranchName','RentalAsset.DateAsAsset',
-                        'RentalAsset.AssetInitialValue','Lifespan','CurrentValue','RentalAsset.RentalStatus'),
+                        'RentalAsset.AssetInitialValue','RentalAsset.MonthRemaining','Lifespan','CurrentValue','RentalAsset.RentalStatus','RentalAssetStatus.StatusDate',
+                        'RentalAssetStatus.ClientName','RentalAssetStatus.EstimatedReturnDate','DaysRemaining'),
                     'alllen' 		=> $arrItem[0],
                     'title'		    => $this->translate->_('Items Series').": ". $arrItem[0]." ".$this->translate->_('items').$strUpdateButton,
                     'aligndata' 	=> $aligndata,
