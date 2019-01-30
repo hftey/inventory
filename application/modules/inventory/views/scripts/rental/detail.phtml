@@ -371,7 +371,7 @@ if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" &&
 <?
 if (!$this->add_series) {
 ?>
-
+    <span style="font-size: 10px;">*Please make sure to enter the status in chronological sequence.</span>
     <form  action='/inventory/rental/detail/id/<?=$this->RentalAssetID?>' method=POST>
         <table border="0" align="class='report_table'" id="report_table" cellspacing="0" cellpadding="3">
             <tbody><tr>

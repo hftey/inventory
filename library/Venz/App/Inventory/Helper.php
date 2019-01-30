@@ -287,7 +287,7 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
             "FROM ItemSeries ".
             "LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
             "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset LEFT JOIN ".
-            " RentalAssetStatus ON (RentalAssetStatus.RentalAssetID=RentalAsset.ID AND RentalAssetStatus.StatusDate=(SELECT MAX(StatusDate) FROM RentalAssetStatus WHERE RentalAssetStatus.RentalAssetID=RentalAsset.ID))  ".
+            " RentalAssetStatus ON (RentalAssetStatus.RentalAssetID=RentalAsset.ID AND RentalAssetStatus.ID=(SELECT MAX(ID) FROM RentalAssetStatus WHERE RentalAssetStatus.RentalAssetID=RentalAsset.ID))  ".
             "WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
 
 
