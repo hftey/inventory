@@ -378,14 +378,18 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             }
             function format_action($colnum, $rowdata, $export)
             {
+                $db = Zend_Db_Table::getDefaultAdapter();
+
                 if ($export)
                     return "";
 
                 $systemSetting = new Zend_Session_Namespace('systemSetting');
-                if ($systemSetting->userInfo->ACLRole == "User")
-                    return "<a href='/inventory/rental/detail/id/".$rowdata[27]."'><img border=0 src='/images/icons/IconView.png'></a>";
-                else
+                $db->setFetchMode(Zend_Db::FETCH_ASSOC);
+                $arrUserDetail = $db->fetchRow("SELECT * FROM ACLUsers WHERE ID=".$systemSetting->userInfo->ID);
+                if ($systemSetting->userInfo->ACLRole == "Admin" || $systemSetting->userInfo->ACLRole == "AdminSystem" || $arrUserDetail['ManageRental'])
                     return "<a href='/inventory/rental/detail/id/".$rowdata[27]."'><img border=0 src='/images/icons/IconEdit.gif'></a>";
+                else
+                    return "<a href='/inventory/rental/detail/id/".$rowdata[27]."'><img border=0 src='/images/icons/IconView.png'></a>";
             }
             function format_status($colnum, $rowdata, $export)
             {
@@ -502,9 +506,9 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
 //            {
 
             $arrHeader = array ('<input type=checkbox name="SelectAllItemSeries" id="SelectAllItemSeries">','#', 'PO',$this->translate->_('Item Name (Model Name)<BR>Part Number'),$this->translate->_('Serial Number'), $this->translate->_('Branch'),
-                $this->translate->_('Date marked<BR>for rental'), $this->translate->_('Initial<BR>Asset Value'),'Initial Remaining<BR>Lifespan',
-                $this->translate->_('Asset<BR>Lifespan'), $this->translate->_('Current<BR>Value'),$this->translate->_('Status'),'Status Date', 'Customer<BR>Name',
-                'Date of Return', 'Days Remaining', $this->translate->_('Edit'));
+                $this->translate->_('Date marked<BR>for rental'), $this->translate->_('Initial Asset<BR>Value'),'Initial<BR>Remaining<BR>Lifespan',
+                $this->translate->_('Asset<BR>Lifespan'), $this->translate->_('Current<BR>Value'),$this->translate->_('Status'),'Status<BR>Date', 'Customer<BR>Name',
+                'Date of<BR>Return', 'Days<BR>Remaining', $this->translate->_('Edit'));
             $arrFormat = array('{format_checkbox}','{format_counter}','%7%','{format_itemname}','{format_seriesnumber}','{format_branch}',
                 '{format_dateasset}','{format_initvalue}', '{format_initlifespan}', '{format_lifespan}', '{format_currentvalue}', '{format_status}',
                 '{format_statusdate}','%38%','{format_returndate}','{format_remainingday}','{format_action}');
@@ -606,6 +610,11 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
             $add_series = $Request->getParam('add_series');
             $this->view->add_series = $add_series;
 
+            $this->view->bCanEdit = $bCanEdit = false;
+            $arrUserDetail = $db->fetchRow("SELECT * FROM ACLUsers WHERE ID=".$this->userInfo->ID);
+            if ($systemSetting->userInfo->ACLRole == "Admin" || $systemSetting->userInfo->ACLRole == "AdminSystem" || $arrUserDetail['ManageRental']){
+                $this->view->bCanEdit = $bCanEdit = true;
+            }
 
 
             $update_item = $Request->getParam('update_item');

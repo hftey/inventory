@@ -410,3 +410,6 @@ ALTER TABLE `RentalAsset` ADD MonthRemaining int(3) DEFAULT NULL;
 ALTER TABLE `ItemSeriesStatus` ADD MonthDepreciation int(3) DEFAULT NULL;
 ALTER TABLE `ItemSeriesStatus` ADD MonthRemaining int(3) DEFAULT NULL;
 
+/* Jan 31, 2019 */
+
+ALTER TABLE `ACLUsers` ADD ManageRental int(1) DEFAULT 0;

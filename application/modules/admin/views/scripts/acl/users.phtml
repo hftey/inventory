@@ -185,7 +185,12 @@ function OnDeleteUsers(users_id){
 		<TR><TD class='form_label'><?=$this->translate->_('Confirm Password')?><font class='required'>*</font></TD><TD class='form_field'><input type='Password' name='ACLConfirmPassword' id='ACLConfirmPassword' width=35 value='' title='<?=$this->translate->_('Please re-enter the password for confirmation')?>.'></TD></TR>
 		<TR><TD class='form_label'><?=$this->translate->_('Name')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>' title='<?=$this->translate->_('Please enter a full name')?>.'></TD></TR>
 		<TR><TD class='form_label'><?=$this->translate->_('Email')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='Email' id='Email' width=35 value='<?=$this->Email?>'  title='<?=$this->translate->_('Please enter a valid email')?>.'></TD></TR>
-		<TR><TD class='form_label'><?=$this->translate->_('Role')?><font class='required'>*</font></TD><TD class='form_field'>
+        <TR><TD class='form_label'><?=$this->translate->_('Manage Rental')?></TD>
+            <TD class='form_field'>
+                <input type='checkbox' name='ManageRental' id='ManageRental' value='1'  title='This user will manage rental status.' <?=$this->ManageRentalCheck?>>
+            </TD>
+        </TR>
+        <TR><TD class='form_label'><?=$this->translate->_('Role')?><font class='required'>*</font></TD><TD class='form_field'>
 			<SELECT name='ACLRole' id='ACLRole' title='Select User for normal users and Admin for administrators'>
 			<option value=''>-
 			<?=$this->optionsRole?>

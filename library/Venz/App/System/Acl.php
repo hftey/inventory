@@ -29,7 +29,7 @@ class Venz_App_System_Acl extends Zend_Db_Table_Abstract
 		$sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
 		$count = $showPage -1;
 		$sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
-		$sqlAll = "SELECT ID, Name, Username, ACLRole, Email, Active, LastLogin, DateCreated,  DateModified FROM ACLUsers  WHERE 1=1";		
+		$sqlAll = "SELECT ID, Name, Username, ACLRole, Email, Active, LastLogin, DateCreated, DateModified, ManageRental FROM ACLUsers WHERE 1=1";
 		if ($searchString)
 			$sqlAll .= $searchString;
 		$sql .= $sqlAll." order by $sql_orderby $sql_limit";

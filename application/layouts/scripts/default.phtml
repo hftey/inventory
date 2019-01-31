@@ -174,9 +174,9 @@ $(document).ready(function() {
         <!-- ST-CONTENT-INNER -->
         <div class="st-content-inner relative">
           <!-- MAIN -->
-          <div id="mainn" class="main" style="position:relative">
+          <div id="mainn" class="main">
             <!-- MENU-BG -->
-            <div class="container-fluid menu-bg" style="width: 100%;">
+            <div class="container-fluid menu-bg">
               <!-- BM-CONTAINER -->
 			<div class="row-fluid site-width bm-container">
 <? if ($this->navigation_sub) { ?>
@@ -332,52 +332,13 @@ $(document).ready(function() {
 
 				</ul>				
 
-				<? 
-//				
-//				if ($this->userInfo) {
-//					echo $this->navigation()->menu(); 
-//				}
-				?>
-			
+
 				
                 </div>
-                <!-- /Wayout Menu - TOP NAV -->
-			<!--	
-				<div class="loginbox-toggler">
-                  <button id="login-form" class="login-toggle"></button>
-                </div-->				
- 				<? } ?>               
+ 				<? } ?>
             </div>
 			
-			 <!-- Login Container -->
-              <div id="login-container">
-                <form id='ChangePasswordForm'>
-					<div id='chgMsg'></div>
-					<?=$this->translate->_('You are logged in as')?> <B><?=$this->userInfo->Username?></B><BR>
-					<?=$this->translate->_('Last login was')?> <B><?
-					$dispFormat = new Venz_App_Display_Format();
-					echo $dispFormat->format_datetime_simple($this->userInfo->LastLogin);
-					
-					?></B> <BR><BR>
-					<div id='chgForm'>
-					<?=$this->translate->_('Last login was')?>:
-                  <div class="control-group">
-                    <div class="controls">
-                      <input type="password" id="Password" name="Password" placeholder="<?=$this->translate->_('New Password')?>">
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <div class="controls">
-                      <input type="password" id="ConfirmPassword" placeholder="<?=$this->translate->_('Confirm Password')?>">
-                    </div>
-                  </div>				  
-                  
-                  <button type="button" id="ChangePassword" name="ChangePassword" style='text-align:center;'><?=$this->translate->_('Change Password')?> </button>
-				  </div>
-				  
-                </form>
-              </div>
-              <!-- /Login Container -->
+
 			
             <!-- /MENU-BG -->
           </div>
@@ -389,14 +350,10 @@ $(document).ready(function() {
 
 
 		<div id="content">
-		<div id="content_top"></div>
-        <div id="content_main">
-		<? if (strlen($this->appNotice) > 0) { echo $this->appNotice; } ?>
-		<?php echo $this->layout()->content ?>
-		</div>
-		
-        <div id="content_bottom"></div>
-            
+            <div id="content_main">
+            <? if (strlen($this->appNotice) > 0) { echo $this->appNotice; } ?>
+            <?php echo $this->layout()->content ?>
+            </div>
 		</div>
           <!-- !!!!!!!!!!! /YOUR CONTENT GOES HERE !!!!!!!!!!! -->
           
@@ -409,10 +366,7 @@ $(document).ready(function() {
 
   </div>
   <!-- /MAIN CONTAINER -->
-<script>
-  // Initiate Lightbox
 
-</script>
 
 
 </body>

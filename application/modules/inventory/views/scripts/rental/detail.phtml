@@ -310,10 +310,10 @@
 <B class='PageHeader'><?=$this->translate->_('Rental Asset Details')?></B><BR>
 
 <?
-$disableEdit = true;
-if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) {
-    $disableEdit = false;
-}
+$disableEdit = $this->bCanEdit;
+//if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) {
+//    $disableEdit = false;
+//}
 ?>
 
 <form  action='/inventory/rental/detail/id/<?=$this->RentalAssetID?>' method=POST>
@@ -358,7 +358,7 @@ if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" &&
             </TD></TR>
         <TR><TD colspan=2 class='form_field'>&nbsp;</TD></TR>
         <TR><TD colspan=2 class='form_field'>
-                <? if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) { ?>
+                <? if ($disableEdit) { ?>
                         <input type=submit id='update_item' name='update_item' value='<?=$this->translate->_('Update Details')?>'>
                 <? } ?>
                 <input type="hidden" name="ItemSeriesID" value="<?=$this->ItemSeriesID?>">
@@ -385,7 +385,7 @@ if (!$this->add_series) {
                 <td class="report_header" style="text-align:center"><?=$this->translate->_('Entry date')?></td>
                 <td class="report_header" style="text-align:center">&nbsp;</td>
             </tr>
-            <? if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) { ?>
+            <? if ($disableEdit) { ?>
 
                 <tr>
                     <td class="report_even" style="text-align:center"><input type=text size=8 name='ReferenceNo' id='ReferenceNo'></td>
