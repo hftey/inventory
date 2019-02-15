@@ -1,0 +1,47 @@
+
+<script language='Javascript'>
+
+function OnDeleteRolesaccess(rolesaccess_id){
+	$.prompt(
+		"<?=$this->translate->_("Are you sure you want to remove the role's access?")?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){
+					if(v){
+						document.location='/admin/acl/rolesaccess/remove_rolesaccess/'+rolesaccess_id;
+					}
+				  }
+	});
+}
+
+
+
+$(document).ready(function() {   
+
+	$('#Role').change(function () {
+	
+		$.getJSON("/admin/acl/jsonrolesaccessex/roles/"+this.value, function(result){
+			$.each(result, function(i, field){
+			  $("div").append(field + " ");
+			});
+		  });
+			
+		
+	});
+
+});   
+</script>
+
+<form action='/admin/acl/rolesaccess' method=POST>
+	<table border=0 cellspacing=0 cellpadding=0>
+		<TR><TD colspan=2><B><?=$this->translate->_("Role Access Right")?></B></TD></TR>
+		<TR><TD><?=$this->translate->_('Roles')?>*:</TD><TD>
+			<SELECT name='Role' id='Role'>
+			<option value=''>-
+			<?=$this->optionsRole?>
+			</SELECT>
+			</TD></TR>
+		
+	</table>
+</form>
+<?=$this->content_rolesaccess?>
+<BR><BR><BR>

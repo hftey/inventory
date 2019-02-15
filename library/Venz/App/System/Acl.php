@@ -197,7 +197,4 @@ class Venz_App_System_Acl extends Zend_Db_Table_Abstract
 	
 }
 
-
-
-
 ?>

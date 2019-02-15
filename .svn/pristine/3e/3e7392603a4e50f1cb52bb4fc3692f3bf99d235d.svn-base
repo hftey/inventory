@@ -1,0 +1,100 @@
+
+<script language='Javascript'>
+
+
+$(document).ready(function() {   
+
+	$('#ACLRole').change(function () {
+			$.ajaxSetup({
+			// Disable caching of AJAX responses
+			cache: false
+		});
+		$.getJSON("/admin/acl/jsonrolesaccessex/allow/1/roles/"+this.value, function(result){
+			
+			$("#rolematrix_allow").html("");
+			var strPriviledges = "";
+			strPriviledges = "<TR><TD width=200px></TD>";
+			$.each(result.priviledges, function(i, priviledges){
+			  	 strPriviledges += "<TD width=50px>" + priviledges + "</TD>";
+			});
+			strPriviledges += "</TR>";
+						
+			var strMatrix = "";
+			
+			$.each(result.data, function(resource, field){
+				strPriviledges += "<TR>";
+				strPriviledges += "<TD>" + resource + "</TD>";
+			  	$.each(field, function(privilege, access){
+				  if (access)
+					strPriviledges += "<TD><input name='accessMapAllow["+resource+"|"+privilege+"]' type=checkbox checked></TD>";
+				  else
+					strPriviledges += "<TD><input name='accessMapAllow["+resource+"|"+privilege+"]' type=checkbox></TD>";
+				});
+				strPriviledges += "</TR>";
+			});
+			
+			$("#rolematrix_allow").append(strPriviledges);
+	  });
+	
+		$.getJSON("/admin/acl/jsonrolesaccessex/deny/1/roles/"+this.value, function(result){
+			
+			$("#rolematrix_deny").html("");
+			var strPriviledges = "";
+			strPriviledges = "<TR><TD width=200px></TD>";
+			$.each(result.priviledges, function(i, priviledges){
+			  	 strPriviledges += "<TD width=50px>" + priviledges + "</TD>";
+			});
+			strPriviledges += "</TR>";
+						
+			var strMatrix = "";
+			
+			$.each(result.data, function(resource, field){
+				strPriviledges += "<TR>";
+				strPriviledges += "<TD>" + resource + "</TD>";
+			  	$.each(field, function(privilege, access){
+				  if (access)
+					strPriviledges += "<TD><input name='accessMapDeny["+resource+"|"+privilege+"]' type=checkbox checked></TD>";
+				  else
+					strPriviledges += "<TD><input name='accessMapDeny["+resource+"|"+privilege+"]' type=checkbox></TD>";
+				});
+				strPriviledges += "</TR>";
+			});
+			
+			$("#rolematrix_deny").append(strPriviledges);
+	  });			
+		
+	});
+	
+	
+	if ($('#ACLRole').val())
+	{
+		$('#ACLRole').trigger("change");
+	}
+
+});   
+</script>
+
+<form action='/admin/acl/rolesaccessex' method=POST>
+	<table border=0 cellspacing=0 cellpadding=0>
+		<TR><TD class='form_label' colspan=2><B><?=$this->translate->_("Role Access Right")?></B></TD></TR>
+		<TR><TD class='form_field'><?=$this->translate->_('Roles')?>*:</TD><TD>
+			<SELECT name='ACLRole' id='ACLRole'>
+			<option value=''>-
+			<?=$this->optionsRole?>
+			</SELECT>
+			</TD></TR>
+		
+	</table>
+	<HR>
+	<B>Allow</B>
+	<table name='rolematrix_allow' id='rolematrix_allow' cellspacing=0 border=1>
+	</table>
+	<BR>
+	<B>Deny</B>
+	<table name='rolematrix_deny' id='rolematrix_deny' cellspacing=0 border=1>
+	</table>
+	
+	<input type=submit name='Update' id='Update' value='Update'>
+</form>
+<?=$this->content_rolesaccess?>
+<BR><BR><BR>

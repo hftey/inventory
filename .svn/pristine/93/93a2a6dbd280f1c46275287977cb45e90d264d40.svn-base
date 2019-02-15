@@ -1,0 +1,218 @@
+
+
+<script language='Javascript'>
+function validateEmail(email) { 
+    var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+} 
+
+
+function isValidPassword(input)
+{
+	 if (input.length < 8)
+		return false;
+
+
+	 var reg = /[a-zA-Z]/;
+	 var reg2 = /[0-9]/;
+	 return reg.test(input) && reg2.test(input);
+}  
+
+
+$(document).ready(function() { 
+
+$('#Username').poshytip({ bgImageFrameSize:9, className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#ACLPassword').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#ACLConfirmPassword').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#Email').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#Name').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#ACLRole').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#radioActiveYes').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#radioActiveNo').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+
+
+$('#search_users').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#clear').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#add_users').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#save_users').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+
+
+
+	$('#save_users').click(function () {
+
+		
+		var error = false;
+        if ($('#Username').val()=='') { 
+			
+			$('#Username').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the username')?>', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+			$('#Username').poshytip('show');
+
+			error = true;
+		}
+
+		if ($('#ACLPassword').val()) {
+			if (!isValidPassword($('#ACLPassword').val()))
+			{
+				$('#ACLPassword').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Password must contain at least 8 alphanumeric characters')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+				$('#ACLPassword').poshytip('show');
+						
+				error = true;			
+			}
+			
+			if ($('#ACLPassword').val()!=$('#ACLConfirmPassword').val()) {   
+				$('#ACLConfirmPassword').poshytip({bgImageFrameSize:8,  content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Passwords entered are not the same')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+				$('#ACLConfirmPassword').poshytip('show');
+				error = true; 
+			}	
+			
+		}
+		
+        if ($('#Name').val()=='') {   
+			$('#Name').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the name')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#Name').poshytip('show');
+			error = true;
+		}	
+		
+		
+        if ($('#Email').val()=='') {   
+			$('#Email').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter email address')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#Email').poshytip('show');
+			error = true;
+		}
+		
+		if (!validateEmail($('#Email').val()))
+		{
+			$('#Email').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('The email entered is not valid')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#Email').poshytip('show');
+			error = true;			
+		}		
+		if ($('#ACLRole').val() =='')
+		{
+			$('#ACLRole').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select user role')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#ACLRole').poshytip('show');
+			error = true;			
+		}			
+		if (error)
+			return false; 			
+		
+	})
+
+
+	$('#add_users').click(function () {
+
+		
+		var error = false;
+        if ($('#Username').val()=='') { 
+			
+			$('#Username').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the username')?>', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+			$('#Username').poshytip('show');
+
+			error = true;
+		}
+
+		if (!isValidPassword($('#ACLPassword').val()))
+		{
+			$('#ACLPassword').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Password must contain at least 8 alphanumeric characters')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#ACLPassword').poshytip('show');
+					
+			error = true;			
+		}	
+		
+		if ($('#ACLPassword').val()!=$('#ACLConfirmPassword').val()) {   
+			$('#ACLConfirmPassword').poshytip({bgImageFrameSize:8,  content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Passwords entered are not the same')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#ACLConfirmPassword').poshytip('show');
+			error = true; 
+		}				
+		
+		
+        if ($('#Name').val()=='') {   
+			$('#Name').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the name')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#Name').poshytip('show');
+			error = true;
+		}	
+		
+		
+        if ($('#Email').val()=='') {   
+			$('#Email').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter email address')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#Email').poshytip('show');
+			error = true;
+		}
+		
+		if (!validateEmail($('#Email').val()))
+		{
+			$('#Email').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('The email entered is not valid')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#Email').poshytip('show');
+			error = true;			
+		}		
+		if ($('#ACLRole').val() =='')
+		{
+			$('#ACLRole').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select user role')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+			$('#ACLRole').poshytip('show');
+			error = true;			
+		}			
+		if (error)
+			return false; 			
+		
+	})
+});	
+
+
+
+function OnDeleteUsers(users_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove the user?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){
+					if(v){
+						document.location='/admin/acl/users/remove_users/'+users_id;
+					}
+				  }
+	});
+}
+
+
+
+
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_('User Management')?></B><BR>
+
+<form action='/admin/acl/users' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Username')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='Username' id='Username' width=35 value='<?=$this->Username?>' title='<?=$this->translate->_('Username must be at least 5 characters in length')?>.'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Password')?><font class='required'>*</font></TD><TD class='form_field'><input type='Password' name='ACLPassword' id='ACLPassword' width=35 value='' title='<?=$this->translate->_('Password must be at least 8 characters in length')?>.'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Confirm Password')?><font class='required'>*</font></TD><TD class='form_field'><input type='Password' name='ACLConfirmPassword' id='ACLConfirmPassword' width=35 value='' title='<?=$this->translate->_('Please re-enter the password for confirmation')?>.'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Name')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>' title='<?=$this->translate->_('Please enter a full name')?>.'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Email')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='Email' id='Email' width=35 value='<?=$this->Email?>'  title='<?=$this->translate->_('Please enter a valid email')?>.'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Role')?><font class='required'>*</font></TD><TD class='form_field'>
+			<SELECT name='ACLRole' id='ACLRole' title='Select User for normal users and Admin for administrators'>
+			<option value=''>-
+			<?=$this->optionsRole?>
+			</SELECT>
+		</TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Active')?><font class='required'>*</font></TD><TD  class='form_field'>
+			<input type=radio name=radioActive id='radioActiveYes' value='1' <?=$this->radActive?>  title='this is radio'><?=$this->translate->_('Active')?>
+			<input type=radio name=radioActive id='radioActiveNo' value='0' <?=$this->radNotActive?>  title='this is radio.'><?=$this->translate->_('Not Active')?>
+		</TD></TR>
+		<TR><TD colspan=3 height=10px></TD></TR>
+
+		<TR><TD colspan=3>
+<?if ($this->edit_users) { ?>
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Cancel')?>' onclick='document.location="/admin/acl/users"'  title='<?=$this->translate->_('Cancel the edit')?>.'> | 
+		<input type=submit name='save_users' id='save_users' value='<?=$this->translate->_('Save')?>'  title='<?=$this->translate->_('Save the update for the selected user')?>.'>
+		<input type=hidden name='save_users_id' value='<?=$this->edit_users?>'>		
+		<? } else {?>
+		<input type=submit name='search_users' id='search_users' value='<?=$this->translate->_('Search')?>' title='<?=$this->translate->_('Click to search for the users. Password fields are ignored')?>.'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/acl/users"'  title='<?=$this->translate->_('Clear all the inputs above')?>.'> | 
+		<input type=submit name='add_users' id='add_users' value='<?=$this->translate->_('Create New User')?>'  title='<?=$this->translate->_('Please make sure all the required fields are entered before click to create new user')?>.'>		
+		<? } ?>
+		
+		
+		
+		
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_users?>
+<BR><BR><BR>

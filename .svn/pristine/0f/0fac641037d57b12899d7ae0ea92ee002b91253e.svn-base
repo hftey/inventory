@@ -1,0 +1,280 @@
+
+<script language='Javascript'>
+
+function UpdateLandedCost()
+{
+	if (!isNaN(parseFloat($('#UnitPriceRM').val()))){
+		UnitPriceRM = parseFloat($('#UnitPriceRM').val());
+		$('#UnitPriceRM').val(parseFloat($('#UnitPriceRM').val()).toFixed(2));
+	}
+	
+	if (!isNaN(parseFloat($('#UnitDeliveryCost').val()))){
+		UnitDeliveryCost = parseFloat($('#UnitDeliveryCost').val());
+		$('#UnitDeliveryCost').val(parseFloat($('#UnitDeliveryCost').val()).toFixed(2));
+	}
+		
+
+	if (!isNaN(parseFloat($('#UnitTaxCost').val()))){
+		UnitTaxCost = parseFloat($('#UnitTaxCost').val());
+		$('#UnitTaxCost').val(parseFloat($('#UnitTaxCost').val()).toFixed(2));
+	}
+	var LandedCost = parseFloat(UnitPriceRM + UnitDeliveryCost + UnitTaxCost).toFixed(2);
+	$('#UnitLandedCost').val(LandedCost);
+
+	var retailPrice = parseFloat((($('#MarkupPercent').val() / 100) * LandedCost)) + parseFloat(LandedCost);
+	$('#UnitRetail').val(parseFloat(retailPrice).toFixed(2));
+		
+//	var MarkupPercent = 0.00;
+//	if (parseFloat($('#RetailPrice').val()) >= parseFloat($('#UnitLandedCost').val()))
+//		MarkupPercent =  ((parseFloat($('#RetailPrice').val()) - parseFloat($('#UnitLandedCost').val())) / parseFloat($('#UnitLandedCost').val())) * 100;
+//	else
+//		MarkupPercent =  "-" + (((parseFloat($('#UnitLandedCost').val()) - parseFloat($('#RetailPrice').val())) / parseFloat($('#RetailPrice').val()))) * 100;
+//	
+//	$('#MarkupPercent').val(parseFloat(MarkupPercent).toFixed(2));
+}
+
+function OnDeleteStatus(item_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove this entry?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){ 
+			if(v){
+				document.location='/inventory/brand/itemseriesdetail/id/<?=$this->ItemSeriesID?>/remove_status/'+item_id;
+			}
+		}
+	  
+	});
+}
+
+
+
+
+$(document).ready(function() { 
+
+ $( "#StatusDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+$( "#PurchaseDate" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+ 
+if ($('#StatusItem').val() == "sold" || $('#StatusItem').val() == "reserved")
+{
+	$('#divSalesOrder').show();
+	
+}
+ 
+	$('#UnitPriceRM').change(function () {	
+		UpdateLandedCost();
+	});
+
+	$('#UnitDeliveryCost').change(function () {	
+		UpdateLandedCost();
+	});
+
+	$('#UnitTaxCost').change(function () {	
+		UpdateLandedCost();
+	});
+	
+	$('#MarkupPercent').change(function () {	
+		UpdateLandedCost();
+
+		
+		
+	});
+	
+	
+	$('#StatusItem').change(function () {	
+		if ($('#StatusItem').val() == "sold")
+		{
+			$('#divSalesOrder').show();
+		}else
+			$('#divSalesOrder').hide();
+	});
+	
+	
+	$('#Status').change(function () {
+		if ($('#Status').val() == "intransit")
+			$('#divTransferTo').show();
+		else
+			$('#divTransferTo').hide();
+		
+	});
+	
+	
+	$('#add_status').click(function () {
+		var error = false;
+		if ($('#StatusDate').val()=='') { 
+			
+			$('#StatusDate').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the date')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'top',offsetX: 5, timeOnScreen: 3000});
+			$('#StatusDate').poshytip('show');
+			$('#StatusDate').css("border", "1px solid red");
+			
+			error = true;
+		}
+		
+		if ($('#Status').val()=='') { 
+			
+			$('#Status').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select the status')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+			$('#Status').poshytip('show');
+			$('#Status').css("border", "1px solid red");
+			
+			error = true;
+		}
+
+		if ($('#UserIDResp').val()=='') { 
+			
+			$('#UserIDResp').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please select the person in charge')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'top',offsetX: 5, timeOnScreen: 3000});
+			$('#UserIDResp').poshytip('show');
+			$('#UserIDResp').css("border", "1px solid red");
+			
+			error = true;
+		}
+
+//		if ($('#Notes').val()=='') { 
+//			
+//			$('#Notes').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter the notes for this entry')?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'inner-left',alignY: 'bottom',offsetX: 5, timeOnScreen: 3000});
+//			$('#Notes').poshytip('show');
+//			$('#Notes').css("border", "1px solid red");
+//			
+//			error = true;
+//		}		
+		
+		if (error)
+			return false; 
+		else
+			return true;		
+	
+	});	
+	
+
+});
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_('Item Series Details')?></B><BR>
+
+<? 
+$disableEdit = true;
+if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) {
+	$disableEdit = false;
+} 
+?>
+
+<form  action='/inventory/brand/itemseriesdetail/id/<?=$this->ItemSeriesID?>/f/<?=$this->accessFrom?>' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2 width=700px>
+
+		<TR><TD colspan=2 ><B><?=$this->ItemFullName?></B></TD></TR>
+		<? if ($this->ItemImagePath) { ?>
+		<TR><TD colspan=2 ><B><img style="max-height:100px;max-width:150px;" src='<?=$this->ItemImagePath?>'></B></TD></TR>
+		<? } ?>
+		<?if (!$this->add_series) { ?>	
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('PO Number')?></TD>
+		<TD  style='text-align: right;' width=150px  class='form_field' valign=bottom><?=$this->OrderNumber?></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Date of Purchase')?></TD><TD style='text-align: right;' class='form_field'><?=$this->PurchaseDate?></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Item')?></TD><TD style='text-align: right;' class='form_field'><select <?=$disableEdit ? "disabled" : ""?> name='ItemID' style="width:450px;" id='ItemID' title="Items."><option value=''>-<?=$this->optionItems?></select></TD></TR>
+		<? }else{ ?>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Item')?></TD><TD style='text-align: right;' class='form_field'><select <?=$disableEdit ? "disabled" : ""?> name='ItemID' style="width:450px;" id='ItemID' title="Items."><option value=''>-<?=$this->optionItems?></select></TD></TR>
+		<? } ?>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Serial Number')?></TD><TD  style='text-align: right;' class='form_field'>
+		<input  style='text-align: right;' type=text name='SeriesNumber' ID='SeriesNumber' value='<?=$this->SeriesNumber?>' <?=$disableEdit ? "disabled" : ""?>>
+		</TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Branch')?></TD><TD class='form_field' valign=bottom  style='text-align: right;'> <select  <?=$disableEdit ? "disabled" : ""?> name='BranchID' id='BranchID' title=""><option value=''>-</option><?=$this->optionBranches?></select></TD></TR>
+		
+		<? if ($this->POLocked) { ?>
+		<? if ($this->userInfo->ACLRole != "User") { ?>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Unit Price')?> (<?=$this->currencyType?>)</TD><TD  style='text-align: right;' class='form_field'>
+		<input <?=$disableEdit ? "disabled" : ""?> size=10  style='text-align:right' type=text name='UnitPriceRM' ID='UnitPriceRM' value='<?=$this->UnitPriceRM?>'>
+		</TD></TR>				
+		
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Delivery Cost')?> (<?=$this->currencyType?>)</TD><TD  style='text-align: right;' class='form_field'>
+		<input <?=$disableEdit ? "disabled" : ""?> size=10 style='text-align:right' type=text name='UnitDeliveryCost' ID='UnitDeliveryCost' value='<?=$this->UnitDeliveryCost?>'>
+		</TD></TR>				
+
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Tax Cost')?> (<?=$this->currencyType?>)</TD><TD  style='text-align: right;' class='form_field'>
+		<input <?=$disableEdit ? "disabled" : ""?> size=10 style='text-align:right' type=text name='UnitTaxCost' ID='UnitTaxCost' value='<?=$this->UnitTaxCost?>'>
+		</TD></TR>				
+
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Landed Cost')?> (<?=$this->currencyType?>)</TD><TD  style='text-align: right;' class='form_field'>
+		<input <?=$disableEdit ? "disabled" : ""?> size=10 readonly style='text-align:right' type=text name='UnitLandedCost' ID='UnitLandedCost' value='<?=$this->UnitLandedCost?>'>
+		</TD></TR>		
+
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Markup')?></TD><TD  style='text-align: right;' class='form_field'>
+		<input <?=$disableEdit ? "disabled" : ""?> size=8 style='text-align:right' type=text name='MarkupPercent' ID='MarkupPercent' value='<?=$this->MarkupPercent?>'> %
+		</TD></TR>	
+		<? } ?>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Unit Retail')?> (<?=$this->currencyType?>)</TD><TD  style='text-align: right;' class='form_field'>
+		<input <?=$disableEdit ? "disabled" : ""?> size=10 readonly style='text-align:right' type=text name='UnitRetail' ID='UnitRetail' value='<?=$this->RetailPrice?>'>
+		</TD></TR>	
+		<? } ?>
+		
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Stock Status')?></TD><TD  style='text-align: right;' class='form_field'>
+		
+		<SELECT  <?=$disableEdit ? "disabled" : ""?> name='StatusItem' id='StatusItem'><option value=''>-</option><?=$this->optionStatusItem?></SELECT>
+		<div id='divSalesOrder' style='display:none;padding-top:4px; text-align:right;'> <?=$this->translate->_('Sales Order Number')?>: <input <?=$disableEdit ? "disabled" : ""?> type=text id='SalesOrderNumber' name='SalesOrderNumber' value='<?=$this->SalesOrderNumber?>'><?=$this->SOLink?></div>
+		</TD></TR>		
+		
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('In Stock')?></TD><TD  style='text-align: right;' class='form_field'>
+		<?=$this->NumStock?>
+		</TD></TR>	
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Min Stock')?></TD><TD  style='text-align: right;' class='form_field'>
+		<?=$this->MinStock?>
+		</TD></TR>	
+		
+		<TR><TD colspan=2 class='form_field'>&nbsp;</TD></TR>	
+		<TR><TD colspan=2 class='form_field'>
+  <? if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) { ?>
+
+		<? if ($this->add_series) { ?>
+		<input type=submit id='add_itemseries' name='add_itemseries' value='<?=$this->translate->_('Add New Series')?>'>
+		<input type=hidden id='add_series' name='add_series' value='1'>
+		<? } else { ?>
+		<input type=submit id='update_item' name='update_item' value='<?=$this->translate->_('Update Details')?>'>
+		<? } ?>
+ <? } ?>	
+		<? if ($this->accessFrom == "series") { ?>
+		<input type=button id='back' name='back' value='<?=$this->translate->_('Back')?>' onclick="document.location='/inventory/brand/itemseries/'">
+		<? } else { ?>
+		<input type=button id='back' name='back' value='<?=$this->translate->_('Back')?>' onclick="document.location='/inventory/brand/flow/'">
+		<? } ?>
+	
+		</TD></TR>		
+	</table>
+</form>
+
+<?
+if (!$this->add_series) {
+?>
+
+<form  action='/inventory/brand/itemseriesdetail/id/<?=$this->ItemSeriesID?>' method=POST>
+<input type=hidden name='ItemID' value='<?=$this->ItemID ?>'> 
+<table border="0" align="class='report_table'" id="report_table" cellspacing="0" cellpadding="3" width="1100px">
+  <tbody><tr>
+    <td class="report_header" style="text-align:center"><?=$this->translate->_('Reference Number')?></td>
+	<td class="report_header" style="text-align:center"><?=$this->translate->_('Date')?>*</td>
+	<td class="report_header" style="text-align:center"><?=$this->translate->_('Status')?>*</td>
+	<td class="report_header" style="text-align:center"><?=$this->translate->_('Person In Charge')?>*</td>
+	<td class="report_header" style="text-align:center"><?=$this->translate->_('Notes')?>*</td>
+	<td class="report_header" style="text-align:center"><?=$this->translate->_('Entry By')?></td>
+	<td class="report_header" style="text-align:center"><?=$this->translate->_('Entry date')?></td>
+	<td class="report_header" style="text-align:center">&nbsp;</td>
+  </tr>
+  <? if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) { ?>
+
+  <tr>
+	<td class="report_even" style="text-align:center"><input type=text size=8 name='ReferenceNo' id='ReferenceNo'></td>
+	<td width=150px class="report_even" style="text-align:center"><input type=text size=10 name='StatusDate' id='StatusDate'></td>
+	<td class="report_even" style="text-align:center"><SELECT name='Status' id='Status'><option value=''>-</option><?=$this->optionStatus?></SELECT>
+	<div style='display: none' id='divTransferTo'><?=$this->translate->_('To')?>: <select <?=$this->userInfo->ACLRole == "User" ? "disabled" : ""?> name='TransitTo' id='TransitTo' title=""><option value=''>-</option><?=$this->optionBranchesTransit?></select></div>
+	
+	</td>
+	<td class="report_even" style="text-align:center"><SELECT name='UserIDResp' id='UserIDResp' ><option value=''>-</option><?=$this->optionPersonInCharge?></SELECT></td>
+	<td class="report_even" style="text-align:center"><textarea name='Notes' id='Notes'></textarea></td>
+	<td class="report_even" style="text-align:center">&nbsp;</td>
+	<td class="report_even" style="text-align:center">&nbsp;</td>
+	<td class="report_even" style="text-align:center"><input type=submit name='add_status' id='add_status' value='<?=$this->translate->_('Add New Status')?>'></td>
+</tr>  
+	<? } ?>
+
+<?=$this->status?>
+ 
+</tbody></table>
+</form>
+
+<? } ?>

@@ -478,5 +478,4 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 
 
 
-
 ?>
