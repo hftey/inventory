@@ -1,0 +1,82 @@
+<link rel="stylesheet" type="text/css" href="/css/impromptu.css" />
+<script language="JavaScript" type="text/JavaScript" src="/js/jquery/jquery.impromptu.js"></script>
+
+
+
+<script language='Javascript'>
+
+function OnDeleteResources(resources_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove the resources?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){
+					if(v){
+						document.location='/admin/acl/resources/remove_resources/'+resources_id;
+					}
+				  }
+	});
+}
+
+
+
+$(document).ready(function() {   
+
+	$('#add_resources').click(function () {
+	
+
+        if ($('#Name').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Name')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Description').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Description')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Category').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Category')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+		return true;
+	});
+	
+	$('#save_resources').click(function () {
+        if ($('#Name').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Name')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Description').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Description')?>",{ buttons: { Ok: true } });
+            return false; 
+		}	
+        if ($('#Category').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Category')?>",{ buttons: { Ok: true } });
+            return false; 
+		}		
+		return true;
+	});	
+});   
+</script>
+
+<form action='/admin/acl/resources' method=POST>
+	<table border=0 cellspacing=0 cellpadding=0>
+		<TR><TD colspan=2><B><?=$this->translate->_('Add New Resources')?></B></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Name')?>*:</TD><TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Description')?>*:</TD><TD class='form_field'><input type='text' name='Description' id='Description' width=35 value='<?=$this->Description?>'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Category*')?>:</TD><TD class='form_field'><input type='text' name='Category' id='Category' width=35 value='<?=$this->Category?>'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Parent Name')?>:</TD><TD class='form_field'><input type='text' name='ParentName' id='ParentName' width=35 value='<?=$this->ParentName?>'></TD></TR>
+		<TR><TD colspan=2>
+		*Required when add a new resources<BR>
+		<input type=submit name='search_resources' id='search_resources' value='<?=$this->translate->_('Search')?>'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/acl/resources"'>	|
+		<?if ($this->edit_resources) { ?>
+		<input type=submit name='save_resources' id='save_resources' value='<?=$this->translate->_('Save')?>'>
+		<input type=hidden name='save_resources_id' value='<?=$this->edit_resources?>'>		
+		<? } else {?>
+		<input type=submit name='add_resources' id='add_resources' value='<?=$this->translate->_('Add')?>'>
+		<? } ?>
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_resources?>
+<font class='small'>** <?=$this->translate->_('Resources is defined in ACL Access Right')?>.</font>
+<BR><BR><BR>

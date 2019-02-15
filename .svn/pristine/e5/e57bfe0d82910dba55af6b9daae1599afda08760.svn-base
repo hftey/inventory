@@ -1,0 +1,74 @@
+<link rel="stylesheet" type="text/css" href="/css/impromptu.css" />
+<script language="JavaScript" type="text/JavaScript" src="/js/jquery/jquery.impromptu.js"></script>
+
+
+
+<script language='Javascript'>
+
+function OnDeletePriviledges(priviledges_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove the priviledge?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){
+					if(v){
+						document.location='/admin/acl/priviledges/remove_priviledges/'+priviledges_id;
+					}
+				  }
+	});
+}
+
+
+
+$(document).ready(function() {   
+
+	$('#add_priviledges').click(function () {
+	
+
+        if ($('#Name').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Name')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Description').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Description')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+
+		return true;
+	});
+	
+	$('#save_priviledges').click(function () {
+        if ($('#Name').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Name')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Description').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Description')?>",{ buttons: { Ok: true } });
+            return false; 
+		}	
+	
+		return true;
+	});	
+});   
+</script>
+
+<form action='/admin/acl/priviledges' method=POST>
+	<table border=0 cellspacing=0 cellpadding=0>
+		<TR><TD colspan=2><B><?=$this->translate->_('Add New Priviledge')?></B></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Name')?>*:</TD><TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Description')?>*:</TD><TD class='form_field'><input type='text' name='Description' id='Description' width=35 value='<?=$this->Description?>'></TD></TR>
+		<TR><TD colspan=2>
+		*<?=$this->translate->_('Required when add a new priviledges')?><BR>
+		<input type=submit name='search_priviledges' id='search_priviledges' value='<?=$this->translate->_('Search')?>'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/acl/priviledges"'>	|
+		<?if ($this->edit_priviledges) { ?>
+		<input type=submit name='save_priviledges' id='save_priviledges' value='<?=$this->translate->_('Save')?>'>
+		<input type=hidden name='save_priviledges_id' value='<?=$this->edit_priviledges?>'>		
+		<? } else {?>
+		<input type=submit name='add_priviledges' id='add_priviledges' value='<?=$this->translate->_('Add')?>'>
+		<? } ?>
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_priviledges?>
+<font class='small'>** <?=$this->translate->_('Priviledge is defined in ACL Access Right')?>.</font>
+<BR><BR><BR>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<submenu>
+	<inventory>
+
+			<brands>
+			<label>Brands</label>
+			<uri>/inventory/brand</uri>
+			<order>1</order>
+			</brands>
+			
+			<listing>
+			<label>Item Listing</label>
+			<uri>/inventory/brand/item</uri>
+			<order>2</order>
+			</listing>	
+			<itemseries>
+				<label>Item Series</label>
+				<uri>/inventory/brand/itemseries</uri>
+					<order>3</order>
+			</itemseries>						
+									
+	</inventory>
+	
+	
+	<acl>
+
+			<role>
+			<label>Roles</label>
+			<uri>/admin/acl/roles</uri>
+			<order>1</order>
+			</role>
+			
+			<resources>
+			<label>Resouces</label>
+			<uri>/admin/acl/resources</uri>
+			<order>2</order>
+			</resources>	
+			
+			<priviledges>
+			<label>Priviledges</label>
+			<uri>/admin/acl/priviledges</uri>
+			<order>3</order>
+			</priviledges>		
+				
+			<accessright>
+			<label>Access Right</label>
+			<uri>/admin/acl/rolesaccess</uri>
+			<order>4</order>
+			</accessright>	
+
+			<accessrightex>
+			<label>Access Right (Matrix)</label>
+			<uri>/admin/acl/rolesaccessex</uri>
+			<order>5</order>
+			</accessrightex>	
+			
+			<usermanagement>
+			<label>User Management</label>
+			<uri>/admin/acl/users</uri>
+			<order>6</order>
+			</usermanagement>	
+
+
+	
+			
+	</acl>
+	
+	<dynamic>
+		<form>
+			<label>Dynamic Forms</label>
+			<uri>#</uri>
+			<id>dynamic_forms</id>
+			<order>1</order>
+			<pages>
+				<page1>
+					<label>Basic Form</label>
+					<uri>/dynamic/forms/basic</uri>
+				</page1>
+				<page2>
+					<label>Multiple Entry</label>
+					<uri>/dynamic/forms/multiple</uri>
+				</page2>
+				<page3>
+					<label>File Upload</label>
+					<uri>/dynamic/forms/uploads</uri>
+				</page3>
+				<page4>
+					<label>Value Slider</label>
+					<uri>/dynamic/forms/slider</uri>
+				</page4>					
+				<page5>
+					<label>Inline Editing</label>
+					<uri>/dynamic/forms/inline</uri>
+				</page5>				<page6>
+					<label>Tabs</label>
+					<uri>/dynamic/forms/tabs</uri>
+				</page6>					
+				<page7>
+					<label>Advance Form Design</label>
+					<uri>/dynamic/forms/advance</uri>
+				</page7>				
+
+				
+			</pages>				
+		</form>
+		<dynamic_content>
+			<label>Dynamic Content</label>
+			<uri>#</uri>
+			<order>2</order>
+			<pages>
+				<page1>
+					<label>Content Loading</label>
+					<uri>/dynamic/dynamic/content</uri>
+				</page1>
+				<page2>
+					<label>Popups</label>
+					<uri>/dynamic/dynamic/popups</uri>
+				</page2>
+				<page3>
+					<label>Auto Completes</label>
+					<uri>/dynamic/dynamic/autocomplete</uri>
+				</page3>	
+				
+			</pages>			
+			
+			
+		</dynamic_content>
+
+		<image>
+			<label>Image</label>
+			<uri>#</uri>
+			<order>3</order>
+			<pages>
+				<page1>
+					<label>Image Sliding</label>
+					<uri>/dynamic/image/sliding</uri>
+				</page1>
+				<page2>
+					<label>Image Preview</label>
+					<uri>/dynamic/image/preview</uri>
+				</page2>			
+			</pages>			
+			
+			
+		</image>
+	</dynamic>
+	</submenu>
+</config>
+
+
+
+

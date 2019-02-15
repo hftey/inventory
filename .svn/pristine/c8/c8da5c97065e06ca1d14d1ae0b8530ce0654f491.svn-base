@@ -1,0 +1,148 @@
+<link href="/js/jquery/bootstrap-editable/css/bootstrap-editable.css" rel="stylesheet">
+<script src="/js/jquery/bootstrap-editable/js/bootstrap-editable.js"></script>
+
+<script language='Javascript'>
+
+
+$(document).ready(function() { 
+
+$.ajaxSetup({
+    cache: false
+});
+
+
+
+$('#SearchString').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target',offsetY: 10, offsetX: 1, alignX: 'inner-left', showTimeout: 100});
+$('#OrderID').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target',offsetY: 10, offsetX: 1, alignX: 'inner-left', showTimeout: 100});
+$('#ItemID').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#SeriesNumber').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+
+$('#search_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#clear').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+
+
+$('#BrandID').change(function () {
+	$.get("/admin/system/ajaxgetitembybrand",{BrandID:$('#BrandID').val()},function(result_item){
+		$('#ItemName').html(result_item);
+	});	
+	
+	$.get("/admin/system/ajaxgetmodelbybrand",{BrandID:$('#BrandID').val()},function(result_model){
+		$('#ModelNumber').html(result_model);
+	});	
+
+	$.get("/admin/system/ajaxgetpartbybrand",{BrandID:$('#BrandID').val()},function(result_part){
+		$('#PartNumber').html(result_part);
+	});	
+	
+})
+
+
+$('#ItemName').change(function () {
+//	$.get("/admin/system/ajaxgetbrandbyitem",{ItemName:$('#ItemName').val()},function(result_brand){
+//		console.log(result_brand);
+//		$('#BrandID').html(result_brand);
+//	});	
+
+	$.get("/admin/system/ajaxgetmodelbyitem",{ItemName:$('#ItemName').val(),BrandID:$('#BrandID').val()},function(result_model){
+		$('#ModelNumber').html(result_model);
+	});	
+
+	$.get("/admin/system/ajaxgetpartbyitem",{ItemName:$('#ItemName').val(),BrandID:$('#BrandID').val()},function(result_part){
+		$('#PartNumber').html(result_part);
+	});	
+	
+})
+
+
+$('#ModelNumber').change(function () {
+	
+	$.post("/admin/system/ajaxgetpartbymodel",{ModelNumber:$('#ModelNumber').val(),ItemName:$('#ItemName').val(),BrandID:$('#BrandID').val()},function(result_part){
+		console.log(result_part);
+		$('#PartNumber').html(result_part);
+	});	
+	
+})
+
+
+
+
+function OnDeleteItem(item_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove this item?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){ 
+			if(v){
+				document.location='/inventory/brand/item/remove_item/'+item_id;
+			}
+		}
+	  
+	});
+}
+
+
+});
+
+//$.fn.editable.defaults.mode = 'inline';
+$(document).ready(function() {
+    <?
+	$sessionInlineUnitPrice = new Zend_Session_Namespace('sessionInlineUnitPrice');
+	echo $sessionInlineUnitPrice->jsInline;
+	$sessionInlineLandedCost = new Zend_Session_Namespace('sessionInlineLandedCost');
+	echo $sessionInlineLandedCost->jsInline;
+	$sessionInlineMarkup = new Zend_Session_Namespace('sessionInlineMarkup');
+	echo $sessionInlineMarkup->jsInline;
+	?>
+});
+
+function updateUnitRetail(ItemSeriesID, type, value)
+{
+	$.get("/inventory/brand/ajaxgetretail",{ID:ItemSeriesID},function(result){
+		$("#idRetail_"+ItemSeriesID).html(result);
+		if (type == 'unit_price'){
+			$("#unit_price_"+ItemSeriesID).html("<img src='/images/icons/IconEdit2.png'> " + value);
+		}else if (type == 'landed_cost'){
+			$("#landed_cost_"+ItemSeriesID).html("<img src='/images/icons/IconEdit2.png'> " + value);
+		}else if (type == 'markup')
+			$("#markup_"+ItemSeriesID).html("<img src='/images/icons/IconEdit2.png'> " + value);
+	});
+}
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_("Inventory > Listing")?></B><BR>
+
+<form enctype="multipart/form-data"  action='/inventory/brand/flow' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD colspan=2 ><B><?=$this->translate->_("Item's Series")?></B></TD></TR>
+		<TR><TD class='form_label' width=180px><?=$this->translate->_('Item Name / Model Number / Part number')?></TD><TD class='form_field' valign=bottom> <input type='text' name='SearchString' id='SearchString' size="35" value='<?=$this->SearchString?>'  title="<?=$this->translate->_("Search by the item's name or model number or part number.")?>."> </TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_('Purchase Orders')?></TD><TD class='form_field' valign=bottom> <select name='OrderID' id='OrderID' title="<?=$this->translate->_("Purchase Orders")?>."><option value=''>-<?=$this->optionPO?></select></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_('Branch')?></TD><TD class='form_field' valign=bottom> <select name='BranchID' id='BranchID' title=""><option value=''>-</option><?=$this->optionBranches?></select></TD></TR>
+
+		<TR><TD class='form_label' ><?=$this->translate->_('Items')?></TD><TD class='form_field'><select name='ItemID' id='ItemID' title="Items."><option value=''>-<?=$this->optionItems?></select></TD></TR>
+		
+		<TR><TD class='form_label' ><?=$this->translate->_('Brand')?></TD><TD class='form_field' valign=bottom> <select name='BrandID' id='BrandID' title="<?=$this->translate->_("Item's brand")?>."><option value=''>-<?=$this->optionBrand?></select></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_('Item Name')?></TD><TD class='form_field'> <select name='ItemName' id='ItemName'><option value=''>-<?=$this->optionItem?></select></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_('Model Number')?></TD><TD class='form_field'><select name='ModelNumber' id='ModelNumber'><option value=''>-<?=$this->optionModelNumber?></select></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_('Part Number')?></TD><TD class='form_field'><select name='PartNumber' id='PartNumber'><option value=''>-<?=$this->optionPartNumber?></TD></TR>
+		
+		
+		<TR><TD class='form_label' ><?=$this->translate->_('Series Number')?></TD><TD class='form_field'><input type='text' name='SeriesNumber' id='SeriesNumber' size="35" value='<?=$this->SeriesNumber?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_('Item Status')?></TD><TD class='form_field'>
+		<SELECT name='Status' id='Status'><option value=''>-</option><?=$this->optionStatusItem?></SELECT>
+		
+		</TD></TR>
+		
+		
+		
+		<TR><TD colspan=2 height=10px></TD></TR>
+
+		<TR><TD colspan=2>
+		<input type=submit name='search_series' id='search_series' value='<?=$this->translate->_('Search')?>' title='<?=$this->translate->_("Click to search for the item series")?>.'>		
+		<input type=button name='clear_search' id='clear_search' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/inventory/brand/flow/clear_search/1"'  title='<?=$this->translate->_("Clear all the inputs above")?>.'> | 
+		
+		</TD></TR>
+	</table>
+</form>
+
+<?=$this->content_item?>
+<BR><BR><BR>

@@ -1,0 +1,6 @@
+
+
+		<? if (strlen($this->appNotice) > 0) { echo $this->appNotice; } ?>
+		<?php echo $this->layout()->content ?>
+          
+  
