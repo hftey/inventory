@@ -43,16 +43,35 @@ class Venz_App_Db_Table extends Zend_Db_Table_Abstract
 		return $option_string;
    }
    
-	public function getSystemOptions($table, $defaultValue = null)
+	public function getSystemOptions($table, $defaultValue = null, $arrShow = [], $arrHide = [])
    {
    
 		$systemSetting = new Zend_Session_Namespace('systemSetting');
-		$systemSetting->$table;
-		
-		
-		foreach ($systemSetting->$table as $index => $TypeData)
+		$arrTableAll = $arrTable = $systemSetting->$table;
+
+		// only php 5.6.x can return key
+//       if ($arrShow){
+//           $arrTable = array_filter($systemSetting->$table, function($key) use($arrShow){
+//               return in_array($key, $arrShow);
+//           }, ARRAY_FILTER_USE_KEY);
+//       }
+
+       if ($arrShow){
+           $arrTable = array_filter($systemSetting->$table, function($val) use($arrShow, $arrTableAll){
+               $key = array_search($val, $arrTableAll);
+               return in_array($key, $arrShow);
+           });
+       }
+
+        if ($arrHide){
+            $arrTable = array_filter($systemSetting->$table, function($val) use($arrHide, $arrTableAll){
+                $key = array_search($val, $arrTableAll);
+                return !in_array($key, $arrHide);
+            });
+        }
+        $option_string = "";
+		foreach ($arrTable as $index => $TypeData)
 		{	
-		
 			if (is_array($TypeData))
 			{
 				if (!is_null($defaultValue))
@@ -84,7 +103,6 @@ class Venz_App_Db_Table extends Zend_Db_Table_Abstract
    
     
 }
-
 
 
 

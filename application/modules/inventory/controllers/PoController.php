@@ -25,6 +25,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 			$libInv = new Venz_App_Inventory_Helper();
 			$libDb = new Venz_App_Db_Table();
 			$dispFormat = new Venz_App_Display_Format();
+            $invRental = new Venz_App_Inventory_Rental();
 
 
 			/////////////////////////// DEALING WITH PAGINGS AND SORTING ///////////////////////////
@@ -90,13 +91,12 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 				$VendorID = $Request->getParam('VendorID') ? $Request->getParam('VendorID') : new Zend_Db_Expr("NULL");
 				$BranchID = $Request->getParam('BranchID') ? $Request->getParam('BranchID') : new Zend_Db_Expr("NULL");
 				$OrderNumber = $Request->getParam('OrderNumber') ? $Request->getParam('OrderNumber') : new Zend_Db_Expr("NULL");
-				$PurchaseDate = $Request->getParam('PurchaseDate') ? $Request->getParam('PurchaseDate') : new Zend_Db_Expr("NULL");
-				
-				$OADate = $Request->getParam('OADate') ? $Request->getParam('OADate') : new Zend_Db_Expr("NULL");
-				$ExpectedDate = $Request->getParam('ExpectedDate') ? $Request->getParam('ExpectedDate') : new Zend_Db_Expr("NULL");
+				$PurchaseDate = $Request->getParam('PurchaseDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('PurchaseDate')) : new Zend_Db_Expr("NULL");
+				$OADate = $Request->getParam('OADate') ? $dispFormat->format_date_simple_to_db($Request->getParam('OADate')) : new Zend_Db_Expr("NULL");
+				$ExpectedDate = $Request->getParam('ExpectedDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('ExpectedDate')) : new Zend_Db_Expr("NULL");
 				$FreightForwarder = $Request->getParam('FreightForwarder') ? $Request->getParam('FreightForwarder') : new Zend_Db_Expr("NULL");
 				$POStatus = $Request->getParam('POStatus') ? $Request->getParam('POStatus') : new Zend_Db_Expr("NULL");
-				$ReceivedDate = $Request->getParam('ReceivedDate') ? $Request->getParam('ReceivedDate') : new Zend_Db_Expr("NULL");
+				$ReceivedDate = $Request->getParam('ReceivedDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('ReceivedDate')) : new Zend_Db_Expr("NULL");
 				
 				
 				$ProductCost = $Request->getParam('ProductCost') ? $Request->getParam('ProductCost') : new Zend_Db_Expr("NULL");
@@ -110,9 +110,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 				$MiscCost = $Request->getParam('MiscCost') ? $Request->getParam('MiscCost') : new Zend_Db_Expr("NULL");
 				$MiscNote = $Request->getParam('MiscNote') ? $Request->getParam('MiscNote') : new Zend_Db_Expr("NULL");
 				$TotalCost = $Request->getParam('TotalCost') ? $Request->getParam('TotalCost') : new Zend_Db_Expr("NULL");
-				
 
-				
 				$this->view->VendorID = $VendorID;	
 				$this->view->BranchID = $BranchID;	
 				$this->view->OrderNumber = $OrderNumber;	
@@ -165,10 +163,10 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 		
 				if (!$errorFile){
 
-					$arrData = array("VendorID"=>$VendorID,"BranchID"=>$BranchID,"OrderNumber"=>$OrderNumber,"PurchaseDate"=>$dispFormat->format_date_simple_to_db($PurchaseDate),"ProductCost"=>$ProductCost,
-					"PODeliveryCost"=>$PODeliveryCost, "Currency"=>$Currency,"ProductCostRM"=>$ProductCostRM,"Multiplier"=>$Multiplier,"POTaxCost"=>$POTaxCost, 
-					"TotalCost"=>$TotalCost, "PODiscount"=>$PODiscount, "OADate"=>$dispFormat->format_date_simple_to_db($OADate),"ExpectedDate"=>$dispFormat->format_date_simple_to_db($ExpectedDate),
-					"ReceivedDate"=>$dispFormat->format_date_simple_to_db($ReceivedDate),"POStatus"=>$POStatus, "FreightForwarder"=>$FreightForwarder);
+					$arrData = array("VendorID"=>$VendorID,"BranchID"=>$BranchID,"OrderNumber"=>$OrderNumber,"PurchaseDate"=>$PurchaseDate,"ProductCost"=>$ProductCost,
+					"PODeliveryCost"=>$PODeliveryCost, "Currency"=>$Currency,"ProductCostRM"=>$ProductCostRM,"Multiplier"=>$Multiplier,"POTaxCost"=>$POTaxCost,
+					"TotalCost"=>$TotalCost, "PODiscount"=>$PODiscount, "OADate"=>$OADate,"ExpectedDate"=>$ExpectedDate,
+					"ReceivedDate"=>$ReceivedDate,"POStatus"=>$POStatus, "FreightForwarder"=>$FreightForwarder);
 					
 					//print_r($arrData); exit();
 					
@@ -243,9 +241,16 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 						foreach ($arrPOItemsID as $index => $POItemsID)
 						{
 							$POItemStatusDate = $arrStatusDate[$index] ? $dispFormat->format_date_simple_to_db($arrStatusDate[$index]) : new Zend_Db_Expr("NULL");
-							$arrData = array("ItemID"=>$arrItemID[$index],"Status"=>$arrStatus[$index], "StatusDate"=>$POItemStatusDate, "UnitPrice"=>$arrUnitPrice[$index],"UnitPriceRM"=>$arrTotalItemPrice[$index],"DeliveryCost"=>$arrDeliveryCost[$index],"Quantity"=>$arrQuantity[$index],
-							"TaxCost"=>$arrTaxCost[$index],"LandedCost"=>$arrLandedCost[$index],
-							"UnitDiscount"=>$arrUnitDiscount[$index],"UnitDiscountType"=>$arrUnitDiscountType[$index],"OrderID"=>$ID);
+							$arrData = array("ItemID"=>$arrItemID[$index],"Status"=>$arrStatus[$index], "StatusDate"=>$POItemStatusDate,
+                                "UnitPrice"=>($arrUnitPrice[$index] ? $arrUnitPrice[$index] : new Zend_Db_Expr("NULL")),
+                                "UnitPriceRM"=>($arrTotalItemPrice[$index] ? $arrTotalItemPrice[$index] : new Zend_Db_Expr("NULL")),
+                                "DeliveryCost"=>($arrDeliveryCost[$index] ? $arrDeliveryCost[$index] : new Zend_Db_Expr("NULL")),
+                                "Quantity"=>($arrQuantity[$index] ? $arrQuantity[$index] : new Zend_Db_Expr("NULL")),
+                                "TaxCost"=>($arrTaxCost[$index] ? $arrTaxCost[$index] : new Zend_Db_Expr("NULL")),
+                                "LandedCost"=>($arrLandedCost[$index] ? $arrLandedCost[$index] : new Zend_Db_Expr("NULL")),
+                                "UnitDiscount"=>($arrUnitDiscount[$index] ? $arrUnitDiscount[$index] : new Zend_Db_Expr("NULL")),
+                                "UnitDiscountType"=>($arrUnitDiscountType[$index] ? $arrUnitDiscountType[$index] : new Zend_Db_Expr("NULL")),
+                                "OrderID"=>$ID);
 							$db->update("POItems", $arrData, "ID=".$POItemsID);	
 
 				
@@ -260,7 +265,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 							$UnitDeliveryCost = $arrDeliveryCost[$index] / $Quantity;
 							$UnitTaxCost = $arrTaxCost[$index] / $Quantity;
 							$UnitLandedCost = $arrLandedCost[$index] / $Quantity;
-							$MarkupPercent = $arrUnitMarkup[$index];
+							$MarkupPercent = $arrUnitMarkup[$index] ? $arrUnitMarkup[$index] : new Zend_Db_Expr("NULL");
 							$UnitRetail = $arrUnitRetail[$index]; 
 							
 							
@@ -279,6 +284,9 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 							if (!$arrItemSeriesExist)
 							{
 
+							    /*
+							     *  If item series not exist, just insert
+							     */
 								for ($i = 0; $i < $Quantity; $i++)
 								{
 									$arrInsert = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID, "ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
@@ -296,11 +304,19 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 											"UserIDResp"=>$this->userInfo->ID, "EntryDateTime"=>new Zend_Db_Expr("now()"));
 										$db->insert("ItemSeriesStatus", $arrInsertStatus);	
 									}
-								}							
+									if ($arrStatusCheck[$index]){
+                                        if ($arrStatus[$index] == 'rental_asset'){
+                                            $invRental->insertAsRental($itemSeriesID, $POItemsID, $UnitLandedCost);
+                                        }
+                                    }
+								}
 							}
 							else
 							{
 								if (sizeof($arrItemSeriesExist) == $Quantity){
+                                    /*
+                                     *  If item series already exist and as same amount of item as the PO, just update each of the item detail
+                                     */
 									$arrUpdate = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 									"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
 									
@@ -320,10 +336,22 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 										}
 									}
 
-									
-								
+                                    if ($arrStatusCheck[$index]){
+                                        if ($arrStatus[$index] == 'rental_asset'){
+                                            $invRental->updateAssetByPO($POItemsID, $UnitLandedCost);
+                                        }else{
+                                            $invRental->clearAssetByPO($POItemsID);
+                                        }
+									}
+
+
+
 								}else if (sizeof($arrItemSeriesExist) < $Quantity){
-								
+                                    /*
+                                     *  If item series already exist and less amount of item as the PO, update each of the item detail for existing then
+                                     *  add new item series with same detail
+                                     */
+
 									$arrUpdate = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 									"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
 								
@@ -334,14 +362,22 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 									
 									$db->update("ItemSeries", $arrUpdate, "POItemsID=".$POItemsID);		
 									if ($arrStatusCheck[$index]){
-											$arrItemSeriesAll = $db->fetchAll("SELECT * FROM ItemSeries WHERE POItemsID=".$POItemsID);
-											foreach ($arrItemSeriesAll as $arrItemSeries)
-											{
-												$arrInsertStatus = array("ItemSeriesID"=>$arrItemSeries['ID'], "StatusDate"=>$POItemStatusDate, "Status"=>$arrStatus[$index], "UserIDEntry"=>$this->userInfo->ID,
-													"UserIDResp"=>$this->userInfo->ID, "EntryDateTime"=>new Zend_Db_Expr("now()"));
-												$db->insert("ItemSeriesStatus", $arrInsertStatus);	
-													
-											}
+                                        $arrItemSeriesAll = $db->fetchAll("SELECT * FROM ItemSeries WHERE POItemsID=".$POItemsID);
+                                        foreach ($arrItemSeriesAll as $arrItemSeries)
+                                        {
+                                            $arrInsertStatus = array("ItemSeriesID"=>$arrItemSeries['ID'], "StatusDate"=>$POItemStatusDate, "Status"=>$arrStatus[$index], "UserIDEntry"=>$this->userInfo->ID,
+                                                "UserIDResp"=>$this->userInfo->ID, "EntryDateTime"=>new Zend_Db_Expr("now()"));
+                                            $db->insert("ItemSeriesStatus", $arrInsertStatus);
+
+                                        }
+
+                                        if ($arrStatusCheck[$index]){
+                                            if ($arrStatus[$index] == 'rental_asset'){
+                                                $invRental->updateAssetByPO($POItemsID, $UnitLandedCost);
+                                            }else{
+                                                $invRental->clearAssetByPO($POItemsID);
+                                            }
+                                        }
 									}
 									
 									for ($i = 0; $i < ($Quantity - sizeof($arrItemSeriesExist)); $i++)
@@ -360,11 +396,22 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 												"UserIDResp"=>$this->userInfo->ID, "EntryDateTime"=>new Zend_Db_Expr("now()"));
 											$db->insert("ItemSeriesStatus", $arrInsertStatus);	
 										}
+
+                                        if ($arrStatusCheck[$index]){
+                                            if ($arrStatus[$index] == 'rental_asset'){
+                                                $invRental->insertAsRental($itemSeriesID, $POItemsID, $UnitLandedCost);
+                                            }else{
+                                                $invRental->clearAssetByPO($POItemsID);
+                                            }
+										}
 									}										
 								
 								}
 								else if (sizeof($arrItemSeriesExist) > $Quantity)
 								{
+                                    /*
+                                     *  Technically should not happen
+                                     */
 									////// dangerous...  existing record with series number might be removed.
 									$arrUpdate = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 									"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
@@ -512,9 +559,10 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 				foreach ($dataItems as $arrData)
 				{
 					$optionItems = $libInv->getItemOptionsEx($arrData['ItemID']);
-	
-					$optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $arrData['Status']); 
-					$StatusDate = $dispFormat->format_date_db_to_simple($arrData['StatusDate']);
+					$optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $arrData['Status'],array(),array('rental_asset'));
+
+
+                $StatusDate = $dispFormat->format_date_db_to_simple($arrData['StatusDate']);
 					$POItemsID=$arrData['ID'];
 					$ItemID=$arrData['ItemID'];
 					$Quantity = $arrData['Quantity'];
@@ -558,7 +606,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 						$this->view->listItems .= <<<END
 			<TR><TD  nowrap class='report_odd' style='text-align:center'><div id="itemcounter"></div></TD>
 	<TD  nowrap class='report_odd' style='text-align:center'><input type=hidden Name="ItemID[$itemIndex]" ID="ItemID" value="$arrData[ItemID]"><div id='divSelect_$itemIndex'><SELECT  style='width:450px' $disabled  Name="ItemID[]" class="Item_$POItemsID"><option value=''>-</option>$optionItems<option value='add-new'><<< $strAddNew >>></option></SELECT></div></TD>
-	<TD  nowrap class='report_odd' style='text-align:center'><SELECT $disabled style='width:100px; font-size:11px' name='Status[$itemIndex]' id='Status'><option value=''>-</option>$optionStatusItem </SELECT>&nbsp;<input type=checkbox  ID="StatusCheck" Name="StatusCheck[$itemIndex]" value='1'>
+	<TD  nowrap class='report_odd' style='text-align:center'><SELECT $disabled style='width:100px; font-size:11px' name='Status[$itemIndex]' id='Status'>$optionStatusItem </SELECT>&nbsp;<input type=checkbox  ID="StatusCheck" Name="StatusCheck[$itemIndex]" value='1'>
 	<BR><input $disabled type=text name='StatusDate[$itemIndex]' id='StatusDate_$itemIndex' idx='StatusDate' size=8 value="$StatusDate"><BR>
 	</TD>
 	
@@ -636,7 +684,7 @@ END;
 			$this->view->optionBranches = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->BranchID); 
 			$this->view->optionCurrency = $libDb->getSystemOptions("arrCurrency", $this->view->currencyTypeID); 
 			$this->view->optionPOStatus = $libDb->getSystemOptions("arrPOStatus", $this->view->POStatus); 			
-			$this->view->optionStatusItemOverall = $libDb->getSystemOptions("arrStockStatus"); 
+			$this->view->optionStatusItemOverall = $libDb->getSystemOptions("arrStockStatus",NULL,array(),array('rental_asset'));
 					
 			
 			

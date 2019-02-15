@@ -729,6 +729,7 @@ END;
 				$PartNumber = $Request->getParam('PartNumber') ? $Request->getParam('PartNumber') : new Zend_Db_Expr("NULL");
 				$RetailPrice = $Request->getParam('RetailPrice') ? $Request->getParam('RetailPrice') : new Zend_Db_Expr("NULL");
 				$MinStock = $Request->getParam('MinStock') ? $Request->getParam('MinStock') : new Zend_Db_Expr("NULL");
+                $MonthDepreciation = $Request->getParam('MonthDepreciation') ? $Request->getParam('MonthDepreciation') : new Zend_Db_Expr("NULL");
 				$errorFile = false;
 				if (!$_FILES['ItemImage']['error'])
 				{
@@ -750,7 +751,8 @@ END;
 				}
 		
 				if (!$errorFile){
-					$arrInsert = array("BrandID"=>$BrandID,"ItemName"=>$ItemName,"ModelNumber"=>$ModelNumber, "PartNumber"=>$PartNumber, "RetailPrice"=>$RetailPrice, "MinStock"=>$MinStock);
+					$arrInsert = array("BrandID"=>$BrandID,"ItemName"=>$ItemName,"ModelNumber"=>$ModelNumber, "PartNumber"=>$PartNumber, "RetailPrice"=>$RetailPrice,
+                        "MinStock"=>$MinStock, "MonthDepreciation"=>$MonthDepreciation);
 
 					$db->insert("Item", $arrInsert);
 					$itemID = $db->lastInsertId();
@@ -788,8 +790,9 @@ END;
 				$this->view->PartNumber = $arrItemDetail['PartNumber'];	
 				$this->view->ItemImagePath = $arrItemDetail['ItemImagePath'];	
 				$this->view->RetailPrice = $arrItemDetail['RetailPrice'];	
-				$this->view->MinStock = $arrItemDetail['MinStock'];	
-				$this->view->NumStock = $arrItemDetail['NumStock'];	
+				$this->view->MinStock = $arrItemDetail['MinStock'];
+                $this->view->MonthDepreciation = $arrItemDetail['MonthDepreciation'];
+                $this->view->NumStock = $arrItemDetail['NumStock'];
 			}					
 		
 		
@@ -805,6 +808,7 @@ END;
 				$PartNumber = $Request->getParam('PartNumber') ? $Request->getParam('PartNumber') : new Zend_Db_Expr("NULL");
 				$RetailPrice = $Request->getParam('RetailPrice') ? $Request->getParam('RetailPrice') : new Zend_Db_Expr("NULL");
 				$MinStock = $Request->getParam('MinStock') ? $Request->getParam('MinStock') : new Zend_Db_Expr("NULL");
+                $MonthDepreciation = $Request->getParam('MonthDepreciation') ? $Request->getParam('MonthDepreciation') : new Zend_Db_Expr("NULL");
 
 				$NumStock = $Request->getParam('NumStock');
 				$trigger_alert = $Request->getParam('trigger_alert');
@@ -834,9 +838,10 @@ END;
 				$this->view->ModelNumber = $ModelNumber;	
 				$this->view->PartNumber = $PartNumber;				
 				$this->view->RetailPrice = $RetailPrice;				
-				$this->view->MinStock = $MinStock;				
-				
-				$errorFile = false;
+				$this->view->MinStock = $MinStock;
+                $this->view->MonthDepreciation = $MonthDepreciation;
+
+                $errorFile = false;
 				if (!$_FILES['ItemImage']['error'])
 				{
 
@@ -858,7 +863,8 @@ END;
 		
 				if (!$errorFile){
 
-					$arrUpdate = array("BrandID"=>$BrandID,"ItemName"=>$ItemName,"ModelNumber"=>$ModelNumber,"PartNumber"=>$PartNumber,"RetailPrice"=>$RetailPrice,"MinStock"=>$MinStock);
+					$arrUpdate = array("BrandID"=>$BrandID,"ItemName"=>$ItemName,"ModelNumber"=>$ModelNumber,"PartNumber"=>$PartNumber,"RetailPrice"=>$RetailPrice,
+                        "MinStock"=>$MinStock, "MonthDepreciation"=>$MonthDepreciation);
 					$db->update("Item", $arrUpdate, "ID=".$ID);
 					
 					$filename = $ID.".jpg";
@@ -960,23 +966,30 @@ END;
 					return $rowdata[8];
 			}
 
+            function format_lifespan($colnum, $rowdata)
+            {
 
-			
-			
-			$arrHeader = array ('#', 'ID', '', $this->translate->_('Brand'), $this->translate->_('Item Name'), $this->translate->_('Model Name'),$this->translate->_('Part Number'),$this->translate->_('Retail Price'),$this->translate->_('In Stock'),'Min Stock<BR>Trigger', $this->translate->_('Edit | Delete'));
+                return $rowdata[10] ? $rowdata[10]. " months" : "";
+            }
+
+
+
+
+            $arrHeader = array ('#', 'ID', '', $this->translate->_('Brand'), $this->translate->_('Item Name'), $this->translate->_('Model Name'),$this->translate->_('Part Number'),
+                $this->translate->_('Retail Price'),$this->translate->_('In Stock'),'Min Stock<BR>Trigger', 'Asset<BR>Lifespan', $this->translate->_('Edit | Delete'));
 			$displayTable = new Venz_App_Display_Table(
 				array (
 			         'data' => $dataItem,
 					 'hiddenparamtop'=> $strSearch,
 					 'headings' => $arrHeader,
-					 'format' 		=> array('{format_counter}','%0%','{format_image}','%1%', '%2%', '%3%', '%4%', '{format_retail}','{format_stocknum}','%9%', '{format_action}'),					 
-					 'sort_column' 	=> array('','ID','','BrandName','ItemName','ModelNumber', 'PartNumber', 'RetailPrice','NumStock', 'MinStock', ''),
+					 'format' 		=> array('{format_counter}','%0%','{format_image}','%1%', '%2%', '%3%', '%4%', '{format_retail}','{format_stocknum}','%9%','{format_lifespan}', '{format_action}'),
+					 'sort_column' 	=> array('','ID','','BrandName','ItemName','ModelNumber', 'PartNumber', 'RetailPrice','NumStock', 'MinStock','MonthDepreciation', ''),
 					 'alllen' 		=> $arrItem[0],
 					 'title'		=> $this->translate->_('Items'),					 
-					 'aligndata' 	=> 'CCCLLLLRCCC',
+					 'aligndata' 	=> 'CCCLLLLRCCCC',
 					 'pagelen' 		=> $recordsPerPage,
 					 'numcols' 		=> sizeof($arrHeader),
-			         'tablewidth' => "1200px",
+			         'tablewidth' => "1400px",
 			         'sortby' => $sortby,
 			         'ascdesc' => $ascdesc,
 					 'hiddenparam' => $strHiddenSearch,
@@ -1221,13 +1234,14 @@ END;
 			$libDb = new Venz_App_Db_Table();
 			$displayFormat = new Venz_App_Display_Format();
 			$sysNotification = new Venz_App_System_Notification();
-			
-			$systemSetting = new Zend_Session_Namespace('systemSetting');		
+
+            $systemSetting = new Zend_Session_Namespace('systemSetting');
 			$this->view->currencyType = $systemSetting->arrCurrency[$systemSetting->currency][0];
 			
-			$dispFormat = new Venz_App_Display_Format();			
-			
-			/////////////////////////// DEALING WITH PAGINGS AND SORTING ///////////////////////////
+			$dispFormat = new Venz_App_Display_Format();
+            $invRental = new Venz_App_Inventory_Rental();
+
+            /////////////////////////// DEALING WITH PAGINGS AND SORTING ///////////////////////////
 			if (!$this->userInfo){
 				$this->appMessage->setMsg(0, "Please login first before accessing this page.");
 				$this->_redirect('/auth');
@@ -1263,6 +1277,11 @@ END;
 					"UserIDResp"=>$this->userInfo->ID,"Notes"=>new Zend_Db_Expr("NULL"),"ReferenceNo"=>new Zend_Db_Expr("NULL"), "TransitTo"=>new Zend_Db_Expr("NULL")
 				);
 				$db->insert("ItemSeriesStatus", $arrInsert);
+
+				if ($StatusItem == 'rental_asset') {
+                    $invRental->insertAsRental($ItemSeriesID, NULL, NULL);
+                }
+
 				
 				$this->appMessage->setNotice(1, $this->translate->_('Item series has been created').".");
 				$this->_redirect('/inventory/brand/itemseriesdetail/id/'.$ItemSeriesID.'/f/'.$this->view->accessFrom); 				
@@ -1332,8 +1351,19 @@ END;
 			$remove_status = $Request->getParam('remove_status');	
 			if ($remove_status)
 			{
+			    $arrStatusRemove = $db->fetchRow("SELECT * FROM ItemSeriesStatus WHERE ID=".$remove_status);
+			    if ($arrStatusRemove['Status'] == 'rental_asset'){
+                    $arrRentalAsset = $db->fetchRow("SELECT * FROM RentalAsset WHERE ItemSeriesID=".$ItemSeriesID);
+                    $db->delete("RentalAssetStatus", "RentalAssetID=".$arrRentalAsset['ID']);
+                    $db->delete("RentalAsset", "ItemSeriesID=".$ItemSeriesID);
+                }
+
 				$db->delete("ItemSeriesStatus", "ID=".$remove_status);
-				$this->appMessage->setNotice(1, "The entry has been removed.");
+                $arrLatestStatus = $db->fetchRow("SELECT * FROM ItemSeriesStatus WHERE ItemSeriesID=".$ItemSeriesID." ORDER BY StatusDate Desc, EntryDateTime Desc");
+                $LatestStatus = $arrLatestStatus['Status'] ? $arrLatestStatus['Status'] : "in";
+                $db->update("ItemSeries", array("Status"=>$LatestStatus), "ID=".$ItemSeriesID);
+
+                $this->appMessage->setNotice(1, "The entry has been removed.");
 				$this->_redirect('/inventory/brand/itemseriesdetail/id/'.$ItemSeriesID.'/f/'.$this->view->accessFrom); 
 			
 	/*			$arrItemDetail = $libInv->getItemDetail($remove_item);
@@ -1355,13 +1385,15 @@ END;
 				$StatusDate = $Request->getParam('StatusDate') ? $dispFormat->format_date_simple_to_db($Request->getParam('StatusDate')) : new Zend_Db_Expr("NULL");
 				$Status = $Request->getParam('Status') ? $Request->getParam('Status') : new Zend_Db_Expr("NULL");
 				$TransitTo = $Request->getParam('TransitTo') ? $Request->getParam('TransitTo') : new Zend_Db_Expr("NULL");
-				$UserIDResp = $Request->getParam('UserIDResp') ? $Request->getParam('UserIDResp') : new Zend_Db_Expr("NULL");
+                $MonthDepreciation = $Request->getParam('MonthDepreciation') ? $Request->getParam('MonthDepreciation') : new Zend_Db_Expr("NULL");
+                $MonthRemaining = $Request->getParam('MonthRemaining') ? $Request->getParam('MonthRemaining') : new Zend_Db_Expr("NULL");
+                $UserIDResp = $Request->getParam('UserIDResp') ? $Request->getParam('UserIDResp') : new Zend_Db_Expr("NULL");
 				$Notes = $Request->getParam('Notes') ? $Request->getParam('Notes') : new Zend_Db_Expr("NULL");
 
                 $arrItemSeriesStatus = $db->fetchRow("SELECT * FROM ItemSeriesStatus WHERE ItemSeriesID=".$ItemSeriesID." order by StatusDate desc, ID desc limit 1");
 
                 $arrInsert = array("ItemSeriesID"=>$ItemSeriesID,"StatusDate"=>$StatusDate,"Status"=>$Status,"UserIDEntry"=>$this->userInfo->ID,"EntryDateTime"=>new Zend_Db_Expr("now()"),
-					"UserIDResp"=>$UserIDResp,"Notes"=>$Notes,"ReferenceNo"=>$ReferenceNo, "TransitTo"=>$TransitTo
+					"UserIDResp"=>$UserIDResp,"Notes"=>$Notes,"ReferenceNo"=>$ReferenceNo, "TransitTo"=>$TransitTo, "MonthDepreciation"=>$MonthDepreciation, "MonthRemaining"=>$MonthRemaining
 				);
 				$db->insert("ItemSeriesStatus", $arrInsert);
 
@@ -1370,8 +1402,13 @@ END;
                     $arrUpdate['BranchID'] = $arrItemSeriesStatus['TransitTo'];
                 }
 
+
                 $db->Update("ItemSeries", $arrUpdate, "ID=".$ItemSeriesID);
 
+                if ($Status == 'rental_asset') {
+                    $arrItemSeries = $db->fetchRow("SELECT * FROM ItemSeries WHERE ID=".$ItemSeriesID);
+                    $invRental->insertAsRental($ItemSeriesID,$arrItemSeries['POItemsID'],$arrItemSeries['UnitLandedCost'],$MonthDepreciation,$MonthRemaining);
+                }
 
 				$arrItem = $libInv->getItemDetail($ItemID);
 				$NumStock = $arrItem['NumStock'];	
@@ -1447,8 +1484,9 @@ END;
 				}
 				
 				$arrItemStatusAll = $libInv->getItemsSeriesStatus($ItemSeriesID);
-				//print_r($arrItemStatus);
-				foreach ($arrItemStatusAll as $arrItemStatus){
+                $counter=0;
+                foreach ($arrItemStatusAll as $arrItemStatus){
+                    $counter++;
 					$strStatus = $systemSetting->arrStockStatus[$arrItemStatus[Status]];
 					$strTransitLocation = "";
 					if ($arrItemStatus['TransitLocation'])
@@ -1456,7 +1494,7 @@ END;
 					
 					$strEntryDateTime = $displayFormat->format_datetime($arrItemStatus['EntryDateTime']);
 					$strDeleteStatus = "";
-					if ($this->view->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales"  && $this->userInfo->ACLRole != "Account" )
+					if ($this->view->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales"  && $this->userInfo->ACLRole != "Account" && $counter == 1)
 						$strDeleteStatus = "<input type=button name='delete_status' id='delete_status' value='".$this->translate->_('Delete Entry')."' onclick='OnDeleteStatus($arrItemStatus[ID])'>";
 					
 					
@@ -1482,7 +1520,8 @@ END;
 			$this->view->optionBranches = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->BranchID); 
 			$this->view->optionBranchesTransit = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->TransitTo); 
 			$this->view->optionPersonInCharge = $libDb->getTableOptions("ACLUsers", "Name", "ID"); 
-			$this->view->optionStatus = $libDb->getSystemOptions("arrStockStatus"); 
+			$this->view->optionStatus = $libDb->getSystemOptions("arrStockStatus", NULL,
+                $arrItemDetail['Status'] == 'rental_asset' ? array('rental_asset') : array());
 			$this->view->optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $this->view->Status); 
 			$this->view->optionItems = $libInv->getItemOptions($this->view->ItemID);
 					

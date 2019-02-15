@@ -57,7 +57,9 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 		$sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
 		$count = $showPage -1;
 		$sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
-		$sqlAll = "SELECT Item.ID, Brand.FullName as BrandName, ItemName, ModelNumber, PartNumber, ItemImagePath, ItemImagePathSmall, Item.RetailPrice, IF (ItemCount.NumStock, ItemCount.NumStock, 0) as NumStock, Item.MinStock ".
+		$sqlAll = "SELECT Item.ID, Brand.FullName as BrandName, ItemName, ModelNumber, PartNumber, ".
+            /*5*/"ItemImagePath, ItemImagePathSmall, Item.RetailPrice, IF (ItemCount.NumStock, ItemCount.NumStock, 0) as NumStock, Item.MinStock, ".
+            /*10*/"Item.MonthDepreciation ".
 		" FROM Item LEFT JOIN (SELECT count(*) as NumStock, ItemID from ItemSeries where Status='in' group by ItemID) as ItemCount ON (ItemCount.ItemID=Item.ID), Brand  WHERE Item.BrandID=Brand.ID ";		
 		if ($searchString)
 			$sqlAll .= $searchString;
@@ -209,16 +211,17 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 		
 //		$sqlLatestStatusOrder = "SELECT ItemSeriesStatus.* FROM ItemSeriesStatus WHERE ItemSeriesStatus.StatusDate <= '".$dateasoff."' AND ItemSeriesStatus.StatusDate IS NOT NULL order by StatusDate Desc, EntryDateTime Desc LIMIT 18446744073709551615";
         $sqlLatestStatusOrder = "SELECT ItemSeriesStatus.* FROM ItemSeriesStatus WHERE ItemSeriesStatus.StatusDate <= '".$dateasoff."' AND ItemSeriesStatus.StatusDate IS NOT NULL order by StatusDate Desc, EntryDateTime Desc LIMIT 100000";
-//        $sqlLatestStatusOrder = "SELECT ItemSeriesStatus.* FROM ItemSeriesStatus WHERE ItemSeriesStatus.StatusDate <= '".$dateasoff."' order by StatusDate Desc, EntryDateTime Desc LIMIT 100000";
+//        $sqlLatestStatusOrder = "SELECT ItemSeriesStatus.* FROM ItemSeriesStatus WHERE (ItemSeriesStatus.StatusDate <= '".$dateasoff."' OR ItemSeriesStatus.StatusDate IS NULL)  order by StatusDate Desc, EntryDateTime Desc";
 
-		$sqlLatestStatusGroup = "SELECT ItemSeriesStatus.* FROM (".$sqlLatestStatusOrder.") as ItemSeriesStatus GROUP BY ItemSeriesStatus.ItemSeriesID";
-		
+		$sqlLatestStatusGroup = "SELECT MAX(ItemSeriesStatus.StatusDate), ItemSeriesStatus.* FROM (".$sqlLatestStatusOrder.") as ItemSeriesStatus GROUP BY ItemSeriesStatus.ItemSeriesID";
+//        $sqlLatestStatusGroup = "SELECT MAX(IF (ItemSeriesStatus.StatusDate IS NULL, ItemSeriesStatus.EntryDateTime, ItemSeriesStatus.StatusDate)), ItemSeriesStatus.* FROM ItemSeriesStatus GROUP BY ItemSeriesStatus.ItemSeriesID";
+
 		$sqlAll = "SELECT POItems.OrderID, POItems.ItemID, ItemSeries.UnitPriceRM, ItemSeries.UnitDeliveryCost, ItemSeries.UnitTaxCost, ".
 		/*5*/"IF (ItemSeries.UnitLandedCost IS NULL, (POItems.LandedCost / POItems.Quantity), ItemSeries.UnitLandedCost) as LandedCost , ItemSeries.SeriesNumber, PurchaseOrders.OrderNumber, Item.ItemName, Item.ModelNumber, ".
 		/*10*/"Item.RetailPrice, ItemSeries.ID, CONCAT(Item.ItemName, ' (', Item.ModelNumber, ')') as ItemFullName, PurchaseOrders.ID as POID, POItems.ID as POItemsID, ".
 		/*15*/"PurchaseOrders.PurchaseDate, Branches.Name as BranchName, ItemSeries.Status, ItemSeries.MarkupPercent, ItemSeries.SalesOrderNumber, ".
 		/*20*/"ItemSeries.UnitRetail, Item.ItemImagePath, PurchaseOrders.ExpectedDate, LatestStatus.Notes, PurchaseOrders.Locked, LatestStatus.Status as StatusAsOff,".
-            /*26*/"LatestStatus.StatusDate, DATEDIFF('$dateasoff', LatestStatus.StatusDate) as StatusDays, Item.PartNumber ".
+            /*26*/"LatestStatus.StatusDate, DATEDIFF('$dateasoff', IF(LatestStatus.StatusDate IS NULL, LatestStatus.EntryDateTime, LatestStatus.StatusDate)) as StatusDays, Item.PartNumber ".
 		"FROM ItemSeries LEFT JOIN ".
 		"(".$sqlLatestStatusGroup.") as LatestStatus ON (LatestStatus.ItemSeriesID=ItemSeries.ID) ".
 		"LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
@@ -243,12 +246,91 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 		//print $sqlAll;
 		$sqlAll = $sqlAll." order by $sql_orderby ";
 		$sql .= $sqlAll. $sql_limit;
-	
-		return array(sizeof($this->_db->fetchAll($sqlAll)), $this->_db->fetchAll($sql), $sqlAll);
-    }	
 
-	
-	public function getItemsSeries($orderby = null, $ascdesc = null, $recordsPerPage = null, $showPage = null, $searchString = null)
+		return array(sizeof($this->_db->fetchAll($sqlAll)), $this->_db->fetchAll($sql), $sqlAll);
+    }
+
+
+
+    public function getItemsSeriesRental($orderby = null, $ascdesc = null, $recordsPerPage = null, $showPage = null, $searchString = null)
+    {
+        if ($showPage	< 0 || $showPage == "") $showPage = 1;
+
+        $sql_orderby =  is_null($orderby) ? "Item.ID" : $orderby;
+        $sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
+        $count = $showPage -1;
+        $sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
+
+        $sqlAll = "SELECT POItems.OrderID, POItems.ItemID as POItemsID, ItemSeries.UnitPriceRM, ItemSeries.UnitDeliveryCost, ItemSeries.UnitTaxCost, ".
+            /*5*/"ItemSeries.UnitLandedCost, ItemSeries.SeriesNumber, PurchaseOrders.OrderNumber, Item.ItemName, Item.ModelNumber, ".
+            /*10*/"Item.RetailPrice, ItemSeries.ID, CONCAT(Item.ItemName, ' (', Item.ModelNumber, ')') as ItemFullName, PurchaseOrders.ID as POID, POItems.ID as POItemsID, ".
+            /*15*/"PurchaseOrders.PurchaseDate, Branches.Name as BranchName, ItemSeries.Status, ItemSeries.MarkupPercent, ItemSeries.SalesOrderNumber, ".
+            /*20*/"ItemSeries.UnitRetail, Item.ItemImagePath, PurchaseOrders.ExpectedDate, NULL, PurchaseOrders.Locked, Item.ID as ItemID, Item.PartNumber, ".
+            /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
+            /*31*/"ItemSeries.ID as ItemSeriesID, RentalAsset.DateAsAsset, Item.MonthDepreciation, IF (Item.MonthDepreciation, Item.MonthDepreciation - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW()), 0) as Lifespan, ".
+            /*35*/"IF (Item.MonthDepreciation, ((Item.MonthDepreciation - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / Item.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue, RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining ".
+            "FROM ItemSeries ".
+            "LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
+            "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
+
+
+
+        $sqlAll = "SELECT POItems.OrderID, POItems.ItemID as POItemsID, ItemSeries.UnitPriceRM, ItemSeries.UnitDeliveryCost, ItemSeries.UnitTaxCost, ".
+            /*5*/"ItemSeries.UnitLandedCost, ItemSeries.SeriesNumber, PurchaseOrders.OrderNumber, Item.ItemName, Item.ModelNumber, ".
+            /*10*/"Item.RetailPrice, ItemSeries.ID, CONCAT(Item.ItemName, ' (', Item.ModelNumber, ')') as ItemFullName, PurchaseOrders.ID as POID, POItems.ID as POItemsID, ".
+            /*15*/"PurchaseOrders.PurchaseDate, Branches.Name as BranchName, ItemSeries.Status, ItemSeries.MarkupPercent, ItemSeries.SalesOrderNumber, ".
+            /*20*/"ItemSeries.UnitRetail, Item.ItemImagePath, PurchaseOrders.ExpectedDate, NULL, PurchaseOrders.Locked, Item.ID as ItemID, Item.PartNumber, ".
+            /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
+            /*31*/"ItemSeries.ID as ItemSeriesID, RentalAsset.DateAsAsset, RentalAsset.MonthDepreciation, IF (RentalAsset.MonthRemaining, RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW()), 0) as Lifespan, ".
+            /*35*/"IF (RentalAsset.MonthRemaining, ((RentalAsset.MonthRemaining - TIMESTAMPDIFF(MONTH, RentalAsset.DateAsAsset, NOW())) / RentalAsset.MonthDepreciation) * RentalAsset.AssetInitialValue, NULL) as CurrentValue, RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining, ".
+            /*38*/"RentalAssetStatus.ClientName, RentalAssetStatus.StatusDate, RentalAssetStatus.EstimatedReturnDate, DATEDIFF(RentalAssetStatus.EstimatedReturnDate, now()) as DaysRemaining ".
+            "FROM ItemSeries ".
+            "LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
+            "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset LEFT JOIN ".
+            " RentalAssetStatus ON (RentalAssetStatus.RentalAssetID=RentalAsset.ID AND RentalAssetStatus.ID=(SELECT MAX(ID) FROM RentalAssetStatus WHERE RentalAssetStatus.RentalAssetID=RentalAsset.ID))  ".
+            "WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID ";
+
+
+        if ($searchString)
+            $sqlAll .= $searchString;
+
+        $sql .= $sqlAll." order by $sql_orderby $sql_limit";
+        return array(sizeof($this->_db->fetchAll($sqlAll)), $this->_db->fetchAll($sql), $sqlAll);
+    }
+
+    public function getItemsSeriesRentalDetail($ID = null, $searchString = null)
+    {
+        if ($showPage	< 0 || $showPage == "") $showPage = 1;
+
+        $sql_orderby =  is_null($orderby) ? "Item.ID" : $orderby;
+        $sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
+        $count = $showPage -1;
+        $sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
+        $sqlAll = "SELECT POItems.OrderID, ItemSeries.ItemID, ItemSeries.UnitPriceRM, ItemSeries.UnitDeliveryCost, ItemSeries.UnitTaxCost, ".
+            /*5*/"ItemSeries.UnitLandedCost, ItemSeries.SeriesNumber, PurchaseOrders.OrderNumber, Item.ItemName, Item.ModelNumber, ".
+            /*10*/"Item.RetailPrice, ItemSeries.ID as ItemSeriesID, CONCAT(Item.ItemName, ' (', Item.ModelNumber, ')') as ItemFullName, PurchaseOrders.ID as POID, POItems.ID as POItemsID, ".
+            /*15*/"PurchaseOrders.PurchaseDate, Branches.Name as BranchName, Branches.ID as BranchID, ItemSeries.Status, ItemSeries.MarkupPercent,  ".
+            /*20*/"ItemSeries.SalesOrderNumber, ItemSeries.UnitRetail, ItemSeries.SOItemsID, Item.ItemImagePath, PurchaseOrders.Locked as POLocked, Item.ID as ItemID, Item.PartNumber, ".
+            /*27*/"RentalAsset.ID as RentalAssetID, RentalAsset.AssetInitialValue, RentalAsset.AssetCurrentValue, RentalAsset.RentalStatus, ".
+            /*31*/"RentalAsset.MonthDepreciation, RentalAsset.MonthRemaining, RentalAsset.DateAsAsset ".
+            "FROM ItemSeries LEFT JOIN POItems ON (POItems.ID=ItemSeries.POItemsID) LEFT JOIN PurchaseOrders ON (PurchaseOrders.ID=POItems.OrderID ) ".
+            "LEFT JOIN Branches ON (ItemSeries.BranchID=Branches.ID), Item, RentalAsset  WHERE Item.ID=ItemSeries.ItemID AND RentalAsset.ItemSeriesID=ItemSeries.ID  ";
+
+        if ($ID)
+            $sqlAll .= " and RentalAsset.ID=".$ID;
+        if ($searchString)
+            $sqlAll .= $searchString;
+
+        $sql .= $sqlAll." order by $sql_orderby $sql_limit";
+
+        if ($ID)
+            return $this->_db->fetchRow($sql);
+        else
+            return $this->_db->fetchAll($sql);
+    }
+
+
+    public function getItemsSeries($orderby = null, $ascdesc = null, $recordsPerPage = null, $showPage = null, $searchString = null)
     {
 		if ($showPage	< 0 || $showPage == "") $showPage = 1;
 				
@@ -324,15 +406,17 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 		return $this->_db->fetchAll($sql);
     }			
 
-	public function getItemOptions($defaultValue = NULL)
+	public function getItemOptions($defaultValue = NULL, $searchString = null, $defaultStatus = 'in')
    {
 
 		$systemSetting = new Zend_Session_Namespace('systemSetting');
-		
-		
-		
-	   	$sql = "select Item.*, Brand.FullName as BrandName, IF (ItemCount.TotalItem IS NULL, '0', ItemCount.TotalItem ) as TotalItem from Item LEFT JOIN (SELECT count(*)TotalItem, Item.ID as ItemID FROM ItemSeries, Item WHERE Item.ID=ItemSeries.ItemID AND ItemSeries.Status='in' group by Item.ID) as ItemCount ON (ItemCount.ItemID=Item.ID),".
-		"Brand where Item.BrandID=Brand.ID order by ItemName ";
+	   	$sqlAll = "select Item.*, Brand.FullName as BrandName, IF (ItemCount.TotalItem IS NULL, '0', ItemCount.TotalItem ) as TotalItem from Item LEFT JOIN (SELECT count(*)TotalItem, Item.ID as ItemID FROM ItemSeries, Item WHERE Item.ID=ItemSeries.ItemID AND ItemSeries.Status='".$defaultStatus."' group by Item.ID) as ItemCount ON (ItemCount.ItemID=Item.ID),".
+		"Brand where Item.BrandID=Brand.ID ";
+
+       if ($searchString)
+           $sqlAll .= $searchString;
+
+        $sql .= $sqlAll." order by ItemName ";
 
 		$record = $this->_db->fetchAll($sql);
 
@@ -352,7 +436,7 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
    }
    
    
-   	public function getItemOptionsEx($defaultValue = NULL)
+   public function getItemOptionsEx($defaultValue = NULL)
    {
 
 		$systemSetting = new Zend_Session_Namespace('systemSetting');
@@ -387,9 +471,10 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 		}
 		return $option_string;
    }
+
+
    
 }
-
 
 
 

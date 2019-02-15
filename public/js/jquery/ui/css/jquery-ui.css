@@ -417,7 +417,14 @@ button.ui-button::-moz-focus-inner {
 	margin: -10px 0 0 0;
 	padding: 1px;
 	height: 20px;
+	text-align: center;
+	line-height: 0px;
 }
+
+button.ui-dialog-titlebar-close::after{
+	content: 'X';
+}
+
 .ui-dialog .ui-dialog-content {
 	position: relative;
 	border: 0;

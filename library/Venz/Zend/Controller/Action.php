@@ -118,7 +118,9 @@ class Venz_Zend_Controller_Action extends Zend_Controller_Action
 			$systemSetting->arrCurrency = $config_env->currency->toArray();
 			$systemSetting->arrMarkupType = $config_env->markup_type->toArray();
 			$systemSetting->arrStockStatus = $config_env->stock_status->toArray();
+            $systemSetting->arrRentalStatus = $config_env->rental_status->toArray();
 			$systemSetting->arrPOStatus = $config_env->po_status->toArray();
+            $systemSetting->arrMail = $config_env->mail->toArray();
 
 			$langPath = NULL;
 			$scriptPath = $this->view->getScriptPaths();

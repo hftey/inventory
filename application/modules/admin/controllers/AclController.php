@@ -125,8 +125,9 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$Name = $Request->getParam('Name');	
 				$Username = $Request->getParam('Username');	
 				$Email = $Request->getParam('Email');	
-				$ACLRole = $Request->getParam('ACLRole');	
-				$radioActive = $Request->getParam('radioActive');	
+				$ACLRole = $Request->getParam('ACLRole');
+                $ManageRental = $Request->getParam('ManageRental') ? 1 : 0;
+                $radioActive = $Request->getParam('radioActive');
 				$LastLoginStart = $Request->getParam('LastLoginStart');	
 				$LastLoginEnd = $Request->getParam('LastLoginEnd');	
 				
@@ -140,7 +141,8 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$sqlSearch .= $Username ? " and ACLUsers.Username LIKE '%".$Username."%'" : "";
 				$sqlSearch .= $Email ? " and ACLUsers.Email LIKE '%".$Email."%'" : "";
 				$sqlSearch .= $ACLRole ? " and ACLUsers.ACLRole = '".$ACLRole."'" : "";
-				$sqlSearch .= $radioActive ? " and ACLUsers.Active = '".$radioActive."'" : " and ACLUsers.Active IS NULL";
+                $sqlSearch .= $ManageRental ? " and ACLUsers.ManageRental = ".$ManageRental : "";
+                $sqlSearch .= $radioActive ? " and ACLUsers.Active = '".$radioActive."'" : " and ACLUsers.Active IS NULL";
 				$sqlSearch .= $LastLoginStart ? " and ACLUsers.LastLogin >= '".$LastLoginStartSearch."'" : "";
 				$sqlSearch .= $LastLoginEnd ? " and ACLUsers.LastLogin <= '".$LastLoginEndSearch." 23:59:59'" : "";
 
@@ -148,8 +150,9 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$this->view->Name = $Name ? $Name : "";				
 				$this->view->Username = $Username ? $Username : "";				
 				$this->view->Email = $Email ? $Email : "";				
-				$this->view->ACLRole = $ACLRole ? $ACLRole : "";				
-				$this->view->radioActive = $radioActive ? $radioActive : "";	
+				$this->view->ACLRole = $ACLRole ? $ACLRole : "";
+                $this->view->ManageRentalCheck = $ManageRental ? "checked" : "";
+                $this->view->radioActive = $radioActive ? $radioActive : "";
 				$this->view->radActive = $this->view->radioActive ? "checked" : "";
 				$this->view->radNotActive = $this->view->radioActive ? "" : "checked";
 
@@ -161,6 +164,7 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$strHiddenSearch .= "<input type=hidden name='Username' value='".$Username."'>";
 				$strHiddenSearch .= "<input type=hidden name='Email' value='".$Email."'>";
 				$strHiddenSearch .= "<input type=hidden name='ACLRole' value='".$ACLRole."'>";
+                $strHiddenSearch .= "<input type=hidden name='ManageRental' value='".$ManageRental."'>";
 				$strHiddenSearch .= "<input type=hidden name='radioActive' value='".$radioActive."'>";
 				$strHiddenSearch .= "<input type=hidden name='LastLoginStart' value='".$LastLoginStart."'>";
 				$strHiddenSearch .= "<input type=hidden name='LastLoginEnd' value='".$LastLoginEnd."'>";
@@ -176,10 +180,11 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$Name = $Request->getParam('Name') ? $Request->getParam('Name') : new Zend_Db_Expr("NULL");
 				$Email = $Request->getParam('Email') ? $Request->getParam('Email') : new Zend_Db_Expr("NULL");
 				$ACLRole = $Request->getParam('ACLRole') ? $Request->getParam('ACLRole') : new Zend_Db_Expr("NULL");
-				$radioActive = $Request->getParam('radioActive') ? $Request->getParam('radioActive') : false;
+                $ManageRental = $Request->getParam('ManageRental') ? 1 : 0;
+                $radioActive = $Request->getParam('radioActive') ? $Request->getParam('radioActive') : false;
 				
 				$arrInsert = array("ACLRole"=>$ACLRole,"UserCreated"=>$this->userInfo->Username, "Name"=>$Name,"Username"=>$Username,"Email"=>$Email,
-					"Active"=>$radioActive, "Password"=>$ACLPassword, "DateCreated"=>new Zend_Db_Expr("now()"));
+                    "ManageRental"=>$ManageRental,"Active"=>$radioActive, "Password"=>$ACLPassword, "DateCreated"=>new Zend_Db_Expr("now()"));
 
 				$db->insert("ACLUsers", $arrInsert);
 				$this->_redirect('/admin/acl/users/');  
@@ -193,11 +198,13 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$this->appMessage->setNotice(3, $this->translate->_('Please leave the password empty if you do not wish to change the password').".");
 				$this->view->edit_users = $edit_users;
 				$arrUserDetail = $sysAcl->getUsersDetail($edit_users);
-				$this->view->Name = $arrUserDetail['Name'];			
+
+				$this->view->Name = $arrUserDetail['Name'];
 				$this->view->Username = $arrUserDetail['Username'];		
 				$this->view->Email = $arrUserDetail['Email'];		
-				$this->view->ACLRole = $arrUserDetail['ACLRole'];		
-				$this->view->radioActive = $arrUserDetail['Active'];
+				$this->view->ACLRole = $arrUserDetail['ACLRole'];
+                $this->view->ManageRentalCheck = $arrUserDetail['ManageRental'] ? "checked" : "";
+                $this->view->radioActive = $arrUserDetail['Active'];
 				$this->view->radActive = $this->view->radioActive ? "checked" : "";
 				$this->view->radNotActive = $this->view->radioActive ? "" : "checked";
 			}					
@@ -212,9 +219,10 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 				$ACLPassword = $Request->getParam('ACLPassword') ? new Zend_Db_Expr("MD5('".$Request->getParam('ACLPassword')."')") : false;
 				$Email = $Request->getParam('Email') ? $Request->getParam('Email') : new Zend_Db_Expr("NULL");
 				$ACLRole = $Request->getParam('ACLRole') ? $Request->getParam('ACLRole') : new Zend_Db_Expr("NULL");
-				$radioActive = $Request->getParam('radioActive') ? $Request->getParam('radioActive') : new Zend_Db_Expr("NULL");
+                $ManageRental = $Request->getParam('ManageRental') ? 1 : 0;
+                $radioActive = $Request->getParam('radioActive') ? $Request->getParam('radioActive') : new Zend_Db_Expr("NULL");
 
-				$arrUpdate = array("ACLRole"=>$ACLRole,"Name"=>$Name,"Username"=>$Username,"Email"=>$Email,"Active"=>$radioActive);
+				$arrUpdate = array("ACLRole"=>$ACLRole,"Name"=>$Name,"Username"=>$Username,"ManageRental"=>$ManageRental,"Email"=>$Email,"Active"=>$radioActive);
 				if ($ACLPassword)
 					$arrUpdate['Password'] = $ACLPassword;
 
@@ -265,9 +273,15 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 			{
 				$systemSetting = new Zend_Session_Namespace('systemSetting');
 				return "<a href='/admin/acl/users/edit_users/".$rowdata[0]."'><img border=0 src='/images/icons/IconEdit.gif'></a> | <a href='javascript:void(0);' onclick='OnDeleteUsers(".$rowdata[0].")'><img border=0 src='/images/icons/IconDelete.gif'></a>";
-			}		
+			}
 
-			$sessionUsers = new Zend_Session_Namespace('sessionUsers');
+
+            function format_rental($colnum, $rowdata)
+            {
+                return $rowdata[9] ? "<img src='/images/icons/IconYes.gif'>" : "";
+            }
+
+            $sessionUsers = new Zend_Session_Namespace('sessionUsers');
 			$sessionUsers->numCounter = $recordsPerPage * ($showPage-1);
 			function format_counter($colnum, $rowdata)
 			{
@@ -286,20 +300,20 @@ class Admin_AclController extends Venz_Zend_Controller_Action
 			if ($this->view->searchUsers)
 				$strSearch = "<input type=hidden name=''>";
 			
-			$arrHeader = array ('', $this->translate->_('Name'), $this->translate->_('Username'), $this->translate->_('Role'),$this->translate->_('Email'), $this->translate->_('Active'), $this->translate->_('Last Login'), $this->translate->_('Date Created'), $this->translate->_('Action'));
+			$arrHeader = array ('', $this->translate->_('Name'), $this->translate->_('Username'), $this->translate->_('Role'),$this->translate->_('Email'), $this->translate->_('Active'), $this->translate->_('Manage<BR>Rental'), $this->translate->_('Last Login'), $this->translate->_('Date Created'), $this->translate->_('Action'));
 			$displayTable = new Venz_App_Display_Table(
 				array (
 			         'data' => $dataUsers,
 					 'hiddenparamtop'=> $strSearch,
 					 'headings' => $arrHeader,
-					 'format' 		=> array('{format_counter}','%1%','%2%', '%3%', '%4%', '{format_active}', '{format_date}','{format_date_created}','{format_action}'),					 
-					 'sort_column' 	=> array('','Name', 'Username', 'ACLRole', 'Email', 'Active', 'LastLogin', 'DateCreated', ''),
+					 'format' 		=> array('{format_counter}','%1%','%2%', '%3%', '%4%', '{format_active}', '{format_rental}', '{format_date}','{format_date_created}','{format_action}'),
+					 'sort_column' 	=> array('','Name', 'Username', 'ACLRole', 'Email', 'Active', 'ManageRental', 'LastLogin', 'DateCreated', ''),
 					 'alllen' 		=> $arrUsers[0],
 					 'title'		=> $this->translate->_('Users'),					 
-					 'aligndata' 	=> 'CLLLLCCCC',
+					 'aligndata' 	=> 'CLLLLCCCCC',
 					 'pagelen' 		=> $recordsPerPage,
 					 'numcols' 		=> sizeof($arrHeader),
-			         'tablewidth' => "1050px",
+			         'tablewidth' => "1150px",
 			         'sortby' => $sortby,
 			         'ascdesc' => $ascdesc,
 					 'hiddenparam' => $strHiddenSearch,

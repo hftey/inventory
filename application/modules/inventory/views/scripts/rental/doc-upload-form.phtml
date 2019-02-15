@@ -1,0 +1,29 @@
+
+
+<form class='clsFormDoc' enctype="multipart/form-data" action='/inventory/rental/doc-upload' method=POST >
+	<table border=0 cellspacing=2 cellpadding=2 width=100%>
+		<TR><TD width=100%><h3><?=$this->DocTitle?><h3></TD></TR>
+		<TR><TD >
+			<div id='idUploadedDoc' style='width: 100%; height: 250px; overflow-y: scroll; overflow-x: hide; display: block; clear: both;'>
+				<?=$this->listUploads?>
+			
+			</div>
+		</TD></TR>
+	</table>
+	<HR>
+	<div class="md-input-wrapper md-input-wrapper-success md-input-filled"><label>Document Details</label>
+		<input style='margin-bottom: 5px;' placeholder="Name"  type=text name='Name' class='clsName' size=40 value=''>
+        <textarea placeholder="Description" name='Description' class='clsDescription'></textarea>
+	</div>
+    <input style='padding-left: 0px; margin-top: 5px' type=file name='DocUpload' class='clsDocUpload'>
+
+	<input type=hidden name='RentalAssetStatusID' id='RentalAssetStatusID' value='<?=$this->RentalAssetStatusID?>'>
+	<input type=submit value="Upload"><div id='UploadStatus'></div>
+	
+</form>
+
+<script>
+//initInput();
+</script>
+
+
