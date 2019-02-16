@@ -310,7 +310,8 @@
 <B class='PageHeader'><?=$this->translate->_('Rental Asset Details')?></B><BR>
 
 <?
-$disableEdit = $this->bCanEdit;
+$disableEdit = !$this->bCanEdit;
+
 //if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) {
 //    $disableEdit = false;
 //}
