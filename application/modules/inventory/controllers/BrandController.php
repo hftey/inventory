@@ -1295,15 +1295,15 @@ END;
 			
 				$ItemID = $Request->getParam('ItemID') ? $Request->getParam('ItemID') : new Zend_Db_Expr("NULL");
 				$SeriesNumber = $Request->getParam('SeriesNumber') ? $Request->getParam('SeriesNumber') : new Zend_Db_Expr("NULL");
-				$SalesOrderNumber = $Request->getParam('SalesOrderNumber') ? $Request->getParam('SalesOrderNumber') : new Zend_Db_Expr("NULL");
+//				$SalesOrderNumber = $Request->getParam('SalesOrderNumber') ? $Request->getParam('SalesOrderNumber') : new Zend_Db_Expr("NULL");
 				//$BranchID = $Request->getParam('BranchID') ? $Request->getParam('BranchID') : new Zend_Db_Expr("NULL");
-				$UnitPriceRM = $Request->getParam('UnitPriceRM') ? $Request->getParam('UnitPriceRM') : new Zend_Db_Expr("NULL");
-				$UnitDeliveryCost = $Request->getParam('UnitDeliveryCost') ? $Request->getParam('UnitDeliveryCost') : new Zend_Db_Expr("NULL");
-				$UnitTaxCost = $Request->getParam('UnitTaxCost') ? $Request->getParam('UnitTaxCost') : new Zend_Db_Expr("NULL");
-				$UnitLandedCost = $Request->getParam('UnitLandedCost') ? $Request->getParam('UnitLandedCost') : new Zend_Db_Expr("NULL");
-				//$StatusItem = $Request->getParam('StatusItem') ? $Request->getParam('StatusItem') : new Zend_Db_Expr("NULL");
-				$MarkupPercent = $Request->getParam('MarkupPercent') ? $Request->getParam('MarkupPercent') : new Zend_Db_Expr("NULL");
-				$UnitRetail = $Request->getParam('UnitRetail') ? $Request->getParam('UnitRetail') : new Zend_Db_Expr("NULL");
+//				$UnitPriceRM = $Request->getParam('UnitPriceRM') ? $Request->getParam('UnitPriceRM') : new Zend_Db_Expr("NULL");
+//				$UnitDeliveryCost = $Request->getParam('UnitDeliveryCost') ? $Request->getParam('UnitDeliveryCost') : new Zend_Db_Expr("NULL");
+//				$UnitTaxCost = $Request->getParam('UnitTaxCost') ? $Request->getParam('UnitTaxCost') : new Zend_Db_Expr("NULL");
+//				$UnitLandedCost = $Request->getParam('UnitLandedCost') ? $Request->getParam('UnitLandedCost') : new Zend_Db_Expr("NULL");
+//				//$StatusItem = $Request->getParam('StatusItem') ? $Request->getParam('StatusItem') : new Zend_Db_Expr("NULL");
+//				$MarkupPercent = $Request->getParam('MarkupPercent') ? $Request->getParam('MarkupPercent') : new Zend_Db_Expr("NULL");
+//				$UnitRetail = $Request->getParam('UnitRetail') ? $Request->getParam('UnitRetail') : new Zend_Db_Expr("NULL");
 				
 //				$arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"BranchID"=>$BranchID,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
 //					"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"Status"=>$StatusItem,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
@@ -1311,14 +1311,19 @@ END;
 
                 if ($this->userInfo->ACLRole == "AdminSystem"){
                     $BranchID = $Request->getParam('BranchID') ? $Request->getParam('BranchID') : new Zend_Db_Expr("NULL");
-                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"BranchID"=>$BranchID,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
-                        "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
-                    );
+//                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"BranchID"=>$BranchID,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
+//                        "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
+//                    );
+
+                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"BranchID"=>$BranchID);
 
                 }else{
-                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
-                        "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
-                    );
+//                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
+//                        "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
+//                    );
+
+                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber);
+
 
                 }
                 $db->update("ItemSeries", $arrUpdate, "ID=".$ItemSeriesID);
