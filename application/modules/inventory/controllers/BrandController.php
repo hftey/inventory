@@ -1308,11 +1308,22 @@ END;
 //				$arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"BranchID"=>$BranchID,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
 //					"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"Status"=>$StatusItem,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
 //				);
-                $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
-                    "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
-                );
-				$db->update("ItemSeries", $arrUpdate, "ID=".$ItemSeriesID);
-				
+
+                if ($this->userInfo->ACLRole == "AdminSystem"){
+                    $BranchID = $Request->getParam('BranchID') ? $Request->getParam('BranchID') : new Zend_Db_Expr("NULL");
+                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"BranchID"=>$BranchID,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
+                        "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
+                    );
+
+                }else{
+                    $arrUpdate = array("ItemID"=>$ItemID,"SeriesNumber"=>$SeriesNumber,"UnitPriceRM"=>$UnitPriceRM,"UnitDeliveryCost"=>$UnitDeliveryCost,"UnitDeliveryCost"=>$UnitDeliveryCost,
+                        "UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"SalesOrderNumber"=>$SalesOrderNumber,"UnitRetail"=>$UnitRetail
+                    );
+
+                }
+                $db->update("ItemSeries", $arrUpdate, "ID=".$ItemSeriesID);
+
+
 				$arrItem = $libInv->getItemDetail($ItemID);
 				$NumStock = $arrItem['NumStock'];	
 				$MinStock = $arrItem['MinStock'];	

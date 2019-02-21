@@ -156,8 +156,7 @@ if ($('#StatusItem').val() == "sold" || $('#StatusItem').val() == "reserved")
 </script>
 
 <B class='PageHeader'><?=$this->translate->_('Item Series Details')?></B><BR>
-
-<? 
+<?
 $disableEdit = true;
 if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" && $this->userInfo->ACLRole != "Account" ) {
 	$disableEdit = false;
@@ -183,7 +182,7 @@ if ($this->userInfo->ACLRole != "User" && $this->userInfo->ACLRole != "Sales" &&
 		<input  style='text-align: right;' type=text name='SeriesNumber' ID='SeriesNumber' value='<?=$this->SeriesNumber?>' <?=$disableEdit ? "disabled" : ""?>>
 		</TD></TR>
 		<TR><TD class='form_label' width=150px><?=$this->translate->_('Branch')?></TD><TD class='form_field' valign=bottom  style='text-align: right;'>
-            <select <?=!$this->add_series ? "disabled" : ""?> name='BranchID' id='BranchID' title="">
+            <select <?=!$this->add_series && $this->userInfo->ACLRole != "AdminSystem" ? "disabled" : ""?> name='BranchID' id='BranchID' title="">
                 <option value=''>-</option><?=$this->optionBranches?>
             </select>
         </TD></TR>
