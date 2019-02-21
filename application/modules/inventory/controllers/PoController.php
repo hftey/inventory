@@ -317,7 +317,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
                                     /*
                                      *  If item series already exist and as same amount of item as the PO, just update each of the item detail
                                      */
-									$arrUpdate = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
+									$arrUpdate = array("POItemsID"=>$POItemsID, "ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 									"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
 									
 									if ($arrStatusCheck[$index])
@@ -352,7 +352,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
                                      *  add new item series with same detail
                                      */
 
-									$arrUpdate = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
+									$arrUpdate = array("POItemsID"=>$POItemsID, "ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 									"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
 								
 									if ($arrStatusCheck[$index])
@@ -382,7 +382,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 									
 									for ($i = 0; $i < ($Quantity - sizeof($arrItemSeriesExist)); $i++)
 									{
-										$arrInsert = array("POItemsID"=>$POItemsID, "ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
+										$arrInsert = array("POItemsID"=>$POItemsID,"BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 										"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
 										
 										if ($arrStatusCheck[$index])
@@ -413,7 +413,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
                                      *  Technically should not happen
                                      */
 									////// dangerous...  existing record with series number might be removed.
-									$arrUpdate = array("POItemsID"=>$POItemsID, "BranchID"=>$BranchID,"ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
+									$arrUpdate = array("POItemsID"=>$POItemsID, "ItemID"=>$arrItemID[$index], "UnitPrice"=>$UnitPrice, "UnitPriceRM"=>$UnitPriceRM, "UnitDeliveryCost"=>$UnitDeliveryCost,
 									"UnitTaxCost"=>$UnitTaxCost,"UnitLandedCost"=>$UnitLandedCost,"MarkupPercent"=>$MarkupPercent,"UnitRetail"=>$UnitRetail);
 									
 									if ($arrStatusCheck[$index])
