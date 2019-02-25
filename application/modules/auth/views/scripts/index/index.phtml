@@ -1,0 +1,28 @@
+          
+
+<? if (!$this->userInfo) { ?>
+<div class="alert alert-info">Please enter your username and password for logging into Inventory System</div>
+	<div id="login-container-main">
+		<form id='formlogin' action='/auth/index/authlogin' method='POST'>
+		  <div class="register-forgot clearfix">
+			<div style="float:left"><a href="#">System Login </a></div>
+		  </div>		 
+
+		 <div class="control-group">
+			<div class="controls">
+			  <input type="text" id="userID"  name='userID' placeholder="Username">
+			</div>
+		  </div>
+		  <div class="control-group">
+			<div class="controls">
+			  <input type="password" id="userPassword" name="userPassword" placeholder="Password">
+			</div>
+		  </div>
+
+		  <button type="submit">Login</button>
+		</form>
+	  </div>
+
+</form> 
+<? } ?>
+

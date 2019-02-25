@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="content">
+      <tuv xml:lang="fr">
+        <seg>Je t'aime</seg>
+      </tuv>
+    </tu>
+    <tu tuid="content2">
+      <tuv xml:lang="fr">
+        <seg>Aimer, c'est risquer de ne pas être aimé en retour. Espérer, c'est au risque de douleur. Pour essayer, c'est risquer l'échec, mais le risque doit être pris parce que le plus grand danger dans la vie est de ne rien risquer.</seg>
+      </tuv>
+    </tu>
+  </body>
+</tmx>

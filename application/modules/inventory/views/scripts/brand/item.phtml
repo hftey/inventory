@@ -1,0 +1,165 @@
+<script language='Javascript'>
+
+
+$(document).ready(function() { 
+
+
+$('#ItemImage').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target',offsetY: 10, offsetX: 1, alignX: 'inner-left', showTimeout: 100});
+$('#BrandID').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#ItemName').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#ModelNumber').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#PartNumber').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+$('#RetailPrice').poshytip({ className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+
+$('#search_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#clear').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#add_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#save_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+$('#remove_image').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+
+
+
+	$('#add_item').click(function () {
+
+		
+		var error = false;
+		
+		if ($('#BrandID').val()=='') { 
+			
+			$('#BrandID').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_("Please select the brand this item belongs to")?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+			$('#BrandID').poshytip('show');
+
+			error = true;
+		}
+		
+        if ($('#ItemName').val()=='') { 
+			
+			$('#ItemName').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_("Please enter the item\'s name")?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+			$('#ItemName').poshytip('show');
+
+			error = true;
+		}
+
+//        if ($('#ModelNumber').val()=='') { 
+//			
+//			$('#ModelNumber').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_("Please enter the item\'s model name")?>.', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+//			$('#ModelNumber').poshytip('show');
+//			error = true;
+//		}        
+		
+//		if ($('#PartNumber').val()=='') { 
+//			
+//			$('#PartNumber').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png">Please enter the item\'s part number', className: 'tip-yellow', showOn:'none', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5, timeOnScreen: 3000});
+//			$('#PartNumber').poshytip('show');
+//
+//			error = true;
+//		}		
+		
+				
+		if (error)
+			return false; 			
+		
+	})
+	
+	//$('#save_item').click(function ( event, tocontinue, triggerstock ) {
+	$('#save_item').on('click', function ( event, tocontinue, triggerstock ) {
+
+		if (!tocontinue)
+		{
+			if (parseInt($('#NumStock').val()) < parseInt($('#MinStock').val())) { 
+				$.prompt(
+					"<?=$this->translate->_('Current stock is lower than the minimum stock.<BR>Do you want to trigger minimum stock alert?')?>",{
+					buttons: { Yes: true, No: false },
+					submit:function(e,v,m,f){ 
+						if(v){
+							$('#save_item').trigger("click", [true, true]);	
+						}else{
+							$('#save_item').trigger("click", [true, false]);	
+						}
+					}
+				  
+				});
+				event.preventDefault();
+				return false;
+				
+			}else
+			{
+				return true;
+				
+			}
+			
+		}else
+		{
+			if (triggerstock)
+				$('#trigger_alert').val("1");
+			else
+				$('#trigger_alert').val("0");
+			return true;
+		}
+		
+		
+	})
+	
+	
+});	
+
+
+
+function OnDeleteItem(item_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove this item?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){ 
+			if(v){
+				document.location='/inventory/brand/item/remove_item/'+item_id;
+			}
+		}
+	  
+	});
+}
+
+
+
+
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_("Inventory > Manage > Item Listing")?></B><BR>
+
+<form enctype="multipart/form-data"  action='/inventory/brand/item' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD colspan=2 ><B><?=$this->translate->_("Item's Details")?></B></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Item Image')?></TD><TD  class='form_field' valign=bottom><?if ($this->ItemImagePath) echo "<a target='_new' href='".$this->ItemImagePath."'><img border=0 src='".$this->ItemImagePath."' style='height:80px'></a><input type=submit name='remove_image' id='remove_image' value='".$this->translate->_("Remove Logo")."' title='".$this->translate->_("Click to remove the item image. Select a differnt image file to replacement existing image").".'><BR>"?><input type='file' name='ItemImage' id='ItemImage' size="35" title="<?=$this->translate->_('It must be in JPEG format and must be less than or equal to 1MB')?>."></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Brand')?><font class='required'>*</font></TD><TD class='form_field' valign=bottom> <select name='BrandID' id='BrandID' title="Item's brand."><option value=''>-<?=$this->optionBrand?></select></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Item Name')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='ItemName' id='ItemName' size="35" value='<?=$this->ItemName?>' title="<?=$this->translate->_("Item's full name")?>."></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Model Name')?></TD><TD class='form_field'><input type='text' name='ModelNumber' id='ModelNumber' size="35" value='<?=$this->ModelNumber?>' title="<?=$this->translate->_("Item's model name")?>."></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Part Number')?></TD><TD class='form_field'><input type='text' name='PartNumber' id='PartNumber'  size="35" value='<?=$this->PartNumber?>' title="<?=$this->translate->_("Item's part number")?>."></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('In Stock')?></TD><TD class='form_field'><?=$this->NumStock?><input type=hidden name='NumStock' ID='NumStock' value='<?=$this->NumStock?>'></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Min Stock')?></TD><TD class='form_field'><input type='text' name='MinStock' id='MinStock'  size="6" value='<?=$this->MinStock?>' title="<?=$this->translate->_("Item's min stock for triggering alerts")?>."></TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Asset Lifespan')?></TD>
+            <TD class='form_field'>
+                <input type='text' name='MonthDepreciation' id='MonthDepreciation'  size="6" value='<?=$this->MonthDepreciation?>' title="<?=$this->translate->_("Item's depreciation lifespan in months")?>."> Months
+            </TD></TR>
+        <TR><TD class='form_label' width=150px><?=$this->translate->_('Retail Price')?></TD><TD class='form_field'><?=$this->currencyType?>: <input type='text' name='RetailPrice' id='RetailPrice'  size="15" value='<?=$this->RetailPrice?>' title="<?=$this->translate->_("Item's retail price")?>."></TD></TR>
+		<TR><TD colspan=2 height=10px></TD></TR>
+
+		<TR><TD colspan=2>
+<?if ($this->edit_item) { ?>
+        <input type=submit name='save_item' id='save_item' value='<?=$this->translate->_('Save')?>'  title='<?=$this->translate->_('Save the update for the selected item')?>.'> |
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Cancel')?>' onclick='document.location="/inventory/brand/item"'  title='<?=$this->translate->_('Cancel the edit')?>.'>
+		<input type=hidden name='save_item_id' value='<?=$this->edit_item?>'>
+		<input type=hidden name='trigger_alert' id='trigger_alert' value='0'>		
+		<? } else {?>
+		<input type=submit name='search_item' id='search_item' value='<?=$this->translate->_('Search')?>' title='<?=$this->translate->_('Click to search for the item')?>.'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/inventory/brand/item/clear_search/1"'  title='<?=$this->translate->_('Clear all the inputs above')?>.'> | 
+		<input type=submit name='add_item' id='add_item' value='<?=$this->translate->_('Create New Item')?>'  title='<?=$this->translate->_('Please make sure all the required fields are entered before click to create new item')?>.'>		
+		<? } ?>
+		
+		
+		
+		
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_item?>
+<BR><BR><BR>

@@ -1,0 +1,25 @@
+<link rel="Stylesheet" type="text/css" href="/template_forms/css/light-blue.css" />	
+
+<H3>ACL</H3>
+<form method="POST">
+<input type=checkbox name='view' value='view' <?=$this->chkView?>>View
+<input type=checkbox name='edit' value='edit' <?=$this->chkEdit?>>Edit
+<input type=checkbox name='delete' value='delete' <?=$this->chkDelete?>>Delete
+<BR><input type="submit"  name='UpdatePriviledges' value='Update Priviledges'/>
+</form>
+
+<? if ($this->allowView) { ?> 
+<form method="POST">
+<fieldset>
+	<legend>User Information:</legend>
+	<label for="input-name"><strong>Name:</strong></label><input name="input-name" id="input-name" type="text" size="30" />
+	<label for="input-email"><strong>Email:</strong></label><input name="input-email" id="input-email" type="text" size="30" /><BR>
+	<? if ($this->allowEdit) { ?>
+	<input type="submit" name='SubmitDetail' value='Save'/>
+	<? } ?>
+	<? if ($this->allowDelete) { ?>
+	<input type="submit" name='DeleteDetail' value='Delete'/>
+	<? } ?>
+</fieldset>
+</form>
+<? } ?>

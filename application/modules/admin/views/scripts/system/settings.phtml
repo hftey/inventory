@@ -1,0 +1,26 @@
+
+<B class='PageHeader'><?=$this->translate->_('Settings')?></B><BR>
+
+<form action='/admin/system/settings' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Language')?></TD>
+		<TD class='form_field'>
+		<select name='SettingLanguage' id='SettingLanguage'>
+			<?=$this->optionLanguage?>
+		</select>
+		</TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Default Currency')?></TD><TD class='form_field'><SELECT Name="SettingCurrency" ID="SettingCurrency"><option value=''>-<?=$this->optionCurrency?></select></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Retail Markup Type')?></TD><TD class='form_field'><SELECT Name="SettingMarkupType" ID="SettingMarkupType"><option value=''>-<?=$this->optionMarkupType?></select></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Default Item Markup')?></TD><TD class='form_field'><INPUT style='text-align:right' TYPE=text size=3 name='SettingMarkup' id='SettingMarkup' value='<?=$this->markup?>'>%</TD></TR>
+
+
+		<TR><TD colspan=2>
+		&nbsp;
+		</TD></TR>
+		
+		<TR><TD colspan=2>
+		<input type=submit name='save_settings' id='save_settings' value='<?=$this->translate->_('Save')?>'  title='<?=$this->translate->_('Save system settings')?>.'>		
+		</TD></TR>
+	</table>
+</form>
+<BR><BR><BR>

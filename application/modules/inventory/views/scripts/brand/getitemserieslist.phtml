@@ -1,0 +1,131 @@
+<script language='Javascript'>
+
+
+
+$(document).ready(function() { 
+	$(document).on("click", "#checkall", function(){	
+		if ($('#checkall').is(':checked')){
+			//var numCheck = "<?=$this->itemLeft?>";
+			$( "[id='checkitemseries']" ).each(function( index, element  ) {
+			//	if (numCheck > 0)
+				$(element).prop('checked',true);
+			//	numCheck = numCheck - 1;
+
+			});
+		}else
+		{
+			$( "[id='checkitemseries']" ).each(function( index, element  ) {
+				$(element).prop('checked',false);
+
+			});
+
+		}
+	});
+	
+//	$(document).on("click", "#checkitemseries", function(){	
+//		var countChecked = 0;
+//			var numCheck = "<?=$this->itemLeft?>";	
+//			$( "[id='checkitemseries']" ).each(function( index, element  ) {
+//				if ($(element).is(':checked'))
+//				{
+//					countChecked = countChecked + 1;
+//				}
+//				
+//			});
+//			countChecked = countChecked + numCheck;
+//			if (countChecked > <?=$this->Quantity?>)
+//			{
+//				$.prompt("<?=$this->translate->_("You had selected all ".$this->Quantity." items from the list.")?>.",{ title: "<?=$this->translate->_("Invalid Entry")?>", buttons: { Ok: true }});
+//				$(this).prop('checked',false);
+//			}
+//	});
+	
+	$(document).on("click", "#checkall_selected", function(){	
+		if ($('#checkall_selected').is(':checked')){
+			$( "[id='checkitemseries_selected']" ).each(function( index, element  ) {
+				$(element).prop('checked',true);
+			});
+		}else
+		{
+			$( "[id='checkitemseries_selected']" ).each(function( index, element  ) {
+				$(element).prop('checked',false);
+
+			});
+
+		}
+	});	
+	
+	$('#search_button').click(function () {
+		
+		$.post('/inventory/brand/getitemserieslist/search_series/1/itemID/<?=$this->ItemID?>/quantity/<?=$this->Quantity?>/SOItemID/<?=$this->SOItemID?>', $('#formseries').serialize(), function( data ) {
+			$('#itemList').html(data);
+		});	 
+	
+		
+	})
+	
+	
+	$('#clear').click(function () {
+		$('#SaerchBranchID').val("");
+		$('#SeriesNumber').val("");
+	
+		$.post('/inventory/brand/getitemserieslist/search_series/1/itemID/<?=$this->ItemID?>/quantity/<?=$this->Quantity?>/SOItemID/<?=$this->SOItemID?>', $('#formseries').serialize(), function( data ) {
+			$('#itemList').html(data);
+		});	 
+	
+		
+	})
+
+})
+
+	
+	$(document).on("click", "#SelectSeries2", function(){	
+		$.post('/inventory/brand/getitemserieslist/select_series/1/itemID/<?=$this->ItemID?>/quantity/<?=$this->Quantity?>/SOItemID/<?=$this->SOItemID?>', $('#idseriesform').serialize(), function( data ) {
+			$('#itemList').html(data);
+		});	 
+	
+	})	
+	
+	$(document).on("click", "#SelectSeries1", function(){	
+
+		$.post('/inventory/brand/getitemserieslist/select_series/1/itemID/<?=$this->ItemID?>/quantity/<?=$this->Quantity?>/SOItemID/<?=$this->SOItemID?>', $('#idseriesform').serialize(), function( data ) {
+			$('#itemList').html(data);
+		});	 
+	
+	})	
+	
+	
+	$(document).on("click", "#RemoveSeries", function(){	
+
+		$.post('/inventory/brand/getitemserieslist/remove_series/1/itemID/<?=$this->ItemID?>/quantity/<?=$this->Quantity?>/SOItemID/<?=$this->SOItemID?>', $('#idseriesformselected').serialize(), function( data ) {
+			$('#itemList').html(data);
+		});	 
+	
+	})	
+		
+	
+</script>
+
+<div id='msg'></div>
+<form action='#' method=POST id='formseries'>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD colspan=2 ><B><?=$this->ItemName?>: <?=$this->ModelNumber?></B></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Branch')?><font class='required'>*</font></TD><TD class='form_field' valign=bottom> <select name='SaerchBranchID' id='SaerchBranchID' title=""><option value=''>-<?=$this->optionBranches?></select></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Series Number')?></TD><TD class='form_field'><input type='text' name='SeriesNumber' id='SeriesNumber' size="35" value='<?=$this->SeriesNumber?>' title="<?=$this->translate->_("Item's series number")?>."></TD></TR>
+		<TR><TD colspan=2 height=10px></TD></TR>
+
+		<TR><TD colspan=2>
+		<input style='font-size:10px;' type=button name='search_button' id='search_button' value='<?=$this->translate->_('Search')?>' title='<?=$this->translate->_('Click to search for the item series')?>.'>		
+		<input style='font-size:10px;' type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' title='<?=$this->translate->_('Clear all the inputs above')?>.'>
+		</TD></TR>
+	</table>
+</form>
+<div style='font-size: 10px;'>
+<?=$this->translate->_('Use the search form above to search for the particular item(s). Select the item and click ')?>
+<input style='margin-bottom: 5px; padding-top: 1px; padding-bottom: 1px; font-size:10px;' type=button value="Select"> 
+<?=$this->translate->_('button to select.You can always remove the item(s) that was selected previously')?>.
+</div>
+<div id='itemList'>
+<?=$this->content_itemselected?>
+<?=$this->content_item?>
+</div>

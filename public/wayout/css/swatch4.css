@@ -1,0 +1,273 @@
+@charset "utf-8";
+/* Pre-defined Swatch#1 */
+
+/* Containers */
+.st-content {
+  background: #d3fcf9;
+}
+
+.menu-bg {
+  background: #0fe8d8;
+}
+
+.bm-container {
+  background: #0cbfb3;
+}
+
+/* Effect Togglers and Search-box/Login-box Containers */
+.side-menu-toggle {
+  background: #13998f;
+  background-image: url(../img/menu-toggle.png);
+  background-repeat: no-repeat;
+  background-position: 15px 11px;
+}
+
+.side-menu-toggle:focus {
+  background: #0e7068;
+  background-image: url(../img/menu-toggle.png);
+  background-repeat: no-repeat;
+  background-position: 15px 11px;
+}
+
+.login-toggle {
+  background: #13998f;
+  background-image: url(../img/login.png);
+  background-repeat: no-repeat;
+  background-position: 10px 11px;
+}
+
+.login-toggle:focus {
+  background: #0e7068;
+  background-image: url(../img/login.png);
+  background-repeat: no-repeat;
+  background-position: 10px 11px;
+}  
+
+#login-container {
+  background: #bcfcf5;
+  background: rgba(188,252,245,1);
+  border: 1px solid #7af8eb;
+  border-top: none;
+}
+
+#login-container form button {
+  background: #0baea2;
+  color:#FFF;
+}
+
+#login-container form button:hover {
+  background: #0edacb;
+}
+
+.search-toggle {
+  background: #0eebda;
+  background-image: url(../img/search.png);
+  background-position: 9px 9px;
+  background-repeat: no-repeat;
+  border-left: 1px solid #0de1d1;
+}
+
+#search-container {
+  background: #b7fbf5;
+  background: rgba(183,251,245,1);
+  border: 1px solid #7af8eb;
+}
+
+#search-container:focus {
+  background: rgb(7,148,134);
+  background: rgb(7,148,134,0.7);
+  color: #dff1f9;
+}
+
+/* Top-nav mega */
+.top-nav-mega-1, .top-nav-mega-2, .top-nav-mega-3, .top-nav-mega-4, .top-nav-mega-5, .top-nav-mega-6, .top-nav-mega-full-width {
+  background: rgb(4,102,92);
+  background: rgba(4,102,92,0.8);
+  color: #fff;
+}
+
+/* Top-nav mega product nav */
+.product-frame {
+  background: rgb(5,131,118);
+  background: rgba(5,131,118,0.8);
+  border: 5px solid #04645a;
+  color: #ddd;
+}
+
+.product-frame h1, .product-frame h1 a, .product-frame h2, .product-frame h2 a, .product-frame h3, .product-frame h3 a, .product-frame h4, .product-frame h4 a, .product-frame h5, .product-frame h5 a, .product-frame h6, .product-frame h6 a {
+  color: #fff;
+  font-weight: 500;
+}
+
+.top-nav-mega-full-width, .top-nav-mega-full-width .carousel-caption h4, .top-nav-mega-full-width .carousel-caption h4 a {
+  color: #fff;
+}
+
+.product-frame:hover {
+  background: rgb(32,116,107);
+  background: rgba(32,116,107,0.9);
+  border: 5px solid #3dc9bb;
+}
+
+.top-nav-mega-full-width ul li a, .top-nav-mega-full-width ol li a {
+  color: #fff;
+}
+
+.top-nav-mega-full-width h1, .top-nav-mega-full-width h2, .top-nav-mega-full-width h3, .top-nav-mega-full-width h4, .top-nav-mega-full-width h5, .top-nav-mega-full-width h6 {
+  color: #fff;
+}
+
+/* Items with images */
+.item-with-images, .item-with-images-black {
+  background: rgb(224,224,224);
+  background: rgba(224,224,224,0.8);
+  color: #333;
+}
+
+.item-with-images-black {
+  background: rgb(0,0,0);
+  background: rgba(0,0,0,0.8);
+}
+
+/* News Nav */
+.mega-news-item {
+  background: rgb(46,112,105);
+  background: rgba(46,112,105,0.8);
+  color: #fff;
+}
+
+.mega-news-item img {
+  background: rgb(54,54,54);
+  background: rgba(54,54,54,0.5);
+}
+
+.mega-news-item h3, .mega-news-item h3 a {
+  color: #1b1b1b;
+}
+
+/* Top-nav News Nav title */
+.mega-news-item h3 a {
+  color: #e1e4e8;
+}
+
+/* Top-nav 1st level */
+.top-nav > ul > li > a {
+  background: #0ee0d0;
+  background: rgba(14,224,208,0.6);
+  color: #fff;
+}
+
+.top-nav > ul > li:hover > a {
+  background: #077870;
+  background: rgba(7,120,112,1);
+  color: #fff;
+}
+
+/* Top-nav 2nd level */
+.top-nav > ul > li > ul > li > a {
+  background: #097971;
+  background: rgba(9,121,113,0.8);
+  border-top: 1px solid #076b64;
+  border-bottom: 1px solid #4fa49d;
+  color: #fff;
+}
+
+.top-nav > ul > li > ul > li > a:hover {
+  background: #0ebeb1;
+  background: rgba(14,190,177,0.9);
+  border-top: 1px solid #076b64;
+  border-bottom: 1px solid #4fa49d;
+  color: #fff;
+}
+
+/* Top-nav 3rd level */
+.top-nav > ul > li > ul > li > ul > li > a {
+  background: #11e6d6;
+  background: rgba(17,230,214,0.92);
+  border-top: 1px solid #0ec2b5;
+  border-bottom: 1px solid #5cf3e8;
+  color: #fff;
+}
+
+.top-nav > ul > li > ul > li > ul > li a:hover {
+  background: #55f2e7;
+  background: rgba(85,242,231,0.8);
+  border-top: 1px solid #0ec2b5;
+  border-bottom: 1px solid #5cf3e8;
+  color: #36414b;
+}
+
+/* Top-nav 4th level */
+.top-nav > ul > li > ul > li > ul > li > ul > li > a {
+  background: #9FEAD8;
+  background: rgba(159,234,216,0.9);
+  border-top: 1px solid #59DBBE;
+  border-bottom: 1px solid #D1F5ED;
+  color: #0A523E;
+}
+
+.top-nav > ul > li > ul > li > ul > li > ul > li a:hover {
+  background: #79E1C8;
+  background: rgba(121,225,200,0.9);
+  border-top: 1px solid #59DBBE;
+  border-bottom: 1px solid #D1F5ED;
+  color: #fff;
+}
+
+/* Top-nav input styles */
+.top-nav input[type="text"], .top-nav textarea {
+  background: #c4eeea;
+  color: #fff;
+}
+
+.top-nav input[type="text"]:focus, .top-nav input:active, .top-nav textarea:focus {
+  border:none;
+  outline:none;
+  border: 1px solid #33a982;
+}
+
+/* Social media button styles */
+.facebook, .twitter, .google-plus, .pinterest, .instagram, .linkedin, .yahoo, .youtube, .vimeo {
+  background: #0cd2c4;
+  background-repeat: no-repeat;
+  background-position: 8px 0px;
+  border-left: 1px solid #0de1d1;
+}
+
+.facebook, .facebook:hover {
+  background-image: url(../img/facebook.png);
+}
+
+.twitter, .twitter:hover {
+  background-image: url(../img/twitter.png);
+}
+
+.google-plus, .google-plus:hover {
+  background-image: url(../img/googleplus.png);
+}
+
+.pinterest, .pinterest:hover {
+  background-image: url(../img/pinterest.png);
+}
+
+.linkedin, .linkedin:hover {
+  background-image: url(../img/linkedin.png);
+}
+
+.yahoo, .yahoo:hover {
+  background-image: url(../img/yahoo.png);
+}
+
+.youtube, .youtube:hover {
+  background-image: url(../img/youtube.png);
+}
+
+.vimeo, .vimeo:hover {
+  background-image: url(../img/vimeo.png);
+}
+
+/* <HR> horizontal line */
+.top-nav-mega-content-seperator {
+  border-top: 1px solid #26605a;
+  border-bottom: 1px solid #46b3a8;
+}

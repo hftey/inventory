@@ -1,0 +1,37 @@
+brand > item > model > part number > serial
+
+level 1 - view only
+level 2 - item management
+level 3 - all including user management
+
+Received Good
+
+Stock out
+
+PO
+
+currency multiplier
+Delivery charges by 
+
+custom form tax - 
+
+USD, EURO, POUND, SGD, 
+
+Landed COst - 
+
+
+
+GRvN - Goods Received note
+GRtN - Goods Return Notes - 
+
+Stock Requisition - Item Sell
+
+HQ, Labuan(LBU), Bintulu (BTU), Kertih(KTE)
+
+item DO
+
+
+-------
+- PO Lock effect
+- ItemSeries Check In and Out
+- Access Level Control

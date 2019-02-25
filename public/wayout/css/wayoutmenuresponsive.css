@@ -1,0 +1,73 @@
+@media (max-width: 480px) {
+  .container {
+    padding:0;
+    margin:0;
+  }
+
+  body {
+    padding:0;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .bm-container .span1 {
+    width:8%;
+    float: left;
+  }
+
+  .bm-container .span2 {
+    width:16%;
+    float: left;
+  }
+
+  .bm-container .span7 {
+    width:56%;
+    float: left;
+  }
+
+  .menu-bg-boxed {
+    margin-top:0px;
+  }
+
+  .social-media {
+    display: none;
+  }
+}
+
+/* Portrait tablet to landscape and desktop */
+@media (min-width: 768px) and (max-width: 979px) { 
+  .container {
+    padding:0;
+    margin:0;
+  }
+
+  body {
+    padding:0;
+  }
+  
+  .social-media {
+    display: none;
+  }
+}
+ 
+/* Landscape phone to portrait tablet */
+@media (max-width: 767px) { 
+  .container {
+    padding:0;
+    margin:0;
+  }
+
+  body {
+    padding:0;
+  } 
+	
+  .social-media {
+    display: none;
+  }
+	
+  .social-media-sidebar {
+    display: none;
+  }
+}

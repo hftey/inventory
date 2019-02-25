@@ -1,0 +1,38 @@
+/* WAYOUT MENU V1.0 BOXED */
+#shop-container, #login-container, #search-container {
+	right: 0%;
+}
+
+#login-container {
+  top: 0px;
+  height:40px;
+  opacity: 0;
+}
+
+#login-container.login-effect {
+  visibility: visible;
+  top:44px;
+  height: 250px;
+  opacity: 1;
+}
+
+#search-container, #shop-container {
+  top: 0px;
+  height: 40px;
+  opacity: 0;
+}
+
+#search-container.search-effect {
+  visibility: visible;
+  top: 40px;
+  height: 50px;
+  opacity: 1;
+}
+
+#shop-container.shop-effect {
+  visibility: visible;
+  top: 40px;
+  max-height:200px;
+  height: auto;
+  opacity: 1;
+}

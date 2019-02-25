@@ -1,0 +1,75 @@
+<link rel="stylesheet" type="text/css" href="/css/impromptu.css" />
+<script language="JavaScript" type="text/JavaScript" src="/js/jquery/jquery.impromptu.js"></script>
+
+
+
+<script language='Javascript'>
+
+function OnDeleteRoles(roles_id){
+	$.prompt(
+		"<?=$this->translate->_('Are you sure you want to remove the role?')?>",{
+		buttons: { Ok: true, Cancel: false },
+		submit:function(e,v,m,f){
+					if(v){
+						document.location='/admin/acl/roles/remove_roles/'+roles_id;
+					}
+				  }
+	});
+}
+
+
+
+$(document).ready(function() {   
+
+	$('#add_roles').click(function () {
+	
+
+        if ($('#Name').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Name')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Description').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Description')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+
+		return true;
+	});
+	
+	$('#save_roles').click(function () {
+        if ($('#Name').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Name')?>",{ buttons: { Ok: true } });
+            return false; 
+		}
+        if ($('#Description').val()=='') {   
+			$.prompt("<?=$this->translate->_('Please enter Description')?>",{ buttons: { Ok: true } });
+            return false; 
+		}	
+	
+		return true;
+	});	
+});   
+</script>
+
+<form action='/admin/acl/roles' method=POST>
+	<table border=0 cellspacing=0 cellpadding=0>
+		<TR><TD colspan=2><B><?=$this->translate->_('Add New Role')?></B></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Name')?>*:</TD><TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Description')?>*:</TD><TD class='form_field'><input type='text' name='Description' id='Description' width=35 value='<?=$this->Description?>'></TD></TR>
+		<TR><TD class='form_label'><?=$this->translate->_('Parent Name')?>:</TD><TD class='form_field'><input type='text' name='ParentName' id='ParentName' width=35 value='<?=$this->ParentName?>'></TD></TR>
+		<TR><TD colspan=2>
+		*<?=$this->translate->_('Required when add a new priviledges')?><BR>
+		<input type=submit name='search_roles' id='search_roles' value='<?=$this->translate->_('Search')?>'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/acl/roles"'>	|
+		<?if ($this->edit_roles) { ?>
+		<input type=submit name='save_roles' id='save_roles' value='<?=$this->translate->_('Save')?>'>
+		<input type=hidden name='save_roles_id' value='<?=$this->edit_roles?>'>		
+		<? } else {?>
+		<input type=submit name='add_roles' id='add_roles' value='<?=$this->translate->_('Add')?>'>
+		<? } ?>
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_roles?>
+<font class='small'>** <?=$this->translate->_('Role is defined in ACL Access Right')?>.</font>
+<BR><BR><BR>

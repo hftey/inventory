@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
+<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+<title>Wayout Menu - Responsive CSS3 Menu</title>
+<meta name="description" content="Wayout Menu - A responsive exclusive CSS3 menu written with HTML, CSS3 and jQuery" />
+<meta name="keywords" content="wayout menu, wayout css menu, css3 menu, css3 navigation, mega navigation, mega menu" />
+<meta name="author" content="Brienlabs" />
+
+<!-- Load Bootstrap 2.3.2 stylesheets -->
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.min.css" media="screen" />
+<!-- Load Fonts -->
+<link rel="stylesheet" type="text/css" href="css/fonts.css" />
+<!-- WAYOUT MENU -->
+<link rel="stylesheet" type="text/css" href="css/wayoutmenu.css" />
+<link rel="stylesheet" type="text/css" href="css/wayoutmenuboxed.css" />
+<link rel="stylesheet" type="text/css" href="css/wayoutmenueffects.css" />
+<link rel="stylesheet" type="text/css" href="css/swatch5.css" />
+<link rel="stylesheet" type="text/css" href="css/wayoutmenuresponsive.css" />
+  
+<!-- Lightbox stylesheet -->
+<link rel="stylesheet" type="text/css" href="css/jquery.lightbox.min.css" />
+<!-- Input slider -->
+<link href="css/slider.css" rel="stylesheet" type="text/css" />
+<!-- Color Picker --> 
+<link rel="stylesheet" type="text/css" href="css/spectrum.css" />
+
+<!-- jQuery 1.10.2 -->
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="js/bootstrap.min.js"></script>
+<!-- Lightbox -->
+<script src="js/jquery.lightbox.min.js"></script>  
+<!-- Wayout Menu -->
+<script src="js/wayoutmenu.boxed.js"></script>  
+
+<!-- Wayout Menu DEMO (Theme customization) -->
+<script src="js/demo.js"></script> 
+<!-- Color Picker for DEMO -->
+<script src="js/spectrum.js"></script>  
+<!-- Input Slider for DEMO -->
+<script src="js/slider.min.js"></script>
+
+<!-- Google Maps -->
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+<script>
+// Enable the visual refresh
+google.maps.visualRefresh = true;
+var map;
+function initialize() {
+  var mapOptions = {
+    zoom: 8,
+    center: new google.maps.LatLng(-34.397, 150.644),
+    mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+  map = new google.maps.Map(document.getElementById('map-canvas'),
+      mapOptions);
+}
+google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<!--[if lt IE 10]>
+<script type="text/javascript">
+$(document).ready(function() {
+  $('.hidden-menu').css('display','none');
+});
+</script>
+<![endif]-->
+</head>
+<body>
+  <!-- MAIN CONTAINER -->
+  <div id="main-container" class="container-fluid relative overflow-hidden full-height">
+    <!-- Side Menu (.st-effect-1) -->
+    <nav class="hidden-menu st-effect-1" id="menu-1">
+      <h2>Sidebar</h2>
+      <ul>
+        <li><a href="#"><i class="icon-user icon-white icon-pos"></i>Profile</a></li>
+        <li><a href="#"><i class="icon-envelope icon-white icon-pos"></i>Messages</a></li>
+        <li><a href="#"><i class="icon-calendar icon-white icon-pos"></i>Events</a></li>
+        <li><a href="#"><i class="icon-picture icon-white icon-pos"></i>Photos</a></li>
+        <li><a href="#"><i class="icon-off icon-white icon-pos"></i>Logout</a></li>
+      </ul>
+      <div class="social-media-sidebar">
+        <a class="facebook-sb" title="Facebook" href="#"><span>Facebook</span></a>
+        <a class="twitter-sb" title="Twitter" href="#"><span>Twitter</span></a>
+        <a class="google-plus-sb" title="Google+" href="#"><span>Google Plus</span></a>
+        <a class="yahoo-sb" title="Yahoo!" href="#"><span>Yahoo!</span></a>
+        <a class="pinterest-sb" title="Pinterest" href="#"><span>Pinterest</span></a>
+        <a class="vimeo-sb" title="Vimeo" href="#"><span>Vimeo</span></a>
+        <a class="youtube-sb" title="Youtube" href="#"><span>Youtube</span></a>
+        <a class="linkedin-sb" title="Linkedin" href="#"><span>Linkedin</span></a>
+      </div>
+    </nav>
+    <!-- /Side Menu (.st-effect-1) -->
+    
+    <!-- WRAPPER -->
+    <div class="wrapper relative full-height">
+      <!-- ST-CONTENT -->
+      <div class="st-content relative full-height"><!-- this is the wrapper for the content -->
+        <!-- ST-CONTENT-INNER -->
+        <div class="st-content-inner relative">
+          <!-- MAIN -->
+          <div class="main" style="position:relative">
+            <!-- MENU-BG -->
+            <div class="container-fluid menu-bg-boxed">
+              <!-- BM-CONTAINER -->
+              <div class="row-fluid site-width-boxed bm-container">
+                <div class="slidemenu-toggler">
+                  <button id="brien-button" class="side-menu-toggle"></button>
+                </div>
+                <div class="site-title"><h1>Wayout Menu</h1></div>
+                <!-- Wayout Menu - TOP NAV -->
+                <div class="top-nav hidden-phone">
+                  <ul>
+                    <!-- Standard Nav -->
+                    <li><a href="#" title="">Standard Nav</a>
+                      <ul>
+                        <li><a href="#" title="">Second Level 1</a></li>
+                        <li><a href="#" title="">Second Level 2</a>
+                          <ul>
+                            <li><a href="#" title="">Third Level 1</a></li>
+                            <li><a href="#" title="">Third Level 2</a>
+                              <ul>
+                                <li><a href="#" title="">Fourth Level 1</a></li>
+                                <li><a href="#" title="">Fourth Level 2</a></li>
+                                <li><a href="#" title="">Fourth Level 3</a></li>
+                                <li><a href="#" title="">Fourth Level 4</a></li>
+                              </ul>
+                            </li>
+                            <li><a href="#" title="">Third Level 3</a></li>
+                            <li><a href="#" title="">Third Level 4</a></li>
+                          </ul>
+                        </li>
+                        <li><a href="#" title="">Second Level 3</a></li>
+                        <li><a href="#" title="">Second Level 4</a></li>
+                      </ul>
+                    </li>
+                    <!-- / Standard Nav -->
+                    
+                    <!-- News Nav -->
+                    <li class="top-nav-mega"><a href="#" title="">News Nav</a>
+                      <ul class="top-nav-mega-1">
+                        <div class="row-fluid">
+                          <div class="span12">
+                            <!-- Sample News Item 1 -->
+                            <div class="row-fluid mega-news-item">
+                              <div class="span4">
+                                <img src="http://placehold.it/120x75" alt="MacBook Pro">
+                              </div>
+                              <div class="span8">
+                                <h3><a href="#" title="Macbook Pro">New MacBook Pro</a></h3>
+                                Introducing the all-new MacBook Pro with Retina display. More than ever, faster than ever. The new MacBook Pro is awesome.
+                              </div>
+                            </div>
+                            <!-- Sample News Item 2 -->
+                            <div class="row-fluid mega-news-item">
+                              <div class="span4">
+                                <img src="http://placehold.it/120x75" alt="Lenovo Yoga">
+                              </div>
+                              <div class="span8">
+                                <h3><a href="#" title="Lenovo Ideapad">Lenovo announced Ideapad</a></h3>
+                                With the productivity of Ultrabook™, feel intuitive touch experience of an ultimate versatile tablet.
+                              </div>
+                            </div>
+                            <!-- Sample News Item 3 -->
+                            <div class="row-fluid mega-news-item">
+                              <div class="span4">
+                                <img src="http://placehold.it/120x75" alt="Dell monitors">
+                              </div>
+                              <div class="span8">
+                                <h3><a href="#" title="Dell monitors">Dell Monitors evolved</a></h3>
+                                Productivity, performance and comfort, plus environmentally responsible design and power management features.
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </ul>
+                    </li>
+                    <!-- / News Nav -->
+                    
+                    <!-- Product Nav -->
+                    <li class="top-nav-mega fw"><a href="#" title="">Product Nav</a></li>
+                    <div class="top-nav-mega-full-width">
+                      <div class="row-fluid">
+                      
+                        <!-- PC & Laptops -->
+                        <div class="span3">
+                          <h3>PC &amp; Laptops</h3>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Desktops">Desktops</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Laptops">Laptops</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">Keyboards</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">Printers</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- PC and Laptops -->
+                        
+                        <!-- Tablets -->
+                        <div class="span3">
+                          <h3>Tablets</h3>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Desktops">iPad Air</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Laptops">GalaxyTab</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">LumiaTab</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">Venue 8</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /Tablets -->
+                        
+                        <!-- Cellphones -->
+                        <div class="span3">
+                          <h3>Cellphones</h3>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Desktops">iPhone5</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Laptops">Galaxy SIII</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">LG G2</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">Xperia Z</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /Cellphones -->
+                        
+                        <!-- Consoles -->
+                        <div class="span3">
+                          <h3>Consoles</h3>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Desktops">PS3</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Laptops">Xbox 360</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row-fluid product-row">
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">Wii</a></h4>
+                              </div>
+                            </div>
+                            <div class="span6 product-frame text-center">
+                              <div class="row-fluid product-image">
+                                <img src="http://placehold.it/200x150" class="product" alt="" >
+                              </div>
+                              <div class="row-fluid product-category">
+                                <h4><a href="#" title="Printers">Wii U</a></h4>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- /Consoles -->
+                        
+                      </div>
+                    </div>
+                    <!-- / Product Nav -->
+                    
+                    <!-- Full Width Nav -->
+                    <li class="top-nav-mega fw"><a href="#" title="">Full-width Nav</a></li>
+                    <div class="top-nav-mega-full-width">
+                      <div class="row-fluid">
+                        <div class="span3">
+                          <h3>Monitors</h3>
+                          <ul>
+                            <li><a href="#" title="">CRT Flat Monitors</a></li>
+                            <li><a href="#" title="">LCD Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                          </ul>
+                        </div>
+                        <div class="span3">
+                          <h3>Monitors</h3>
+                          <ul>
+                            <li><a href="#" title="">CRT Flat Monitors</a></li>
+                            <li><a href="#" title="">LCD Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                          </ul>
+                        </div>
+                        <div class="span3">
+                          <h3>Monitors</h3>
+                          <ul>
+                            <li><a href="#" title="">CRT Flat Monitors</a></li>
+                            <li><a href="#" title="">LCD Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                          </ul>
+                        </div>
+                        <div class="span3">
+                          <h3>Monitors</h3>
+                          <ul>
+                            <li><a href="#" title="">CRT Flat Monitors</a></li>
+                            <li><a href="#" title="">LCD Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                            <li><a href="#" title="">LED Monitors</a></li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- /Full-width Nav -->
+                    
+                    <!-- Elements -->
+                    <li class="top-nav-mega fw"><a href="#" title="">Elements</a></li>
+                    <div class="top-nav-mega-full-width typo">
+                      <div class="row-fluid">
+
+                        <div class="span4">
+                          <div class="row-fluid">
+                            <h3>Items with Images</h3>
+                            <hr class="top-nav-mega-content-seperator">
+                            
+                            <!-- Example Item with Image 1 -->
+                            <div class="row-fluid item-with-images">
+                              <div class="span3">
+                                <img src="http://placehold.it/300x300">
+                              </div>
+                              <div class="span9">
+                                <p>Yahoo has acquired LookFlow, a startup that develops image recognition technology, 
+                                the two companies announced Wednesday.</p>
+                                <div class="read-more">
+                                  <a href="#">Read More</a>
+                                </div>
+                                <div class="cat">
+                                  <a href="#">Technology</a>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- /Example Item with Image 1 -->
+                            
+                            <!-- Example Item with Image 2 -->
+                            <div class="row-fluid item-with-images">
+                              <div class="span3">
+                                <img src="http://placehold.it/300x300">
+                              </div>
+                              <div class="span9">
+                                <p>Don't hide behind your geek shame, Klingon speakers and elf chatroom frequenters. 
+                                Confess your most embarrassing geek fact.</p>
+                                <div class="read-more">
+                                  <a href="#">Read More</a>
+                                </div>
+                                <div class="cat">
+                                  <a href="#">Start-ups</a>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- /Example Item with Image 2 -->
+                            
+                            <!-- Example Item with Image 3 -->
+                            <div class="row-fluid item-with-images">
+                              <div class="span3">
+                                <img src="http://placehold.it/300x300">
+                              </div>
+                              <div class="span9">
+                                <p>Don't hide behind your geek shame, Klingon speakers and elf chatroom frequenters. 
+                                Confess your most embarrassing geek fact.</p>
+                                <div class="read-more">
+                                  <a href="#">Read More</a>
+                                </div>
+                                <div class="cat">
+                                  <a href="#">Applets</a>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- /Example Item with Image 3 -->
+                            
+                          </div>
+                          
+                          <!-- Alerts and Info -->
+                          <h3>Alerts and Info</h3>
+                          <hr class="top-nav-mega-content-seperator">
+                          <div class="row-fluid">
+                            <div class="alert alert-error">Alert! This is an alert box.</div>
+                            <div class="alert alert-info">Info! This is an info box.</div>
+                            <div class="alert alert-success">Success! This is a success box.</div>
+                            <div class="alert alert-block">Warning! This is a warning box.</div>
+                          </div>
+                          <!-- /Alerts and Info -->
+                                                    
+                        </div>
+                        
+                        <!-- Bootstrap Slider and Image Showcase -->
+                        <div class="span4">
+                          <h3>Simple Slider</h3>
+                          <hr class="top-nav-mega-content-seperator">
+                          
+                          <!-- Slider -->
+                          <div id="myCarousel" class="carousel slide" style="z-index:2">
+                            <ol class="carousel-indicators">
+                              <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+                              <li data-target="#myCarousel" data-slide-to="1"></li>
+                              <li data-target="#myCarousel" data-slide-to="2"></li>
+                            </ol>
+                            <div class="carousel-inner">
+                              <div class="item active">
+                                <img src="http://placehold.it/800x600" alt="">
+                                <div class="carousel-caption transpare">
+                                  <h4>Enter iPad Air.</h4>
+                                  <p>The new heir apparent to the iPad throne.</p>
+                                </div>
+                              </div>
+                              <div class="item">
+                                <img src="http://placehold.it/800x600" alt="">
+                                <div class="carousel-caption transpare">
+                                  <h4>Apple wrapped its October event</h4>
+                                  <p>At Yerba Buena Center earlier today.</p>
+                                </div>
+                              </div>
+                              <div class="item">
+                                <img src="http://placehold.it/800x600" alt="">
+                                <div class="carousel-caption transpare">
+                                  <h4>BlackBerry’s Bad Timing</h4>
+                                  <p>Too early and your product will shrivel...</p>
+                                </div>
+                              </div> 
+                            </div>
+                            <a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+                            <a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
+                          </div>
+                          <!-- /Slider -->
+                          
+                          <!-- Image Showcase -->
+                          <h3>Image Showcase</h3>
+                          <hr class="top-nav-mega-content-seperator">
+                          <div class="row-fluid image-gallery">
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/1.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/2.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/3.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/4.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/5.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/6.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/7.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/8.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/9.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/10.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/11.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/12.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/13.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/14.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/15.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/16.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/17.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                            <div class="image-item">
+                              <a href="img/image-gallery/big/18.jpg"><img src="http://placehold.it/70x70" alt=""></a>
+                            </div>
+                          </div>
+                          <!-- /Image Showcase -->
+                          This image showcase can also be used outside of the menu
+                        </div>
+                        <!-- /Bootstrap Slider and Image Showcase -->
+                        
+                        <!-- Icons and Images -->
+                        <div class="span4">
+                          <h3>Icons and Images</h3>
+                          <hr class="top-nav-mega-content-seperator">
+                          <!-- Black Icons -->
+                          <div class="row-fluid item-with-images typo-icons">
+                            <i class="icon-glass" title="icon-glass"></i>
+                            <i class="icon-music" title="icon-music"></i>
+                            <i class="icon-search" title="icon-search"></i>
+                            <i class="icon-envelope" title="icon-envelope"></i>
+                            <i class="icon-heart" title="icon-heart"></i>
+                            <i class="icon-star" title="icon-star"></i>
+                            <i class="icon-star-empty" title="icon-star-empty"></i>
+                            <i class="icon-user" title="icon-user"></i>
+                            <i class="icon-film" title="icon-film"></i>
+                            <i class="icon-th-large" title="icon-th-large"></i>
+                            <i class="icon-th" title="icon-th"></i>
+                            <i class="icon-th-list" title="icon-th-list"></i>
+                            <i class="icon-ok" title="icon-ok"></i>
+                            <i class="icon-remove" title="icon-remove"></i>
+                            <i class="icon-zoom-in" title="icon-zoom-in"></i>
+                            <i class="icon-zoom-out" title="icon-zoom-out"></i>
+                            <i class="icon-off" title="icon-off"></i>
+                            <i class="icon-signal" title="icon-signal"></i>
+                            <i class="icon-cog" title="icon-cog"></i>
+                            <i class="icon-trash" title="icon-trash"></i>
+                            <i class="icon-home" title="icon-home"></i>
+                            <i class="icon-file" title="icon-file"></i>
+                            <i class="icon-time" title="icon-time"></i>
+                            <i class="icon-road" title="icon-road"></i>
+                            <i class="icon-download-alt" title="icon-download-alt"></i>
+                            <i class="icon-download" title="icon-download"></i>
+                            <i class="icon-upload" title="icon-upload"></i>
+                            <i class="icon-inbox" title="icon-inbox"></i>
+                            <i class="icon-play-circle" title="icon-play-circle"></i>
+                            <i class="icon-repeat" title="icon-repeat"></i>
+                            <i class="icon-refresh" title="icon-refresh"></i>
+                            <i class="icon-list-alt" title="icon-list-alt"></i>
+                            <i class="icon-lock" title="icon-lock"></i>
+                            <i class="icon-flag" title="icon-flag"></i>
+                            <i class="icon-headphones" title="icon-headphones"></i>
+                            <i class="icon-volume-off" title="icon-volume-off"></i>
+                            <i class="icon-volume-down" title="icon-volume-down"></i>
+                            <i class="icon-volume-up" title="icon-volume-up"></i>
+                            <i class="icon-qrcode" title="icon-qrcode"></i>
+                            <i class="icon-barcode" title="icon-barcode"></i>
+                            <i class="icon-tag" title="icon-tag"></i>
+                            <i class="icon-tags" title="icon-tags"></i>
+                            <i class="icon-book" title="icon-book"></i>
+                            <i class="icon-bookmark" title="icon-bookmark"></i>
+                            <i class="icon-print" title="icon-print"></i>
+                            <i class="icon-camera" title="icon-camera"></i>
+                            <i class="icon-font" title="icon-font"></i>
+                            <i class="icon-bold" title="icon-bold"></i>
+                            <i class="icon-italic" title="icon-italic"></i>
+                            <i class="icon-text-height" title="icon-text-height"></i>
+                            <i class="icon-text-width" title="icon-text-width"></i>
+                            <i class="icon-align-left" title="icon-align-left"></i>
+                            <i class="icon-align-center" title="icon-align-center"></i>
+                            <i class="icon-align-right" title="icon-align-right"></i>
+                            <i class="icon-align-justify" title="icon-align-justify"></i>
+                            <i class="icon-list" title="icon-list"></i>
+                            <i class="icon-indent-left" title="icon-indent-left"></i>
+                            <i class="icon-indent-right" title="icon-indent-right"></i>
+                            <i class="icon-facetime-video" title="icon-facetime-video"></i>
+                            <i class="icon-picture" title="icon-picture"></i>
+                            <i class="icon-pencil" title="icon-pencil"></i>
+                            <i class="icon-map-marker" title="icon-map-marker"></i>
+                            <i class="icon-adjust" title="icon-adjust"></i>
+                            <i class="icon-tint" title="icon-tint"></i>
+                            <i class="icon-edit" title="icon-edit"></i>
+                            <i class="icon-share" title="icon-share"></i>
+                            <i class="icon-check" title="icon-check"></i>
+                            <i class="icon-move" title="icon-move"></i>
+                            <i class="icon-step-backward" title="icon-step-backward"></i>
+                            <i class="icon-fast-backward" title="icon-fast-backward"></i>
+                            <i class="icon-backward" title="icon-backward"></i>
+                            <i class="icon-play" title="icon-play"></i>
+                            <i class="icon-pause" title="icon-pause"></i>
+                            <i class="icon-stop" title="icon-stop"></i>
+                            <i class="icon-forward" title="icon-forward"></i>
+                            <i class="icon-fast-forward" title="icon-fast-forward"></i>
+                            <i class="icon-step-forward" title="icon-step-forward"></i>
+                            <i class="icon-eject" title="icon-eject"></i>
+                            <i class="icon-chevron-left" title="icon-chevron-left"></i>
+                            <i class="icon-chevron-right" title="icon-chevron-right"></i>
+                            <i class="icon-plus-sign" title="icon-plus-sign"></i>
+                            <i class="icon-minus-sign" title="icon-minus-sign"></i>
+                            <i class="icon-remove-sign" title="icon-remove-sign"></i>
+                            <i class="icon-ok-sign" title="icon-ok-sign"></i>
+                            <i class="icon-question-sign" title="icon-question-sign"></i>
+                            <i class="icon-info-sign" title="icon-info-sign"></i>
+                            <i class="icon-screenshot" title="icon-screenshot"></i>
+                            <i class="icon-remove-circle" title="icon-remove-circle"></i>
+                            <i class="icon-ok-circle" title="icon-ok-circle"></i>
+                            <i class="icon-ban-circle" title="icon-ban-circle"></i>
+                            <i class="icon-arrow-left" title="icon-arrow-left"></i>
+                            <i class="icon-arrow-right" title="icon-arrow-right"></i>
+                            <i class="icon-arrow-up" title="icon-arrow-up"></i>
+                            <i class="icon-arrow-down" title="icon-arrow-down"></i>
+                            <i class="icon-share-alt" title="icon-share-alt"></i>
+                            <i class="icon-resize-full" title="icon-resize-full"></i>
+                            <i class="icon-resize-small" title="icon-resize-small"></i>
+                            <i class="icon-plus" title="icon-plus"></i>
+                            <i class="icon-minus" title="icon-minus"></i>
+                            <i class="icon-asterisk" title="icon-asterisk"></i>
+                            <i class="icon-exclamation-sign" title="icon-exclamation-sign"></i>
+                            <i class="icon-gift" title="icon-gift"></i>
+                            <i class="icon-leaf" title="icon-leaf"></i>
+                            <i class="icon-fire" title="icon-fire"></i>
+                            <i class="icon-eye-open" title="icon-eye-open"></i>
+                            <i class="icon-eye-close" title="icon-eye-close"></i>
+                            <i class="icon-warning-sign" title="icon-warning-sign"></i>
+                            <i class="icon-plane" title="icon-plane"></i>
+                            <i class="icon-calendar" title="icon-calendar"></i>
+                            <i class="icon-random" title="icon-random"></i>
+                            <i class="icon-comment" title="icon-comment"></i>
+                            <i class="icon-magnet" title="icon-magnet"></i>
+                            <i class="icon-chevron-up" title="icon-chevron-up"></i>
+                            <i class="icon-chevron-down" title="icon-chevron-down"></i>
+                            <i class="icon-retweet" title="icon-retweet"></i>
+                            <i class="icon-shopping-cart" title="icon-shopping-cart"></i>
+                            <i class="icon-folder-close" title="icon-folder-close"></i>
+                            <i class="icon-folder-open" title="icon-folder-open"></i>
+                            <i class="icon-resize-vertical" title="icon-resize-vertical"></i>
+                            <i class="icon-resize-horizontal" title="icon-resize-horizontal"></i>
+                            <i class="icon-hdd" title="icon-hdd"></i>
+                            <i class="icon-bullhorn" title="icon-bullhorn"></i>
+                            <i class="icon-bell" title="icon-bell"></i>
+                            <i class="icon-certificate" title="icon-certificate"></i>
+                            <i class="icon-thumbs-up" title="icon-thumbs-up"></i>
+                            <i class="icon-thumbs-down" title="icon-thumbs-down"></i>
+                            <i class="icon-hand-right" title="icon-hand-right"></i>
+                            <i class="icon-hand-left" title="icon-hand-left"></i>
+                            <i class="icon-hand-up" title="icon-hand-up"></i>
+                            <i class="icon-hand-down" title="icon-hand-down"></i>
+                            <i class="icon-circle-arrow-right" title="icon-circle-arrow-right"></i>
+                            <i class="icon-circle-arrow-left" title="icon-circle-arrow-left"></i>
+                            <i class="icon-circle-arrow-up" title="icon-circle-arrow-up"></i>
+                            <i class="icon-circle-arrow-down" title="icon-circle-arrow-down"></i>
+                            <i class="icon-globe" title="icon-globe"></i>
+                            <i class="icon-wrench" title="icon-wrench"></i>
+                            <i class="icon-tasks" title="icon-tasks"></i>
+                            <i class="icon-filter" title="icon-filter"></i>
+                            <i class="icon-briefcase" title="icon-briefcase"></i>
+                            <i class="icon-fullscreen" title="icon-fullscreen"></i>
+                          </div>
+                          <!-- /Black Icons -->
+                          
+                          <!-- White Icons -->
+                          <div class="row-fluid item-with-images-black typo-icons">
+                            <i class="icon-glass icon-white" title="icon-glass"></i>
+                            <i class="icon-music icon-white" title="icon-music"></i>
+                            <i class="icon-search icon-white" title="icon-search"></i>
+                            <i class="icon-envelope icon-white" title="icon-envelope"></i>
+                            <i class="icon-heart icon-white" title="icon-heart"></i>
+                            <i class="icon-star icon-white" title="icon-star"></i>
+                            <i class="icon-star-empty icon-white" title="icon-star-empty"></i>
+                            <i class="icon-user icon-white" title="icon-user"></i>
+                            <i class="icon-film icon-white" title="icon-film"></i>
+                            <i class="icon-th-large icon-white" title="icon-th-large"></i>
+                            <i class="icon-th icon-white" title="icon-th"></i>
+                            <i class="icon-th-list icon-white" title="icon-th-list"></i>
+                            <i class="icon-ok icon-white" title="icon-ok"></i>
+                            <i class="icon-remove icon-white" title="icon-remove"></i>
+                            <i class="icon-zoom-in icon-white" title="icon-zoom-in"></i>
+                            <i class="icon-zoom-out icon-white" title="icon-zoom-out"></i>
+                            <i class="icon-off icon-white" title="icon-off"></i>
+                            <i class="icon-signal icon-white" title="icon-signal"></i>
+                            <i class="icon-cog icon-white" title="icon-cog"></i>
+                            <i class="icon-trash icon-white" title="icon-trash"></i>
+                            <i class="icon-home icon-white" title="icon-home"></i>
+                            <i class="icon-file icon-white" title="icon-file"></i>
+                            <i class="icon-time icon-white" title="icon-time"></i>
+                            <i class="icon-road icon-white" title="icon-road"></i>
+                            <i class="icon-download-alt icon-white" title="icon-download-alt"></i>
+                            <i class="icon-download icon-white" title="icon-download"></i>
+                            <i class="icon-upload icon-white" title="icon-upload"></i>
+                            <i class="icon-inbox icon-white" title="icon-inbox"></i>
+                            <i class="icon-play-circle icon-white" title="icon-play-circle"></i>
+                            <i class="icon-repeat icon-white" title="icon-repeat"></i>
+                            <i class="icon-refresh icon-white" title="icon-refresh"></i>
+                            <i class="icon-list-alt icon-white" title="icon-list-alt"></i>
+                            <i class="icon-lock icon-white" title="icon-lock"></i>
+                            <i class="icon-flag icon-white" title="icon-flag"></i>
+                            <i class="icon-headphones icon-white" title="icon-headphones"></i>
+                            <i class="icon-volume-off icon-white" title="icon-volume-off"></i>
+                            <i class="icon-volume-down icon-white" title="icon-volume-down"></i>
+                            <i class="icon-volume-up icon-white" title="icon-volume-up"></i>
+                            <i class="icon-qrcode icon-white" title="icon-qrcode"></i>
+                            <i class="icon-barcode icon-white" title="icon-barcode"></i>
+                            <i class="icon-tag icon-white" title="icon-tag"></i>
+                            <i class="icon-tags icon-white" title="icon-tags"></i>
+                            <i class="icon-book icon-white" title="icon-book"></i>
+                            <i class="icon-bookmark icon-white" title="icon-bookmark"></i>
+                            <i class="icon-print icon-white" title="icon-print"></i>
+                            <i class="icon-camera icon-white" title="icon-camera"></i>
+                            <i class="icon-font icon-white" title="icon-font"></i>
+                            <i class="icon-bold icon-white" title="icon-bold"></i>
+                            <i class="icon-italic icon-white" title="icon-italic"></i>
+                            <i class="icon-text-height icon-white" title="icon-text-height"></i>
+                            <i class="icon-text-width icon-white" title="icon-text-width"></i>
+                            <i class="icon-align-left icon-white" title="icon-align-left"></i>
+                            <i class="icon-align-center icon-white" title="icon-align-center"></i>
+                            <i class="icon-align-right icon-white" title="icon-align-right"></i>
+                            <i class="icon-align-justify icon-white" title="icon-align-justify"></i>
+                            <i class="icon-list icon-white" title="icon-list"></i>
+                            <i class="icon-indent-left icon-white" title="icon-indent-left"></i>
+                            <i class="icon-indent-right icon-white" title="icon-indent-right"></i>
+                            <i class="icon-facetime-video icon-white" title="icon-facetime-video"></i>
+                            <i class="icon-picture icon-white" title="icon-picture"></i>
+                            <i class="icon-pencil icon-white" title="icon-pencil"></i>
+                            <i class="icon-map-marker icon-white" title="icon-map-marker"></i>
+                            <i class="icon-adjust icon-white" title="icon-adjust"></i>
+                            <i class="icon-tint icon-white" title="icon-tint"></i>
+                            <i class="icon-edit icon-white" title="icon-edit"></i>
+                            <i class="icon-share icon-white" title="icon-share"></i>
+                            <i class="icon-check icon-white" title="icon-check"></i>
+                            <i class="icon-move icon-white" title="icon-move"></i>
+                            <i class="icon-step-backward icon-white" title="icon-step-backward"></i>
+                            <i class="icon-fast-backward icon-white" title="icon-fast-backward"></i>
+                            <i class="icon-backward icon-white" title="icon-backward"></i>
+                            <i class="icon-play icon-white" title="icon-play"></i>
+                            <i class="icon-pause icon-white" title="icon-pause"></i>
+                            <i class="icon-stop icon-white" title="icon-stop"></i>
+                            <i class="icon-forward icon-white" title="icon-forward"></i>
+                            <i class="icon-fast-forward icon-white" title="icon-fast-forward"></i>
+                            <i class="icon-step-forward icon-white" title="icon-step-forward"></i>
+                            <i class="icon-eject icon-white" title="icon-eject"></i>
+                            <i class="icon-chevron-left icon-white" title="icon-chevron-left"></i>
+                            <i class="icon-chevron-right icon-white" title="icon-chevron-right"></i>
+                            <i class="icon-plus-sign icon-white" title="icon-plus-sign"></i>
+                            <i class="icon-minus-sign icon-white" title="icon-minus-sign"></i>
+                            <i class="icon-remove-sign icon-white" title="icon-remove-sign"></i>
+                            <i class="icon-ok-sign icon-white" title="icon-ok-sign"></i>
+                            <i class="icon-question-sign icon-white" title="icon-question-sign"></i>
+                            <i class="icon-info-sign icon-white" title="icon-info-sign"></i>
+                            <i class="icon-screenshot icon-white" title="icon-screenshot"></i>
+                            <i class="icon-remove-circle icon-white" title="icon-remove-circle"></i>
+                            <i class="icon-ok-circle icon-white" title="icon-ok-circle"></i>
+                            <i class="icon-ban-circle icon-white" title="icon-ban-circle"></i>
+                            <i class="icon-arrow-left icon-white" title="icon-arrow-left"></i>
+                            <i class="icon-arrow-right icon-white" title="icon-arrow-right"></i>
+                            <i class="icon-arrow-up icon-white" title="icon-arrow-up"></i>
+                            <i class="icon-arrow-down icon-white" title="icon-arrow-down"></i>
+                            <i class="icon-share-alt icon-white" title="icon-share-alt"></i>
+                            <i class="icon-resize-full icon-white" title="icon-resize-full"></i>
+                            <i class="icon-resize-small icon-white" title="icon-resize-small"></i>
+                            <i class="icon-plus icon-white" title="icon-plus"></i>
+                            <i class="icon-minus icon-white" title="icon-minus"></i>
+                            <i class="icon-asterisk icon-white" title="icon-asterisk"></i>
+                            <i class="icon-exclamation-sign icon-white" title="icon-exclamation-sign"></i>
+                            <i class="icon-gift icon-white" title="icon-gift"></i>
+                            <i class="icon-leaf icon-white" title="icon-leaf"></i>
+                            <i class="icon-fire icon-white" title="icon-fire"></i>
+                            <i class="icon-eye-open icon-white" title="icon-eye-open"></i>
+                            <i class="icon-eye-close icon-white" title="icon-eye-close"></i>
+                            <i class="icon-warning-sign icon-white" title="icon-warning-sign"></i>
+                            <i class="icon-plane icon-white" title="icon-plane"></i>
+                            <i class="icon-calendar icon-white" title="icon-calendar"></i>
+                            <i class="icon-random icon-white" title="icon-random"></i>
+                            <i class="icon-comment icon-white" title="icon-comment"></i>
+                            <i class="icon-magnet icon-white" title="icon-magnet"></i>
+                            <i class="icon-chevron-up icon-white" title="icon-chevron-up"></i>
+                            <i class="icon-chevron-down icon-white" title="icon-chevron-down"></i>
+                            <i class="icon-retweet icon-white" title="icon-retweet"></i>
+                            <i class="icon-shopping-cart icon-white" title="icon-shopping-cart"></i>
+                            <i class="icon-folder-close icon-white" title="icon-folder-close"></i>
+                            <i class="icon-folder-open icon-white" title="icon-folder-open"></i>
+                            <i class="icon-resize-vertical icon-white" title="icon-resize-vertical"></i>
+                            <i class="icon-resize-horizontal icon-white" title="icon-resize-horizontal"></i>
+                            <i class="icon-hdd icon-white" title="icon-hdd"></i>
+                            <i class="icon-bullhorn icon-white" title="icon-bullhorn"></i>
+                            <i class="icon-bell icon-white" title="icon-bell"></i>
+                            <i class="icon-certificate icon-white" title="icon-certificate"></i>
+                            <i class="icon-thumbs-up icon-white" title="icon-thumbs-up"></i>
+                            <i class="icon-thumbs-down icon-white" title="icon-thumbs-down"></i>
+                            <i class="icon-hand-right icon-white" title="icon-hand-right"></i>
+                            <i class="icon-hand-left icon-white" title="icon-hand-left"></i>
+                            <i class="icon-hand-up icon-white" title="icon-hand-up"></i>
+                            <i class="icon-hand-down icon-white" title="icon-hand-down"></i>
+                            <i class="icon-circle-arrow-right icon-white" title="icon-circle-arrow-right"></i>
+                            <i class="icon-circle-arrow-left icon-white" title="icon-circle-arrow-left"></i>
+                            <i class="icon-circle-arrow-up icon-white" title="icon-circle-arrow-up"></i>
+                            <i class="icon-circle-arrow-down icon-white" title="icon-circle-arrow-down"></i>
+                            <i class="icon-globe icon-white" title="icon-globe"></i>
+                            <i class="icon-wrench icon-white" title="icon-wrench"></i>
+                            <i class="icon-tasks icon-white" title="icon-tasks"></i>
+                            <i class="icon-filter icon-white" title="icon-filter"></i>
+                            <i class="icon-briefcase icon-white" title="icon-briefcase"></i>
+                            <i class="icon-fullscreen icon-white" title="icon-fullscreen"></i>
+                          </div>
+                          <!-- /White Icons -->
+                          
+                          <div class="row-fluid">
+                          
+                            <div class="span6">
+                              <h3>Unordered List</h3>
+                              <hr class="top-nav-mega-content-seperator">
+                              <ul>
+                                <li><a href="#" title="">CRT Monitors</a></li>
+                                <li><a href="#" title="">LCD Monitors</a></li>
+                                <li><a href="#" title="">LED Monitors</a></li>
+                                <li><a href="#" title="">LED Monitors</a></li>
+                              </ul>
+                            </div>
+                            
+                            <div class="span6">
+                              <h3>Ordered List</h3>
+                              <hr class="top-nav-mega-content-seperator">
+                              <ol>
+                                <li><a href="#" title="">CRT Monitors</a></li>
+                                <li><a href="#" title="">LCD Monitors</a></li>
+                                <li><a href="#" title="">LED Monitors</a></li>
+                                <li><a href="#" title="">LED Monitors</a></li>
+                              </ol>
+                            </div>
+                            
+                          </div>
+                        </div>
+                        <!-- /Icons and Images -->
+                      </div>
+                    </div>
+                    <!-- /Elements -->
+                    
+                    <!-- Contact Us -->
+                    <li class="top-nav-mega"><a href="#" title="">Contact Us</a>
+                      <ul class="top-nav-mega-2 top-nav-rtl">
+                        <div class="row-fluid">
+                        
+                          <div class="span6">
+                            <!-- Google Maps -->
+                            <div id="map-canvas" style="width:280px; height:300px;"></div>
+                            <!-- /Google Maps -->
+                          </div>
+                          
+                          <div class="span6" id="contact-us">
+                            <!-- Contact Form -->
+                            <div class="row-fluid">
+                              <div  class="span12">
+                                <input type="text" name="contact-name" placeholder="Your Name, Surname">
+                                <input type="text" name="contact-email" placeholder="Your Email">
+                                <textarea name="contact-message" placeholder="Your Message"></textarea>
+                                <button type="submit">Let us know</button>
+                              </div>
+                            </div>
+                            <!-- /Contact Form -->
+                            
+                            <!-- Adress -->
+                            <div class="row-fluid">
+                              <table>
+                                <tr>
+                                  <td class="contact-us-image"><img src="http://placehold.it/16x16"></td>
+                                  <td>Beard Street Brooklyn, NY 11231</td>
+                                </tr>
+                                <tr>
+                                  <td class="contact-us-image"><img src="http://placehold.it/16x16"></td>
+                                  <td>1-888-888-4532</td>
+                                </tr>
+                                <tr>
+                                  <td class="contact-us-image"><img src="http://placehold.it/16x16"></td>
+                                  <td>support@example.com</td>
+                                </tr>
+                              </table>
+                            </div>
+                            <!-- /Adress -->
+                            
+                          </div>
+                        </div>
+                      </ul>
+                    </li>
+                    <!-- /Contact Us -->
+                  </ul>
+                </div>
+                <!-- /Wayout Menu - TOP NAV -->
+                
+                <!-- Wayout Menu - Search Toggle -->
+                <div class="search-toggler hidden-phone">
+                  <button id="search-form" class="search-toggle"></button>
+                </div>
+                <!-- /Wayout Menu - Search Toggle -->
+                
+                <!-- Wayout Menu - Login Toggle -->
+                <div class="loginbox-toggler">
+                  <button id="login-form" class="login-toggle"></button>
+                </div>
+                <!-- Wayout Menu - /Login Toggle -->
+                
+                <!-- Wayout Menu - Shopping Cart Toggle -->
+                <div class="shop-toggler">
+                  <button id="shopping" class="shop-toggle"></button>
+                </div>
+                <!-- Wayout Menu - /Shopping Cart Toggle -->
+                
+              </div>
+              <!-- /BM-CONTAINER -->
+              
+              <!-- Search Input -->
+              <input type="text" id="search-container" placeholder="Type ahead...">
+              <!-- /Search Input -->
+              
+              <!-- Shopping Cart Container -->
+              <div id="shop-container">
+                <p class="itemcount"></p>
+                <table class="shop-item table">
+                  <tr>
+                    <td class="span3"><img src="http://placehold.it/30x30" class="img-polaroid"></td>
+                    <td class="span6 price text-center">$399.00</td>
+                    <td class="span3 item-remove text-center"><a href="#"><img src="img/remove.png"></a></td>
+                  </tr>
+                </table>
+                <table class="shop-item table">
+                  <tr>
+                    <td class="span3"><img src="http://placehold.it/30x30" class="img-polaroid"></td>
+                    <td class="span6 text-center">$215.00</td>
+                    <td class="span3 item-remove text-center"><a href="#"><img src="img/remove.png"></a></td>
+                  </tr>
+                </table>
+                <a href="#">Checkout</a>
+              </div>
+              <!-- /Shopping Cart Container -->
+              
+              <!-- Login Container -->
+              <div id="login-container">
+                <form>
+                  <div class="control-group">
+                    <div class="controls">
+                      <input type="text" id="email" placeholder="Username">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <div class="controls">
+                      <input type="password" id="password" placeholder="Password">
+                    </div>
+                  </div>
+                  <div class="register-forgot clearfix">
+                  	<div style="float:left"><a href="#">Register</a></div>
+                    <div style="float:right"><a href="#">Forgot your details?</a></div>
+                  </div>
+                  <button type="submit">Login</button>
+                </form>
+              </div>
+              <!-- /Login Container -->
+              
+            </div>
+            <!-- /MENU-BG -->
+          </div>
+          <!-- MAIN -->
+          
+          <!-- !!!!!!!!!!! YOUR CONTENT GOES HERE !!!!!!!!!!! -->
+          
+          <!-- !!!!!!!!!!! /YOUR CONTENT GOES HERE !!!!!!!!!!! -->
+          
+        </div>
+        <!-- /ST-CONTENT-INNER -->
+      </div>
+      <!-- /ST-CONTENT -->
+    </div>
+    <!-- /WRAPPER -->
+  </div>
+  <!-- /MAIN CONTAINER -->
+<script>
+  // Initiate Lightbox
+  $(function() {
+    $('.image-item > a').lightbox(); 
+  });
+</script>
+</body>
+</html>

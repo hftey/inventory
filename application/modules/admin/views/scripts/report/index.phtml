@@ -1,0 +1,47 @@
+
+<script language='Javascript'>
+
+
+$(document).ready(function() { 
+
+	$( "#EntryDateFrom" ).datepicker({changeYear: true , minDate: new Date(2014, 7, 1), yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+	$( "#EntryDateTo" ).datepicker({changeYear: true , yearRange: '2010:<?=Date("Y", time())+1?>', dateFormat: 'dd-mm-yy'});
+	
+	$( ".report_table").append("<TR><TD class='report_header' colspan='3' style='text-align: right'>Total</TD><TD class='report_header' style='text-align: center'><?=$this->content_total?></TD></TR>");
+	$( ".report_title").html("Stock Status Count: <?=$this->content_total?>");
+
+})
+
+
+</script>
+
+<B class='PageHeader'><?=$this->translate->_('Report')?></B><BR>
+
+<form action='/admin/report' method=POST>
+
+
+
+	<table border=0 cellspacing=2 cellpadding=2 width=750px>
+<TR><TD colspan=2 ><B><?=$this->translate->_("Stock Status Count Report")?></B></TD></TR>
+		<TR><TD width=175px class='form_label' width=150px><?=$this->translate->_('Status')?></TD><TD class='form_field' valign=bottom> 
+			<SELECT name='Status' id='Status'><?=$this->optionStatusItem?></SELECT></TD></TR>
+		<TR><TD class='form_label' width=150px><?=$this->translate->_('Stock Status Period')?></TD><TD class='form_field'>
+		From <input type='text' name='EntryDateFrom' id='EntryDateFrom' size="10" value='<?=$this->EntryDateFrom?>' title="<?=$this->translate->_("Stock level as selected date")?>.">
+		To <input type='text' name='EntryDateTo' id='EntryDateTo' size="10" value='<?=$this->EntryDateTo?>' title="<?=$this->translate->_("Stock level as selected date")?>.">
+		
+		</TD></TR>
+				<TR><TD colspan=2 height=10px>
+		</TD></TR>
+
+		<TR><TD colspan=2>
+		<input type=submit name='generate_report' id='generate_report' value='<?=$this->translate->_('Generate')?>' title='<?=$this->translate->_("Click to generate the report")?>.'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/report"'  title='<?=$this->translate->_("Clear all the inputs above")?>.'>
+		
+		
+		</TD></TR>
+	</table>
+</form>
+
+<a target='_blank' href='/admin/report/checkstatus'><img src='/images/icons/IconView.png'><?=$this->translate->_("Status Discrepancy Report")?></a>
+
+<?=$this->content_report?>

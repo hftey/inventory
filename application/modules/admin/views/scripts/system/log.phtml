@@ -1,0 +1,50 @@
+
+<link rel="stylesheet" type="text/css" href="/js/jquery/jtip/jtip.css" />
+<script type="text/javascript" src="/js/jquery/jtip/jtip.js"></script>
+
+<script language='Javascript'>
+$(document).ready(function() {   
+
+	$("input#FromDateTime").datepicker({ changeYear: true, yearRange: '1920:<?=(Date("Y")+1)?>', dateFormat: 'dd-mm-yy'});
+	$("input#ToDateTime").datepicker({ changeYear: true, yearRange: '1920:<?=(Date("Y")+1)?>', dateFormat: 'dd-mm-yy'});
+
+});   
+</script>
+<B class='PageHeader'><?=$this->translate->_('System Log')?></B><BR>
+
+<form action='/admin/system/log' method=POST>
+	<table border=0 cellspacing=2 cellpadding=2>
+		<TR><TD  colspan=2><B><?=$this->translate->_("Activity Log Search")?></B></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Name")?>:</TD><TD class='form_field' >
+		<input type='text' name='Name' id='Name' size=25 maxlength=25 value='<?=$this->Name?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Username")?>:</TD><TD class='form_field' >
+		<input type='text' name='Username' id='Username' size=25 maxlength=25 value='<?=$this->Username?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Role")?>:</TD><TD class='form_field' >
+		<input type='text' name='Role' id='Role' size=25 maxlength=25 value='<?=$this->Role?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Module")?>:</TD><TD class='form_field' >
+		<input type='text' name='Module' id='Module' size=25 maxlength=25 value='<?=$this->Module?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Controller")?>:</TD><TD class='form_field' >
+		<input type='text' name='Controller' id='Controller' size=25 maxlength=25 value='<?=$this->Controller?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Action")?>:</TD><TD class='form_field' >
+		<input type='text' name='Action' id='Action' size=25 maxlength=25 value='<?=$this->Action?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Get Data")?>:</TD><TD class='form_field' >
+		<input type='text' name='GetData' id='GetData' size=25 maxlength=25 value='<?=$this->GetData?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Post Data")?>:</TD><TD class='form_field' >
+		<input type='text' name='PostData' id='PostData' size=25 maxlength=25 value='<?=$this->PostData?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("IP")?>:</TD><TD class='form_field' >
+		<input type='text' name='IP' id='IP' size=25 maxlength=25 value='<?=$this->IP?>'></TD></TR>
+		<TR><TD class='form_label' ><?=$this->translate->_("Activity Time")?>:</TD><TD class='form_field' >
+		<input type='text' name='FromDateTime' id='FromDateTime' size=10 maxlength=10 value='<?=$this->FromDateTime?>'>
+		To:<input type='text' name='ToDateTime' id='ToDateTime' size=10 maxlength=10 value='<?=$this->ToDateTime?>'>
+		
+		</TD></TR>
+
+		<TR><TD colspan=2>
+		<input type=submit name='search_log' class='btn' id='search_log' value='<?=$this->translate->_('Search')?>'>		
+		<input type=submit name='clear' class='btn' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='javascript: document.location.reload()'>		
+		</TD></TR>
+	</table>
+</form>
+<?=$this->content_log?>
+<BR><BR><BR>
+<div id="divJQ"></div>

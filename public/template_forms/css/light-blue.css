@@ -1,0 +1,91 @@
+
+form {
+
+	left: 0px;
+	background:#fff;
+	padding:1em;
+	border:1px solid #eee;
+
+}
+
+form {
+	margin: 25px 0 0 0;
+	width:500px;
+}
+label {
+	float:left;
+	width:10em;
+	text-align:right;
+	margin-right:1em;
+	color: black;
+}
+legend {
+	clear: both;
+	border: solid 1px #ddd;
+	color:gray;
+	font-size:1.0em;
+	padding: 4px 18px; 
+	width: 100px;
+	
+}
+
+fieldset input, fieldset select, fieldset textarea {
+	padding:0.15em;
+	border:1px solid #ddd;
+	background:#fafafa;
+	font:bold 0.95em arial, sans-serif;
+	-moz-border-radius:0.4em;
+	-khtml-border-radius:0.4em;
+	margin-bottom: 5px;
+}
+
+fieldset input[type="button"], fieldset input[type="submit"], fieldset input[type="reset"]
+{
+	width:100px;
+	margin-left:10px;
+	background: #DEDEFF;
+	border: solid 1px #ddd;
+}	
+
+fieldset input[type="radio"]
+{
+	margin-right: 5px;
+}	
+
+input:hover, input:focus {
+	border-color:#c5c5c5;
+	background:#f6f6f6;
+} 
+fieldset {
+	border:1px solid #ddd;
+	padding:0.5em 0.5em 0.5em;
+	margin-bottom: 5px;
+}
+#submit-go {
+	margin-top:1em;
+	width:69px;
+	height:26px;
+	text-indent:-9999px;
+	overflow:hidden;
+	border:0;
+	background:url(../gfx/submit-button.gif) no-repeat 0 0;
+	display:block;
+	cursor:pointer !important; cursor:hand;
+}
+#submit-go:hover {
+	background-position:0 -26px;
+}
+
+/*
+input[type=checkbox], input[type=radio] { visibility: hidden; width:0; height:0; padding:0; margin:0; }
+input[type=checkbox] + label, input[type=radio] + label { padding-left:18px; }
+input[type=checkbox] + label{ background: url(../gfx/check_radio.png) 0 0 no-repeat; }
+input[type=checkbox]:focus + label{ background-position: 0 -16px; }
+input[type=checkbox] + label:hover{ background-position: 0 -32px; } 
+input[type=checkbox]:checked + label{ background-position: 0 -48px; }
+
+input[type=radio] + label{ background: url(../gfx/check_radio.png) 0 -64px no-repeat; }
+input[type=radio]:focus + label{ background-position: 0 -80px; }
+input[type=radio] + label:hover{ background-position: 0 -96px; } 
+input[type=radio]:checked + label{ background-position: 0 -112px; }
+*/

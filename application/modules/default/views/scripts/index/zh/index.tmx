@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+  <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+  <body>
+    <tu tuid="Inventory System: Main Page">
+      <tuv xml:lang="zh">
+        <seg>库存系统: 主页</seg>
+      </tuv>
+	</tu>
+	<tu tuid="Inventory">
+      <tuv xml:lang="zh">
+        <seg>库存</seg>
+      </tuv>
+	</tu>
+    <tu tuid="Inventory listing">
+      <tuv xml:lang="zh">
+        <seg>库存清单</seg>
+      </tuv>
+    </tu>	
+	<tu tuid="Create brands">
+      <tuv xml:lang="zh">
+        <seg>制作品牌</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Manage items">
+      <tuv xml:lang="zh">
+        <seg>项目管理</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Manage item series">
+      <tuv xml:lang="zh">
+        <seg>项目系列管理</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Purchase Orders">
+      <tuv xml:lang="zh">
+        <seg>采购订单</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Create purchase orders">
+      <tuv xml:lang="zh">
+        <seg>制作采购订单</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Purchase orders listing">
+      <tuv xml:lang="zh">
+        <seg>采购订单清单</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Sales Order">
+      <tuv xml:lang="zh">
+        <seg>销售订单</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Create sales orders">
+      <tuv xml:lang="zh">
+        <seg>制作销售订单</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Sales orders listing">
+      <tuv xml:lang="zh">
+        <seg>销售订单清单</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Administration">
+      <tuv xml:lang="zh">
+        <seg>行政</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Manage system users account">
+      <tuv xml:lang="zh">
+        <seg>用户帐号系统管理</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Manage list of branches">
+      <tuv xml:lang="zh">
+        <seg>分支机构名单管理</seg>
+      </tuv>
+    </tu>
+    <tu tuid="Manage list of vendors">
+      <tuv xml:lang="zh">
+        <seg>供应商名单管理</seg>
+      </tuv>
+    </tu>	
+  </body>
+</tmx>
