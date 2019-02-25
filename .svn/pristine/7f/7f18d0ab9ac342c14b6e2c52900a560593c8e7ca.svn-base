@@ -1,5 +1,0 @@
-<H3>Database</H3>
-<PRE>
-<? print_r($this->userHelper); ?>
-</PRE>
-<HR><BR>

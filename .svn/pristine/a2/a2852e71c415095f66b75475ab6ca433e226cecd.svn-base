@@ -1,4 +1,0 @@
-
-<B class="PageHeader">Report</B>
-
-<?=$this->content_report?>
