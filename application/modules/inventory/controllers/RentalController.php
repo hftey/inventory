@@ -230,12 +230,13 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                 return $sessionItemCounter->numCounter;
             }
 
+
             $sessionInitialValue = new Zend_Session_Namespace('sessionInitialValue');
             $sessionInitialValue->jsInline = "";
             function format_initvalue($colnum, $rowdata, $export)
             {
                 if ($export){
-                    return $rowdata[28];
+                    return $rowdata[0] ? $rowdata[5] : $rowdata[28];
                 }
 
                 $sessionInitialValue = new Zend_Session_Namespace('sessionInitialValue');
@@ -255,9 +256,9 @@ class Inventory_RentalController extends Venz_Zend_Controller_Action
                         $sessionInitialValue->jsInline .= "$('#init_value_".$rowdata[27]."').editable({success: function (data){ updateUnitRental(".$rowdata[27].", 'init_value', data);}});";
                         $edit = '<a href="#" id="init_value_'.$rowdata[27].'" data-type="text" data-pk="1" data-url="/inventory/rental/ajaxinitvalue/id/'.$rowdata[27].'" data-title="Enter initial value"><img width="15px" src="/images/icons/IconEdit2.png"> '.$dispFormat->format_currency($rowdata[28]).'</a>';
                         return $edit;
-                    }else if ($rowdata[28])
+                    }else if ($rowdata[5])
                     {
-                        return $dispFormat->format_currency($rowdata[28]);
+                        return $dispFormat->format_currency($rowdata[5]);
                     }
                     else if (!$rowdata[0])
                     {
