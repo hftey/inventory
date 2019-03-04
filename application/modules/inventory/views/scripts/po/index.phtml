@@ -1276,7 +1276,7 @@ function OnSelectItem(obj, itemIndex, poitemId)
     <TD width=25px nowrap class='report_header' style='text-align:center'>#</TD>
 	<TD width=350px  nowrap class='report_header' style='text-align:center'><?=$this->translate->_("Items")?></TD>
 	<TD width=170px nowrap class='report_header' style='text-align:left'><?=$this->translate->_("Status")?> / <?=$this->translate->_("Update")?><img title='<?=$this->translate->_("If the <B>Update</B> is checked, all the individual item units will be updated with the status and the date selected.<BR>Leave the <B>Update</B> un-checked to save the status at the PO level only.")?>' id='qUpdateStatus' src='/images/icons/IconInfo.gif'><BR>
-	<SELECT style='font-size:11px; width:100px; float:left;' ID='StatusOverall'><option value=''>-<?=$this->optionStatusItemOverall?></select> <input ID='StatusCheckOverall' type=checkbox>
+        <SELECT style='font-size:11px; width:100px; float:left;' ID='StatusOverall'><option value="">-</option><?=$this->optionStatusItemOverall?></select> <input ID='StatusCheckOverall' type=checkbox>
 	<input type=text name='StatusDateOverall' id='StatusDateOverall' size=8 value=''><BR>
 	</TD>
 	<TD width=75px nowrap class='report_header' style='text-align:center'><?=$this->translate->_("QTY")?></TD>
