@@ -1034,12 +1034,21 @@ $('#AddItems').click(function () {
             $("#StatusOverall").prop("selectedIndex", 0); //indent
             $("#StatusOverall").trigger("change");
         }
-		
-		$( "[id='StatusCheck']" ).each(function( index, element  ) {
-				$(element).prop("checked", true);
-		});
-		$("#StatusCheckOverall").prop("checked", true); 
-		
+
+        if ($(this).val() != "cancelled"){
+            $( "[id='StatusCheck']" ).each(function( index, element  ) {
+                $(element).prop("checked", true);
+            });
+            $("#StatusCheckOverall").prop("checked", true);
+
+        }else{
+            $( "[id='StatusCheck']" ).each(function( index, element  ) {
+                $(element).prop("checked", false);
+            });
+            $("#StatusCheckOverall").prop("checked", false);
+
+        }
+
 		
 	})
 	
