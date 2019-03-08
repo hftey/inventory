@@ -393,7 +393,15 @@ $('#add_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'h
 $('#save_item').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
 $('#remove_image').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
 
-$('#qUpdateStatus').poshytip({ className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+    $('#StatusCheckOverall').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target', offsetY: 10, offsetX: -15, alignX: 'inner-left',  showTimeout: 100,
+    'content':'Checked: &nbsp;&nbsp;&nbsp;&nbsp; All the individual item units will be updated with the status and date entered when Save Details button is clicked.<BR>Un-checked: Individual item status will <u>not</u> be updated when Save Details button is clicked.'});
+
+    $('.clsStatusCheck').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target', offsetY: 10, offsetX: -15, alignX: 'inner-left',  showTimeout: 100,
+        'content':'Checked: &nbsp;&nbsp;&nbsp;&nbsp; All the individual item units will be updated with the status and date entered when Save Details button is clicked.<BR>Un-checked: Individual item status will <u>not</u> be updated when Save Details button is clicked.'});
+
+    $('#qUpdateStatus').poshytip({ className: 'tip-yellow', showOn: 'hover', alignTo: 'target', offsetY: 10, offsetX: -15, alignX: 'inner-left',  showTimeout: 100,
+        'content':'Checked: &nbsp;&nbsp;&nbsp;&nbsp; All the individual item units will be updated with the status and date entered when Save Details button is clicked.<BR>Un-checked: Individual item status will <u>not</u> be updated when Save Details button is clicked.'});
+
 
 
 if ($('#POStatus').val() == "received")
@@ -922,12 +930,16 @@ $('#AddItems').click(function () {
 	
 	$('#ReceivedDate').change(function () {
 		$('#StatusDateOverall').val($('#ReceivedDate').val());
-	})	
+        $("#StatusDateOverall").trigger("change");
+
+    })
 		
 	$('#StatusDateOverall').change(function () {
 		$( "[idx='StatusDate']" ).each(function( index, element  ) {
-			$( element ).val($('#StatusDateOverall').val());
-		});	
+            if ($(element).parent().find('#StatusCheck').is(':checked')){
+                $( element ).val($('#StatusDateOverall').val());
+            }
+		});
 	})	
 					
 	$( "#dialog-message-vendor" ).dialog({
@@ -1010,44 +1022,61 @@ $('#AddItems').click(function () {
 		var selectedIndex = $(this).prop("selectedIndex");
 		
 		$( "[id='Status']" ).each(function( index, element  ) {
-			element.selectedIndex = selectedIndex;
+		    if (element.selectedIndex != 1){
+                element.selectedIndex = selectedIndex;
+
+            }
 		});
 	
 	})
 	
 	
 	
-	$(document).on("change", "#POStatus", function(){	
-	
-		if ($(this).val() == "received")
-		{	
-			$("#StatusOverall").prop("selectedIndex", 1);
-			$("#StatusOverall").trigger("change");
-
-		}else if ($(this).val() == "process")
-		{	
-			$("#StatusOverall").prop("selectedIndex", 5); //indent
-			$("#StatusOverall").trigger("change");
-		}
-        else if ($(this).val() == "cancelled")
-        {
-            $("#StatusOverall").prop("selectedIndex", 0); //indent
-            $("#StatusOverall").trigger("change");
-        }
+	$(document).on("change", "#POStatus", function(){
 
         if ($(this).val() != "cancelled"){
             $( "[id='StatusCheck']" ).each(function( index, element  ) {
-                $(element).prop("checked", true);
+                if ($(element).parent().find('#Status').val() != 'in'){
+                    $(element).prop("checked", true);
+                }
             });
+
             $("#StatusCheckOverall").prop("checked", true);
 
         }else{
             $( "[id='StatusCheck']" ).each(function( index, element  ) {
                 $(element).prop("checked", false);
             });
+            $( "[idx='StatusDate']" ).each(function( index, element  ) {
+                $( element ).val('');
+            });
             $("#StatusCheckOverall").prop("checked", false);
 
         }
+
+        if ($(this).val() == "received")
+        {
+			$("#StatusOverall").prop("selectedIndex", 1);
+			$("#StatusOverall").trigger("change");
+            $("#ReceivedDate").trigger("change");
+            $("#StatusDateOverall").trigger("change");
+
+
+        }else if ($(this).val() == "process")
+        {
+			$("#StatusOverall").prop("selectedIndex", 5); //indent
+			$("#StatusOverall").trigger("change");
+            $("#StatusDateOverall").trigger("change");
+        }
+        else if ($(this).val() == "cancelled")
+        {
+            $("#StatusOverall").prop("selectedIndex", 0); //indent
+            $("#StatusOverall").trigger("change");
+            $("#StatusDateOverall").val('');
+            $("#StatusDateOverall").trigger("change");
+        }
+
+
 
 		
 	})
@@ -1253,10 +1282,10 @@ function OnSelectItem(obj, itemIndex, poitemId)
 		<? if ($this->edit_po && !$this->Locked) { ?>
 			<? if ($this->allowEdit) { ?>
 			<input type=hidden name='save_po_id' id='save_po_id' value='<?=$this->edit_po?>'>
-			<input type=submit name='save_po' id='save_po' value='<?=$this->translate->_('Save Details')?>'>	
-			<input type=submit name='lock_po' id='lock_po' value='<?=$this->translate->_('Lock and Finalized')?>'>	
+			<input style="font-size: 15px;" type=submit name='save_po' id='save_po' value='<?=$this->translate->_('Save Details')?>'>
 			<input type=button value='Cancel Changes' id='CancelChanges' name='CancelChanges'>
-			<? } ?>
+            <input type=submit name='lock_po' id='lock_po' value='<?=$this->translate->_('Lock and Finalized')?>'>
+            <? } ?>
 			<input type=button value='<?=$this->translate->_('Back to PO Listing')?>' id='Back' name='Back' onclick='document.location="/inventory/po/listing"'>
 <BR>
 		<? } else if ($this->edit_po && $this->Locked) { ?>
@@ -1272,10 +1301,9 @@ function OnSelectItem(obj, itemIndex, poitemId)
 			<div class='small'><?=$this->translate->_("Please fill in the required details before proceeding with purchase items.")?>.</div>
 			<? } ?>
 		<? } ?>
-		
-		
-		
-		
+
+        <div class='small'><?=$this->translate->_("Please remember to click <B>Save Details</B> button for any changes on the PO and item details below.")?>.<BR>
+        </div>
 		</TD></TR>
 	</table>
 
@@ -1291,7 +1319,8 @@ function OnSelectItem(obj, itemIndex, poitemId)
   <TR>
     <TD width=25px nowrap class='report_header' style='text-align:center'>#</TD>
 	<TD width=350px  nowrap class='report_header' style='text-align:center'><?=$this->translate->_("Items")?></TD>
-	<TD width=170px nowrap class='report_header' style='text-align:left;'><?=$this->translate->_("Status")?> / <?=$this->translate->_("Update")?><img title='<?=$this->translate->_("If the <B>Update</B> is checked, all the individual item units will be updated with the status and the date selected.<BR>Leave the <B>Update</B> un-checked to save the status at the PO level only.")?>' id='qUpdateStatus' src='/images/icons/IconInfo.gif'><BR>
+	<TD width=170px nowrap class='report_header' style='text-align:left;'><?=$this->translate->_("Status")?> / <?=$this->translate->_("Update")?>
+        <img title='<?=$this->translate->_("If the <B>Update</B> checkbox is checked, all the individual item units will be updated with the status and the date entered.<BR>Leave the <B>Update</B> un-checked to update item details without changing the individual item status.")?>' id='qUpdateStatus' src='/images/icons/IconInfo.gif'><BR>
         <SELECT style='font-size:11px; width:100px; float:left;' ID='StatusOverall'><option value="">-</option><?=$this->optionStatusItemOverall?></select> <input style="width: 18px; height: 18px;" ID='StatusCheckOverall' class="clsCheckOverall" type=checkbox>
 	<input type=text name='StatusDateOverall' id='StatusDateOverall' size=8 value=''><BR>
 	</TD>
@@ -1329,8 +1358,9 @@ function OnSelectItem(obj, itemIndex, poitemId)
   </TR>  
  
 </TABLE>
-<? if (!$this->Locked && $this->allowEdit) { ?> <input type=submit name='save_po' id='save_po2' value='<?=$this->translate->_('Save Details')?>'>  
-<input type=button value='Cancel Changes' id='CancelChanges2' name='CancelChanges2'><? } ?>
+<? if (!$this->Locked && $this->allowEdit) { ?>
+    <input style="font-size: 15px;" type=submit name='save_po' id='save_po2' value='<?=$this->translate->_('Save Details')?>'>
+    <input type=button value='Cancel Changes' id='CancelChanges2' name='CancelChanges2'><? } ?>
 <? if ($this->allowUpdateMarkup) { ?> 
 <input type=submit name='update_markup' id='update_markup' value='<?=$this->translate->_('Save Markup Details')?>'>  
 <? } ?>

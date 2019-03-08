@@ -606,7 +606,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 						$this->view->listItems .= <<<END
 			<TR><TD  nowrap class='report_odd' style='text-align:center'><div id="itemcounter"></div></TD>
 	<TD  nowrap class='report_odd' style='text-align:center'><input type=hidden Name="ItemID[$itemIndex]" ID="ItemID" value="$arrData[ItemID]"><div id='divSelect_$itemIndex'><SELECT  style='width:450px' $disabled  Name="ItemID[]" class="Item_$POItemsID"><option value=''>-</option>$optionItems<option value='add-new'><<< $strAddNew >>></option></SELECT></div></TD>
-	<TD  nowrap class='report_odd' style='text-align:center'><SELECT $disabled style='width:100px; font-size:11px' name='Status[$itemIndex]' id='Status'><option value=''>-</option>$optionStatusItem </SELECT>&nbsp;<input style="width: 18px; height: 18px;" type=checkbox  ID="StatusCheck" Name="StatusCheck[$itemIndex]" value='1'>
+	<TD  nowrap class='report_odd' style='text-align:center'><SELECT $disabled style='width:100px; font-size:11px' name='Status[$itemIndex]' id='Status'><option value=''>-</option>$optionStatusItem </SELECT>&nbsp;<input style="width: 18px; height: 18px;" type=checkbox class="clsStatusCheck" ID="StatusCheck" Name="StatusCheck[$itemIndex]" value='1'>
 	<BR><input $disabled type=text name='StatusDate[$itemIndex]' id='StatusDate_$itemIndex' idx='StatusDate' size=8 value="$StatusDate"><BR>
 	</TD>
 	
