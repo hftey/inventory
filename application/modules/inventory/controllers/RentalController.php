@@ -812,12 +812,13 @@ END;
             $this->view->optionBranchesTransit = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->TransitTo);
             $this->view->optionPersonInCharge = $libDb->getTableOptions("ACLUsers", "Name", "ID");
             $this->view->optionRentalStatus = $libDb->getSystemOptions("arrRentalStatus", NULL,
-                $arrRentalDetail['RentalStatus'] == 'available' ? array('out', 'service', 'writeoff') : (
-                    $arrRentalDetail['RentalStatus'] == 'out' ||  $arrRentalDetail['RentalStatus'] == 'extension' ? array('returned', 'extension') : (
-                            $arrRentalDetail['RentalStatus'] == 'returned' ? array('service') : (
-                                $arrRentalDetail['RentalStatus'] == 'writeoff' ? array('writeoff') : (
-                                    $arrRentalDetail['RentalStatus'] == 'service' || $arrRentalDetail['RentalStatus'] == 'service_update' ? array('available', 'service_update', 'writeoff') :
-                                    array())))));
+                $arrRentalDetail['RentalStatus'] == 'available' ? array('out', 'out_demo', 'service', 'writeoff') : (
+                    $arrRentalDetail['RentalStatus'] == 'out_demo' ? array('available') : (
+                        $arrRentalDetail['RentalStatus'] == 'out' ||  $arrRentalDetail['RentalStatus'] == 'extension' ? array('returned', 'extension') : (
+                                $arrRentalDetail['RentalStatus'] == 'returned' ? array('service') : (
+                                    $arrRentalDetail['RentalStatus'] == 'writeoff' ? array('writeoff') : (
+                                        $arrRentalDetail['RentalStatus'] == 'service' || $arrRentalDetail['RentalStatus'] == 'service_update' ? array('available', 'service_update', 'writeoff') :
+                                        array()))))));
             $this->view->optionStatusItem = $libDb->getSystemOptions("arrRentalStatus", $this->view->RentalStatus);
             $this->view->optionItems = $libInv->getItemOptions($this->view->ItemID);
 
