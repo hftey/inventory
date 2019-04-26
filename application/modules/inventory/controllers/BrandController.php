@@ -263,9 +263,9 @@ END;
 			if ($add_brand)
 			{
 			
-				$FullName = $Request->getParam('FullName') ? $Request->getParam('FullName') : new Zend_Db_Expr("NULL");
-				$ShortName = $Request->getParam('ShortName') ? $Request->getParam('ShortName') : new Zend_Db_Expr("NULL");
-				$CompanyName = $Request->getParam('CompanyName') ? $Request->getParam('CompanyName') : new Zend_Db_Expr("NULL");
+				$FullName = $Request->getParam('FullName') ? trim($Request->getParam('FullName')) : new Zend_Db_Expr("NULL");
+				$ShortName = $Request->getParam('ShortName') ? trim($Request->getParam('ShortName')) : new Zend_Db_Expr("NULL");
+				$CompanyName = $Request->getParam('CompanyName') ? trim($Request->getParam('CompanyName')) : new Zend_Db_Expr("NULL");
 				$errorFile = false;
 				if (!$_FILES['BrandLogo']['error'])
 				{
@@ -724,9 +724,9 @@ END;
 			{
 			
 				$BrandID = $Request->getParam('BrandID') ? $Request->getParam('BrandID') : new Zend_Db_Expr("NULL");
-				$ItemName = $Request->getParam('ItemName') ? $Request->getParam('ItemName') : new Zend_Db_Expr("NULL");
-				$ModelNumber = $Request->getParam('ModelNumber') ? $Request->getParam('ModelNumber') : new Zend_Db_Expr("NULL");
-				$PartNumber = $Request->getParam('PartNumber') ? $Request->getParam('PartNumber') : new Zend_Db_Expr("NULL");
+				$ItemName = $Request->getParam('ItemName') ? trim($Request->getParam('ItemName')) : new Zend_Db_Expr("NULL");
+				$ModelNumber = $Request->getParam('ModelNumber') ? trim($Request->getParam('ModelNumber')) : new Zend_Db_Expr("NULL");
+				$PartNumber = $Request->getParam('PartNumber') ? trim($Request->getParam('PartNumber')) : new Zend_Db_Expr("NULL");
 				$RetailPrice = $Request->getParam('RetailPrice') ? $Request->getParam('RetailPrice') : new Zend_Db_Expr("NULL");
 				$MinStock = $Request->getParam('MinStock') ? $Request->getParam('MinStock') : new Zend_Db_Expr("NULL");
                 $MonthDepreciation = $Request->getParam('MonthDepreciation') ? $Request->getParam('MonthDepreciation') : new Zend_Db_Expr("NULL");
