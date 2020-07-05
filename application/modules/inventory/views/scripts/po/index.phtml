@@ -1097,7 +1097,107 @@ $('#AddItems').click(function () {
 				$(element).prop("checked", false);
 			});	
 		}
-	})	
+	})
+
+
+
+    $(document).on("click", "#idDeleteDoc", function(event){
+        var DocumentsID = $(this).attr("DocumentsID");
+        $objDel = $(this);
+        $.prompt("<?=$this->translate->_('Delete the document?')?>",{
+            buttons: { Ok: true, Cancel: false },
+            submit:function(e,v,m,f){
+                if(v){
+                    $.post("/inventory/po/doc-delete",{DocumentsID:DocumentsID},function(result){
+                        $objDel.parent().remove();
+                    });
+                }
+            }
+        });
+
+
+    });
+
+    $(document).on("click", "#idUploadDoc", function(event){
+        var POID = $(this).attr("POID");
+        var objUpload = $(this).parent().parent();
+        var DocType = $(this).attr("DocType");
+        $('#idDialog').dialog({title: "Documents", modal: true, minWidth: 500,maxHeight: 600,
+            position: {my: "top+50%", at: "top", of: window},
+            buttons: {
+                'Close': function() {
+                    $('#idDialog').dialog('close');
+                    objUpload.html("<img src='/images/icons/IconIndicator.gif'>");
+                    $.post("/inventory/po/doc-get-list",{POID:POID,DocType:DocType},function(result){
+                      // console.log(result);
+                        objUpload.html(result);
+                    });
+
+                    //	location.reload();
+                }
+            },
+            open: function( event, ui ) {
+                $(this).html("<img src='/images/icons/IconIndicator.gif'>");
+                $(this).load("/inventory/po/doc-upload-form",{POID:POID, DocType:DocType});
+            },
+            destroy: function( event, ui ) {
+            }
+        });
+    });
+
+
+
+    $(document).on("submit", ".clsFormDoc", function(event){
+        event.preventDefault();
+        var objEntry = $(this);
+        var formData = new FormData(this);
+
+
+        if ($(this).find(".clsName").val() == "")
+        {
+            $.prompt("Please enter the document name.", {buttons: { Ok: true}});
+            $(this).find(".clsName").addClass("md-input-danger");
+            return false;
+        }
+
+        if ($(this).find(".clsDocUpload").val() == "")
+        {
+            $.prompt("Please select a document to upload.", {buttons: { Ok: true}});
+            $(this).find(".clsDocUpload").addClass("md-input-danger");
+            return false;
+        }
+        objEntry.find("#UploadStatus").html("<img src='/images/icons/IconIndicator.gif'>");
+        var url=objEntry.attr("action");
+        $.ajax({
+            url: url,
+            type: objEntry.attr("method"),
+            dataType: "html",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data, status)
+            {
+                console.log(data);
+                if (data == "ERRORSIZE")
+                {
+                    $.prompt("Please upload file that is less than 5MB in size.", {buttons: { Ok: true}});
+                }else if (data == "ERROR_IMAGETYPE")
+                {
+                    $.prompt("Please upload files with jpg, png, pdf, doc, docx, xls or xlsx file types.", {buttons: { Ok: true}});
+                }else
+                {
+                    $("#idUploadedDoc").prepend(data);
+                }
+                objEntry.find("#UploadStatus").html("");
+                objEntry.find(".clsDocUpload").val("");
+                objEntry.find(".clsName").val("");
+
+            }
+
+        })
+
+    })
+
 	
 	
 	
@@ -1206,7 +1306,7 @@ function OnSelectItem(obj, itemIndex, poitemId)
 </style>
 <script type="text/javascript" src="/js/jquery/ddslick/ddslick.js"></script>
 
-
+<div id='idDialog'></div>
 <form enctype="multipart/form-data"  action='/inventory/po' method=POST>
 	<table border=0 cellspacing=2 cellpadding=2>
 	
@@ -1260,6 +1360,19 @@ function OnSelectItem(obj, itemIndex, poitemId)
 	<!--	<TR><TD class='form_label' ><?=$this->translate->_('Freight Forwarder')?></TD><TD class='form_field'></TD></TR> -->
 		<TR><TD class='form_label' ><?=$this->translate->_('Delivery Cost')?></TD><TD class='form_field'><?=$this->currencyType?>: <input <?=$this->disabled?> style='text-align:right' type='text' name='PODeliveryCost' id='PODeliveryCost'  size="10" value='<?=$this->PODeliveryCost?>' title="<?=$this->translate->_("Purchase order's misc charges")?>.">
 		<input placeholder="<?=$this->translate->_('Freight Forwarder Code')?>" <?=$this->disabled?> type='text' name='FreightForwarder' id='FreightForwarder'  size="30" value='<?=$this->FreightForwarder?>' title="<?=$this->translate->_("Freight forwarding code")?>.">
+                <? if ($this->edit_po) { ?>
+                    <div>
+                        <div style='display: inline-block;  vertical-align: top'>
+                            <img id="idUploadDoc" doctype="Delivery" POID="<?=$this->edit_po?>" style="cursor: pointer" src="/images/icons/IconUpload2.png"> &raquo;
+                        </div>
+                        <div style='display: inline-block'>
+                            <?=$this->listUploads?>
+                        </div>
+
+                    </div>
+                <? }else{ ?>
+                    <BR>*Freight/Delivery documents can be uploaded once PO is created.
+                <? } ?>
 		
 		</TD></TR>
 		<TR><TD class='form_label' ><?=$this->translate->_('Total Tax')?></TD><TD class='form_field'><?=$this->currencyType?>: <input <?=$this->disabled?> readonly style='text-align:right' type='text' name='POTaxCost' id='POTaxCost'  size="10" value='<?=$this->POTaxCost?>' title="<?=$this->translate->_("Total tax applied to all the items")?>.">

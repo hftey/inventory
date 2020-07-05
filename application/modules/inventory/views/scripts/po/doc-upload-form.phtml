@@ -1,0 +1,47 @@
+
+
+<form class='clsFormDoc' enctype="multipart/form-data" action='/inventory/po/doc-upload' method=POST >
+	<table border=0 cellspacing=2 cellpadding=2 width=100%>
+		<TR><TD width=100%><h3><?=$this->DocTitle?><h3></TD></TR>
+		<TR><TD >
+			<div id='idUploadedDoc' style='width: 100%; height: 150px; overflow-y: scroll; overflow-x: hidden; display: block; clear: both;'>
+				<?=$this->listUploads?>
+			
+			</div>
+		</TD></TR>
+	</table>
+	<HR>
+	<BR>
+	<div class="md-input-wrapper md-input-wrapper-success md-input-filled"><label><?=$this->DocName?></label>
+		<input style='margin-bottom: 5px;'  type=text name='Name'  class='clsName md-input' size=40 value='<? // $this->DefaultName?>' autocomplete="off">
+	</div>
+	<input style='margin-bottom: 5px;' type=file name='DocUpload' class='clsDocUpload'>
+	
+	<input type=hidden name='POID' id='POID' value='<?=$this->POID?>'>
+	<input type=hidden name='DocType' id='DocType' value='<?=$this->DocType?>'>
+	<input type=submit value="Upload"><div id='UploadStatus'></div>
+	
+</form>
+
+<script>
+//initInput();
+var DocDescription = [
+    "Packing List",
+    "Supplier Invoice",
+    "FedEx Doc"
+];
+
+$( ".clsName" ).autocomplete({
+    source: DocDescription,
+    minLength: 0
+}).focus(function(){
+    // The following works only once.
+    // $(this).trigger('keydown.autocomplete');
+    // As suggested by digitalPBK, works multiple times
+    // $(this).data("autocomplete").search($(this).val());
+    // As noted by Jonny in his answer, with newer versions use uiAutocomplete
+    $(this).data("uiAutocomplete").search($(this).val());
+});;
+</script>
+
+
