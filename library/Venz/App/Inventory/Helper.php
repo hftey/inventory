@@ -165,7 +165,7 @@ class Venz_App_Inventory_Helper extends Zend_Db_Table_Abstract
 		$count = $showPage -1;
 		$sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
 		$sqlAll = "SELECT PurchaseOrders.ID, OrderNumber, PurchaseDate, ProductCostRM, PODeliveryCost, ".
-		/*5*/"POTaxCost, TotalCost, POFilePath, TotalItem, Branches.Name as BranchName, Locked ".
+		/*5*/"POTaxCost, TotalCost, POFilePath, TotalItem, Branches.Name as BranchName, Locked, AOFilePath ".
 		"FROM PurchaseOrders LEFT JOIN (SELECT SUM(Quantity) as TotalItem, OrderID FROM POItems GROUP BY OrderID) as ItemCount ON (ItemCount.OrderID=PurchaseOrders.ID) ".
 		"LEFT JOIN Branches ON (Branches.ID=PurchaseOrders.BranchID) WHERE 1=1 ";		
 		if ($searchString)

@@ -1,4 +1,5 @@
 <?php
+
 // Define path to application directory
 //define these global path constants here
 define( 'ROOT_PATH' , dirname( dirname( __FILE__ ) ) ) ;

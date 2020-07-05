@@ -413,3 +413,17 @@ ALTER TABLE `ItemSeriesStatus` ADD MonthRemaining int(3) DEFAULT NULL;
 /* Jan 31, 2019 */
 
 ALTER TABLE `ACLUsers` ADD ManageRental int(1) DEFAULT 0;
+
+/* June 25, 2020 */
+
+CREATE TABLE IF NOT EXISTS `Documents` (
+  `ID` int(11) NOT NULL auto_increment,
+  `POID` int(12) DEFAULT NULL,
+  `DocType` varchar(32) DEFAULT NULL,
+  `Name` varchar(128) NOT NULL,
+  `Description` varchar(5000) NOT NULL,
+  `DateSubmitted` DateTime DEFAULT NULL,
+  `SubmittedBy` int(12) DEFAULT NULL,
+  `FilePath` varchar(255) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1;

@@ -2,6 +2,8 @@
 
 class Inventory_PoController extends Venz_Zend_Controller_Action
 {
+    private $_PathJobDoc = '/var/www/html/raymond/exact/inventory/Doc';
+//	private $_PathJobDoc = 'C:/Websites/inventory/Doc';
 
     public function init()
     {
@@ -583,8 +585,8 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 					$disabled = "";
 					if ($this->view->Locked)
 						$disabled = "disabled";
-						
-					if (!$this->view->allowEdit)	
+
+					if (!$this->view->allowEdit)
 						$disabled = "disabled";
 					
 					if (!$this->view->Locked && $this->view->allowEdit)
@@ -633,6 +635,18 @@ END;
 
 					$itemIndex++;
 				}
+
+
+
+                $arrUploadsAll = $db->fetchAll("SELECT Documents.*, ACLUsers.Name as Username FROM Documents, ACLUsers WHERE DocType='Delivery' AND Documents.SubmittedBy=ACLUsers.ID AND POID=".$edit_po." ORDER BY DateSubmitted DESC");
+                $this->view->listUploads = "<div style='display: inline-block;'>";
+                foreach ($arrUploadsAll as $arrUploads)
+                {
+                    $this->view->listUploads .= "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$arrUploads['ID']."'>".
+                        "<img title='".$arrUploads['Name']." by ".$arrUploads['Username']."' src='/images/icons/IconViewSmall.png'></a> ".$arrUploads['Name']."<BR>";
+
+                }
+                $this->view->listUploads .= "</div>";
 			}					
 
 			$lock_po = $Request->getParam('lock_po');	
@@ -678,7 +692,9 @@ END;
 				$db->update("PurchaseOrders", $arrUpdate, "ID=".$ID);
 				$this->appMessage->setNotice(1, "The Order Acknowledgement flie has been removed.");
 				$this->_redirect('/inventory/po/index/edit_po/'.$ID);   				
-			}			
+			}
+
+
 			
 			$this->view->optionVendors = $libDb->getTableOptions("Vendors", "Name", "ID", $this->view->VendorID); 
 			$this->view->optionBranches = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->BranchID); 
@@ -982,29 +998,65 @@ END;
 				$dispFormat = new Venz_App_Display_Format();
 				return $dispFormat->format_currency($amount);
 			}
-			
-			function format_locked($colnum, $rowdata)
+
+            function format_doc($colnum, $rowdata)
+            {
+                $strDoc = "";
+                if ($rowdata[7]){
+                    $strDoc = "<a target='_new' href='".$rowdata[7]."'><img border=0 src='/images/icons/IconView.png'></a>&nbsp;&nbsp;&nbsp;";
+                }
+                return $strDoc;
+            }
+
+            function format_doc_oa($colnum, $rowdata)
+            {
+                $strDoc = "";
+                if ($rowdata[11]){
+                    $strDoc = "<a target='_new' href='".$rowdata[11]."'><img border=0 src='/images/icons/IconView.png'></a>&nbsp;&nbsp;&nbsp;";
+                }
+                return $strDoc;
+            }
+
+            function format_delivery_doc($colnum, $rowdata)
+            {
+                $db = Zend_Db_Table::getDefaultAdapter();
+
+                $db->setFetchMode(Zend_Db::FETCH_ASSOC);
+                $arrUploadsAll = $db->fetchAll("SELECT Documents.*, ACLUsers.Name as Username FROM Documents, ACLUsers WHERE DocType='Delivery' AND Documents.SubmittedBy=ACLUsers.ID AND POID=".$rowdata[0]." ORDER BY DateSubmitted DESC");
+                $listUploads = "<div style='display: inline-block;'>";
+                foreach ($arrUploadsAll as $arrUploads)
+                {
+                    $listUploads .= "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$arrUploads['ID']."'>".
+                        "<img title='".$arrUploads['Name']." by ".$arrUploads['Username']."' src='/images/icons/IconViewSmall.png'></a> ".$arrUploads['Name']."<BR>";
+
+                }
+                $listUploads .= "</div>";
+
+                return $listUploads;
+            }
+
+            function format_locked($colnum, $rowdata)
 			{
 				return $rowdata[10] ? "<img src='/images/icons/IconApproved.gif'>" : "<img src='/images/icons/IconExclamation.gif'>" ;
 			}		
 
 			
 			
-			$arrHeader = array ('#', $this->translate->_('Order Number'),$this->translate->_('Branch'), $this->translate->_('Purchase Date'), $this->translate->_('# Items'), $this->translate->_('Product Cost'), $this->translate->_('Delivery Cost'), $this->translate->_('Tax Cost'), $this->translate->_('Final Costing'), $this->translate->_('Locked'), $this->translate->_('View'));
+			$arrHeader = array ('#', $this->translate->_('Order<BR>Number'),$this->translate->_('PO<BR>Doc'), $this->translate->_('OA<BR>Doc'), $this->translate->_('Branch'), $this->translate->_('Purchase Date'), $this->translate->_('# Items'), $this->translate->_('Delivery<BR>Doc'), $this->translate->_('Product Cost'), $this->translate->_('Delivery Cost'), $this->translate->_('Tax Cost'), $this->translate->_('Final Costing'), $this->translate->_('Locked'), $this->translate->_('View'));
 			$displayTable = new Venz_App_Display_Table(
 				array (
 			         'data' => $dataItem,
 					 'hiddenparamtop'=> $strSearch,
 					 'headings' => $arrHeader,
-					 'format' 		=> array('{format_counter}','%1%','{format_branch}', '{format_date}','{format_itemcount}', '{format_productcost}', '{format_delivery}', '{format_tax}','{format_total}', '{format_locked}', '{format_action}'),					 
-					 'sort_column' 	=> array('','OrderNumber','BranchName','PurchaseDate','TotalItem','ProductCost','PODeliveryCost','POTaxCost', 'TotalCost', 'Locked', ''),
+					 'format' 		=> array('{format_counter}','%1%','{format_doc}','{format_doc_oa}','{format_branch}', '{format_date}','{format_itemcount}', '{format_delivery_doc}', '{format_productcost}', '{format_delivery}', '{format_tax}','{format_total}', '{format_locked}', '{format_action}'),
+					 'sort_column' 	=> array('','OrderNumber','','','BranchName','PurchaseDate','TotalItem','','ProductCost','PODeliveryCost','POTaxCost', 'TotalCost', 'Locked', ''),
 					 'alllen' 		=> $arrItem[0],
 					 'title'		=> $this->translate->_('Purchase Orders'),					 
-					 'aligndata' 	=> 'CCCCCRRRRCC',
-					 'colparam'      => array('','','','','','','','','','','nowrap'),
+					 'aligndata' 	=> 'CCCCCCCLRRRRCC',
+					 'colparam'      => array('','','','','','','','','','','','nowrap'),
 					 'pagelen' 		=> $recordsPerPage,
 					 'numcols' 		=> sizeof($arrHeader),
-			         'tablewidth' => "870px",
+			         'tablewidth' => "1300px",
 			         'sortby' => $sortby,
 			         'ascdesc' => $ascdesc,
 					 'hiddenparam' => $strHiddenSearch,
@@ -1261,7 +1313,294 @@ END;
 		exit();
 			
 		
-	}	
-	
+	}
+
+    public function docGetListAction()
+    {
+
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $POID = $Request->getParam('POID');
+        $DocType = $Request->getParam('DocType');
+        $this->view->POID = $POID;
+        $this->view->DocType = $DocType;
+
+
+        if ($POID){
+            $listUploads = "<div style='display: inline-block; vertical-align: top'><img id='idUploadDoc' DocType='".$DocType."' POID='".$POID."' style='cursor: pointer' src='/images/icons/IconUpload2.png'> &raquo;</div><div style='display: inline-block'>";
+            $arrUploadsAll = $db->fetchAll("SELECT Documents.*, ACLUsers.Name as Username FROM Documents, ACLUsers WHERE DocType='".$DocType."' AND Documents.SubmittedBy=ACLUsers.ID AND POID=".$POID." ORDER BY DateSubmitted DESC");
+        }
+
+        foreach ($arrUploadsAll as $arrUploads)
+        {
+
+            $listUploads .= "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$arrUploads['ID']."'>".
+                "<img title='".$arrUploads['Name']." by ".$arrUploads['Username']."' src='/images/icons/IconViewSmall.png'></a> ".$arrUploads['Name']."<BR>";
+
+        }
+        $listUploads .= "</div>";
+        echo $listUploads;
+        exit();
+
+    }
+
+
+    public function docUploadFormAction()
+    {
+
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $POID = $Request->getParam('POID');
+        $DocType = $Request->getParam('DocType');
+        $this->view->POID = $POID;
+        $this->view->DocType = $DocType;
+       // $arrPO = $db->fetchRow("SELECT * FROM PurchaseOrders where ID=".$POID);
+
+
+        if ($DocType=="Delivery"){
+         //   $this->view->DefaultName = $arrJob['EOGSTSBPO'];
+            $this->view->DocTitle = "Documents";
+            $this->view->DocName = "Delivery Descriptions";
+        }
+
+
+        if ($POID){
+            $arrUploadsAll = $db->fetchAll("SELECT Documents.*, ACLUsers.Name as Username FROM Documents, ACLUsers WHERE DocType='".$DocType."' AND Documents.SubmittedBy=ACLUsers.ID AND POID=".$POID." ORDER BY DateSubmitted DESC");
+
+        }
+
+        $this->view->listUploads = "";
+        foreach ($arrUploadsAll as $arrUploads)
+        {
+            $display = "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$arrUploads['ID']."'><img style='height: 65px;' src='/images/icons/IconViewL.png'></a>";
+            if (exif_imagetype($arrUploads['FilePath']))
+            {
+                $display = "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$arrUploads['ID']."'>".
+                    "<img style='height: 65px;  max-width: 80%' src='/inventory/po/doc-view-image/DocumentsID/".$arrUploads['ID']."'></a>";
+
+            }
+            $strDelete = "";
+            if ($arrUploads['SubmittedBy'] == $this->userInfo->ID)
+                $strDelete = "<img style='height: 25px; cursor: pointer' id='idDeleteDoc' DocumentsID=".$arrUploads['ID']." src='/images/icons/IconTrash.png'>";
+
+            $this->view->listUploads .= "<div style='padding: 5px; text-align: center; float: left; width: 33%'>".
+                $display.$strDelete.
+                "<BR><B style='font-size: 10px'>".$arrUploads['Name']."</B>".
+                "<BR><B style='font-size: 10px'>".$arrUploads['Username']."</B>".
+                "<BR><B style='font-size: 10px'>".$dispFormat->format_datetime_simple($arrUploads['DateSubmitted'])."</B>".
+                "</div>";
+
+        }
+
+
+    }
+
+
+    public function docUploadAction()
+    {
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $POID = $Request->getParam('POID');
+        if (!$POID)
+            exit();
+
+        $DocType = $Request->getParam('DocType');
+        $Name = $Request->getParam('Name');
+        $arrPO = $db->fetchRow("SELECT * FROM PurchaseOrders where ID=".$POID);
+        $errorFile = false;
+        if ($_FILES['DocUpload'])
+        {
+            if (!$_FILES['DocUpload']['error'])
+            {
+
+                if ($_FILES['DocUpload']['size'] > (5 * 1024 * 1024))
+                {
+                    echo "ERRORSIZE";
+                    exit();
+                }
+
+            }
+
+        }
+
+        if (!$errorFile){
+
+            $arrInsert = array("POID"=>$POID, "Name"=>$Name, "DocType"=>$DocType, "DateSubmitted"=>new Zend_Db_Expr("NOW()"), "SubmittedBy"=>$this->userInfo->ID);
+
+            $db->Insert("Documents", $arrInsert);
+            $docID = $db->lastInsertId();
+
+
+            $filename = $_FILES['DocUpload']['tmp_name'];
+
+            if (exif_imagetype($filename) == IMAGETYPE_JPEG || exif_imagetype($filename) == IMAGETYPE_PNG )
+            {
+                ////////////
+                define('THUMBNAIL_IMAGE_MAX_WIDTH', 1200);
+                define('THUMBNAIL_IMAGE_MAX_HEIGHT', 1200);
+                list($source_image_width, $source_image_height, $source_image_type) = getimagesize($filename);
+                if (exif_imagetype($filename) == IMAGETYPE_PNG)
+                    $source_gd_image = imagecreatefrompng($filename);
+                else
+                    $source_gd_image = imagecreatefromjpeg($filename);
+                $source_aspect_ratio = $source_image_width / $source_image_height;
+                $thumbnail_aspect_ratio = THUMBNAIL_IMAGE_MAX_WIDTH / THUMBNAIL_IMAGE_MAX_HEIGHT;
+                if ($source_image_width <= THUMBNAIL_IMAGE_MAX_WIDTH && $source_image_height <= THUMBNAIL_IMAGE_MAX_HEIGHT) {
+                    $thumbnail_image_width = $source_image_width;
+                    $thumbnail_image_height = $source_image_height;
+                } elseif ($thumbnail_aspect_ratio > $source_aspect_ratio) {
+                    $thumbnail_image_width = (int) (THUMBNAIL_IMAGE_MAX_HEIGHT * $source_aspect_ratio);
+                    $thumbnail_image_height = THUMBNAIL_IMAGE_MAX_HEIGHT;
+                } else {
+                    $thumbnail_image_width = THUMBNAIL_IMAGE_MAX_WIDTH;
+                    $thumbnail_image_height = (int) (THUMBNAIL_IMAGE_MAX_WIDTH / $source_aspect_ratio);
+                }
+                $thumbnail_gd_image = imagecreatetruecolor($thumbnail_image_width, $thumbnail_image_height);
+                imagecopyresampled($thumbnail_gd_image, $source_gd_image, 0, 0, 0, 0, $thumbnail_image_width, $thumbnail_image_height, $source_image_width, $source_image_height);
+                imagejpeg($thumbnail_gd_image, $filename, 60);
+                imagedestroy($source_gd_image);
+                imagedestroy($thumbnail_gd_image);
+                ///////////////
+            }else
+            {
+                $arrTemp = explode(".", $_FILES['DocUpload']['name']);
+                $ext = strtolower($arrTemp[sizeof($arrTemp) -1]);
+                if ($ext != "pdf" && $ext != "xls" && $ext != "doc" && $ext != "docx" && $ext != "xlsx")
+                {
+                    echo "ERROR_IMAGETYPE";
+                    exit();
+                }
+            }
+
+
+            $handle = fopen($filename, "r");
+            $contents = fread($handle, filesize($filename));
+            fclose($handle);
+            $arrTemp = explode(".", $_FILES['DocUpload']['name']);
+            $ext = $arrTemp[sizeof($arrTemp) -1];
+            $docPath = $this->_PathJobDoc.'/'.str_pad($POID, 6, '0', STR_PAD_LEFT);
+            mkdir($docPath);
+
+
+
+            $docPath .= '/'.$DocType;
+            mkdir($docPath);
+
+
+            $filepath = $docID.".".$ext;
+
+            $filepath_full = $docPath."/".$filepath;
+            $fp = fopen($filepath_full, 'w');
+            fwrite($fp, $contents);
+            fclose($fp);
+
+            $arrUpdate = array("FilePath"=>$filepath_full);
+            $db->Update("Documents", $arrUpdate, "ID=".$docID);
+
+            $display = "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$docID."'><img style='height: 65px;' src='/images/icons/IconViewL.png'></a>";
+            if (exif_imagetype($filepath_full))
+            {
+                $display = "<a target='_blank' href='/inventory/po/doc-view/DocumentsID/".$docID."'>".
+                    "<img style='height: 65px; max-width: 80%' src='/inventory/po/doc-view-image/DocumentsID/".$docID."'></a>";
+
+            }
+
+            $returnString = "<div style='padding: 5px; text-align: center; float: left; width: 33%'>".
+                $display.
+                "<img style='height: 25px; cursor: pointer' id='idDeleteDoc' JobDocumentsID=".$docID." src='/images/icons/IconTrash.png'>".
+                "<BR><B style='font-size: 10px'>".$Name."</B>".
+                "<BR><B style='font-size: 10px'>".$this->userInfo->Name."</B>".
+                "<BR><B style='font-size: 10px'>".$dispFormat->format_datetime_simple(Date("Y-m-d H:i:s", time()))."</B>".
+                "</div>";
+
+            echo $returnString;
+        }
+
+        exit();
+
+
+    }
+
+
+
+    public function docDeleteAction()
+    {
+        $layout = $this->_helper->layout();
+        $layout->setLayout("ajax");
+        $Request = $this->getRequest();
+        $dispFormat = new Venz_App_Display_Format();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $DocumentsID = $Request->getParam('DocumentsID');
+        $arrDoc = $db->fetchRow("SELECT * FROM Documents WHERE ID=".$DocumentsID);
+        unlink($arrDoc['FilePath']);
+        $db->delete("Documents", "ID=".$DocumentsID);
+        exit();
+
+    }
+
+
+    public function docViewImageAction()
+    {
+        $sysHelper = new Venz_App_System_Helper();
+        $Request = $this->getRequest();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $DocumentsID = $Request->getParam('DocumentsID');
+        $arrDoc = $db->fetchRow("SELECT * FROM Documents WHERE ID=".$DocumentsID);
+        $filename = $arrDoc['FilePath'];
+        if (exif_imagetype($filename)){
+            header('Content-Description: File Transfer');
+            header('Content-Type: content-type: image/jpeg');
+            //header('Content-Disposition: attachment; filename="'.$arrDoc['Name'].".".$ext.'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($arrDoc['FilePath']));
+        }
+        readfile($arrDoc['FilePath']);
+
+        exit();
+    }
+
+    public function docViewAction()
+    {
+        $sysHelper = new Venz_App_System_Helper();
+        $Request = $this->getRequest();
+        $db = Zend_Db_Table::getDefaultAdapter();
+        $DocumentsID = $Request->getParam('DocumentsID');
+        $arrDoc = $db->fetchRow("SELECT * FROM Documents WHERE ID=".$DocumentsID);
+        if (is_file($arrDoc['FilePath']))
+        {
+            $arrTemp = explode(".", $arrDoc['FilePath']);
+            $ext = $arrTemp[sizeof($arrTemp) -1];
+
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header('Content-Disposition: attachment; filename="'.$arrDoc['Name'].".".$ext.'"');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($arrDoc['FilePath']));
+            readfile($arrDoc['FilePath']);
+            exit();
+
+
+        }
+
+        exit();
+    }
+
+
+
+
+
 }
 
