@@ -1537,7 +1537,7 @@ END;
 			$this->view->optionBranchesTransit = $libDb->getTableOptions("Branches", "Name", "ID", $this->view->TransitTo); 
 			$this->view->optionPersonInCharge = $libDb->getTableOptions("ACLUsers", "Name", "ID"); 
 			$this->view->optionStatus = $libDb->getSystemOptions("arrStockStatus", NULL,
-                $arrItemDetail['Status'] == 'rental_asset' ? array('rental_asset') : array());
+                $arrItemDetail['Status'] == 'rental_asset' ? array('rental_asset', 'intransit') : array());
 			$this->view->optionStatusItem = $libDb->getSystemOptions("arrStockStatus", $this->view->Status); 
 			$this->view->optionItems = $libInv->getItemOptions($this->view->ItemID);
 					
