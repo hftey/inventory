@@ -16,9 +16,14 @@ class Venz_App_Inventory_Rental extends Zend_Db_Table_Abstract
         $AssetInitialValue = $AssetInitialValue ? $AssetInitialValue : new Zend_Db_Expr("NULL");
         $MonthDepreciation = $MonthDepreciation ? $MonthDepreciation : new Zend_Db_Expr("NULL");
         $MonthRemaining = $MonthRemaining ? $MonthRemaining : new Zend_Db_Expr("NULL");
-        $arrInsert = array("ItemSeriesID"=>$ItemSeriesID, "POItemsID"=>$POItemsID, "AssetInitialValue"=>$AssetInitialValue, "AssetCurrentValue"=>$AssetInitialValue,
-            "MonthDepreciation"=>$MonthDepreciation,"MonthRemaining"=>$MonthRemaining,"DateAsAsset"=>new Zend_Db_Expr("now()"));
-        $this->_db->insert("RentalAsset", $arrInsert);
+
+        $arrRecord = $this->_db->fetchRow("SELECT * FROM RentalAsset WHERE ItemSeriesID=".$ItemSeriesID);
+        if (!$arrRecord){
+            $arrInsert = array("ItemSeriesID"=>$ItemSeriesID, "POItemsID"=>$POItemsID, "AssetInitialValue"=>$AssetInitialValue, "AssetCurrentValue"=>$AssetInitialValue,
+                "MonthDepreciation"=>$MonthDepreciation,"MonthRemaining"=>$MonthRemaining,"DateAsAsset"=>new Zend_Db_Expr("now()"));
+            $this->_db->insert("RentalAsset", $arrInsert);
+
+        }
 
     }
 
