@@ -1944,7 +1944,7 @@ END;
 				$db = Zend_Db_Table::getDefaultAdapter(); 
 				if ($rowdata[11])
 				{
-					$arrNotes = $db->fetchRow("SELECT Notes FROM ItemSeriesStatus WHERE ItemSeriesID=".$rowdata[11]." AND ItemSeriesStatus.Notes IS NOT NULL ORDER BY StatusDate Desc");
+					$arrNotes = $db->fetchRow("SELECT Notes FROM ItemSeriesStatus WHERE ItemSeriesID=".$rowdata[11]." AND ItemSeriesStatus.Notes IS NOT NULL ORDER BY StatusDate Desc, EntryDateTime Desc");
 					return $arrNotes[0];
 				}else
 					return "";
