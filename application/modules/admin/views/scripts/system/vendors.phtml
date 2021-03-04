@@ -6,17 +6,48 @@ function validateEmail(email) {
     return re.test(email);
 } 
 
-$(document).ready(function() { 
+$(document).ready(function() {
 
-$('#Name').poshytip({ bgImageFrameSize:9, className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
-$('#Address').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
-$('#Phone').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
-$('#Email').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+    var autocomp_opt={
+        source: function (request, response) {
+            $.get("/default/index/ajax-get-payment-terms", {
+                query: request.term
+            }, function (data) {
+                console.log(data);
+                var responseData = $.parseJSON(data);
+                response(responseData);
+            });
+        },
+        minLength: 0,
+        select: function (event, ui) {
+            // selecting = true;
+            // var value = ui.item.value;
+            // var objClient = $(this);
+            // $.get("/default/index/ajax-get-customer-details", {CustomerName: value}, function (data) {
+            //     console.log(data);
+            //     var customerData = $.parseJSON(data);
+            //     objClient.parent().find("#CustomerID").val(customerData.ID);
+            //     selecting = false;
+            // });
 
-$('#search_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
-$('#clear').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
-$('#add_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
-$('#save_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+
+        }
+    }
+
+    $("#PaymentTerms").autocomplete(autocomp_opt).focus(function() {
+        $(this).autocomplete("search", $(this).val());
+    });
+
+
+    $('#Name').poshytip({ bgImageFrameSize:9, className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+    $('#Address').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+    $('#Phone').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+    $('#Email').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', showOn: 'focus', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,showTimeout: 100});
+
+    $('#search_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+    $('#clear').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+    $('#add_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
+    $('#save_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignTo: 'target', showOn: 'hover', offsetY: 10, offsetX: 1, alignX: 'inner-left',  showTimeout: 100, allowTipHover:false});
 
 	$('#add_vendors').click(function () {
 		var error = false;
@@ -52,6 +83,35 @@ $('#save_vendors').poshytip({ bgImageFrameSize:9,className: 'tip-yellow', alignT
 				error = true;
 			}
 		}
+        if ($('#OrderProcessingEmail').val() != ""){
+            if (!validateEmail($('#OrderProcessingEmail').val())) {
+                $('#OrderProcessingEmail').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter a valid email address')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+                $('#OrderProcessingEmail').poshytip('show');
+                error = true;
+            }
+        }
+        if ($('#TechnicalSupportEmail').val() != ""){
+            if (!validateEmail($('#TechnicalSupportEmail').val())) {
+                $('#TechnicalSupportEmail').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter a valid email address')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+                $('#TechnicalSupportEmail').poshytip('show');
+                error = true;
+            }
+        }
+        if ($('#FinanceEmail').val() != ""){
+            if (!validateEmail($('#FinanceEmail').val())) {
+                $('#FinanceEmail').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter a valid email address')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+                $('#FinanceEmail').poshytip('show');
+                error = true;
+            }
+        }
+        if ($('#AreaManagerEmail').val() != ""){
+            if (!validateEmail($('#AreaManagerEmail').val())) {
+                $('#AreaManagerEmail').poshytip({ bgImageFrameSize:8, content: '<img src="/images/icons/IconAlert.png"><?=$this->translate->_('Please enter a valid email address')?>.', showOn:'none', className: 'tip-yellow', alignTo: 'target', alignX: 'right',alignY: 'center',offsetX: 5,timeOnScreen: 3000});
+                $('#AreaManagerEmail').poshytip('show');
+                error = true;
+            }
+        }
+
 		if (error)
 			return false; 			
 		
@@ -83,21 +143,90 @@ function OnDeleteVendors(vendors_id){
 
 <form action='/admin/system/vendors' method=POST>
 	<table border=0 cellspacing=2 cellpadding=2>
-		<TR><TD class='form_label' width=150px><?=$this->translate->_('Company Name')?><font class='required'>*</font></TD><TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>' title="<?=$this->translate->_("Vendor's full name")?>."></TD></TR>
-		<TR><TD class='form_label'><?=$this->translate->_('Address')?></TD><TD class='form_field'><textarea name='Address' id='Address' cols=35 rows=5 title="<?=$this->translate->_("Vendor's address")?>."><?=$this->Address?></textarea></TD></TR>
-		<TR><TD class='form_label'><?=$this->translate->_('Phone')?></TD><TD class='form_field'><input type='text' name='Phone' id='Phone' width=35 value='<?=$this->Phone?>' title="<?=$this->translate->_("Vendor's main phone number")?>."></TD></TR>
-		<TR><TD class='form_label'><?=$this->translate->_('Email')?></TD><TD class='form_field'><input type='text' name='Email' id='Email' width=35 value='<?=$this->Email?>'  title="<?=$this->translate->_("Vendor's main email address")?>."></TD></TR>
+		<TR>
+            <TD class='form_label' width=180px><?=$this->translate->_('Company Name')?><font class='required'>*</font></TD>
+            <TD class='form_field'><input type='text' name='Name' id='Name' width=35 value='<?=$this->Name?>' title="<?=$this->translate->_("Vendor's full name")?>."></TD>
+            <td>&nbsp</td>
+            <TD class='form_label' width=230px><?=$this->translate->_('Sales Contact')?></TD>
+            <TD class='form_field'><input type='text' name='SalesContact' id='SalesContact' width=35 value='<?=$this->SalesContact?>' title="<?=$this->translate->_("Vendor's sales contact person")?>."></TD>
+        </TR>
+		<TR>
+            <TD rowspan="4" class='form_label'><?=$this->translate->_('Address')?></TD>
+            <TD rowspan="4" class='form_field'><textarea name='Address' id='Address' cols=35 rows=4 title="<?=$this->translate->_("Vendor's address")?>."><?=$this->Address?></textarea></TD>
+            <td>&nbsp</td>
+            <TD class='form_label'><?=$this->translate->_('Sales Contact Email')?></TD>
+            <TD class='form_field'><input  style="width: 280px" type='text' name='Email' id='Email' width=35 value='<?=$this->Email?>'  title="<?=$this->translate->_("Vendor's sales contact email address")?>."></TD>
+
+        </TR>
+        <TR>
+            <td>&nbsp</td>
+            <TD class='form_label'><?=$this->translate->_('Order Processing Contact')?></TD>
+            <TD class='form_field'><input type='text' name='OrderProcessingName' id='OrderProcessingName' width=35 value='<?=$this->OrderProcessingName?>' title="<?=$this->translate->_("Vendor's order processing contact person")?>."></TD>
+        </TR>
+		<TR>
+            <td>&nbsp</td>
+            <TD class='form_label'><?=$this->translate->_('Order Processing Contact Email')?></TD>
+            <TD class='form_field'><input style="width: 280px" type='text' name='OrderProcessingEmail' id='OrderProcessingEmail' width=45 value='<?=$this->OrderProcessingEmail?>' title="<?=$this->translate->_("Vendor's order processing email")?>."></TD>
+        </TR>
+        <TR>
+            <td>&nbsp</td>
+            <TD class='form_label'><?=$this->translate->_('Technical Support Contact')?></TD>
+            <TD class='form_field'><input type='text' name='TechnicalSupportName' id='TechnicalSupportName' width=35 value='<?=$this->TechnicalSupportName?>' title="<?=$this->translate->_("Vendor's technical support person")?>."></TD>
+        </TR>
+        <TR>
+            <TD class='form_label'><?=$this->translate->_('Phone')?></TD>
+            <TD class='form_field'><input type='text' name='Phone' id='Phone' width=35 value='<?=$this->Phone?>' title="<?=$this->translate->_("Vendor's main phone number")?>."></TD>
+            <td>&nbsp</td>
+            <TD class='form_label' width=180px><?=$this->translate->_('Technical Support Contact Email')?></TD>
+            <TD class='form_field'><input style="width: 280px" type='text' name='TechnicalSupportEmail' id='TechnicalSupportEmail' width=45 value='<?=$this->TechnicalSupportEmail?>' title="<?=$this->translate->_("Vendor's technical support email")?>."></TD>
+        </TR>
+        <TR>
+            <TD class='form_label' width=180px><?=$this->translate->_('Payment Terms')?></TD>
+            <TD class='form_field'><input type='text' name='PaymentTerms' id='PaymentTerms' width=35 value='<?=$this->PaymentTerms?>' title="<?=$this->translate->_("Vendor's payment terms")?>."></TD>
+            <td>&nbsp</td>
+            <TD class='form_label' width=180px><?=$this->translate->_('Finance Contact')?></TD>
+            <TD class='form_field'><input type='text' name='FinanceName' id='FinanceName' width=35 value='<?=$this->FinanceName?>' title="<?=$this->translate->_("Vendor's finance contact person")?>."></TD>
+        </TR>
+        <TR>
+            <TD class='form_label' width=180px><?=$this->translate->_('Exact Sales Person')?></TD>
+            <TD class='form_field'>
+                <SELECT name="ExactSalesPersonID">
+                    <option value=""></option>
+                    <?=$this->optionsUsers?>
+                </SELECT>
+            </TD>
+            <td>&nbsp</td>
+            <TD class='form_label' width=180px><?=$this->translate->_('Finance Contact Email')?></TD>
+            <TD class='form_field'><input style="width: 280px" type='text' name='FinanceEmail' id='FinanceEmail' width=45 value='<?=$this->FinanceEmail?>' title="<?=$this->translate->_("Vendor's finance contact email address")?>."></TD>
+        </TR>
+        <TR>
+            <td colspan="3">&nbsp</td>
+            <TD class='form_label' width=180px><?=$this->translate->_('Area Manager Contact')?></TD>
+            <TD class='form_field'><input type='text' name='AreaManagerName' id='AreaManagerName' width=35 value='<?=$this->AreaManagerName?>' title="<?=$this->translate->_("Vendor's area manager contact person")?>."></TD>
+        </TR>
+        <TR>
+            <td colspan="3">&nbsp</td>
+            <TD class='form_label' width=180px><?=$this->translate->_('Area Manager Contact Email')?></TD>
+            <TD class='form_field'><input style="width: 280px" type='text' name='AreaManagerEmail' id='AreaManagerEmail' width=45 value='<?=$this->AreaManagerEmail?>' title="<?=$this->translate->_("Vendor's area manager email address")?>."></TD>
+        </TR>
+
+
+
 		<TR><TD colspan=3 height=10px></TD></TR>
 
 		<TR><TD colspan=3>
-<?if ($this->edit_vendors) { ?>
-		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Cancel')?>' onclick='document.location="/admin/system/vendors"'  title='<?=$this->translate->_("Cancel the edit")?>.'> | 
-		<input type=submit name='save_vendors' id='save_vendors' value='<?=$this->translate->_('Save')?>'  title='<?=$this->translate->_("Save the update for the selected vendor")?>.'>
-		<input type=hidden name='save_vendors_id' value='<?=$this->edit_vendors?>'>		
+        <?if ($this->edit_vendors) { ?>
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Cancel')?>' onclick='document.location="/admin/system/vendors"'  title='<?=$this->translate->_("Cancel the edit")?>.'>
+		    <?if ($this->userInfo->ACLRole == "AdminSystem" || $this->userInfo->ACLRole == "Admin" ) { ?>
+                | <input type=submit name='save_vendors' id='save_vendors' value='<?=$this->translate->_('Save')?>'  title='<?=$this->translate->_("Save the update for the selected vendor")?>.'>
+		    <input type=hidden name='save_vendors_id' value='<?=$this->edit_vendors?>'>
+            <? } ?>
 		<? } else {?>
 		<input type=submit name='search_vendors' id='search_vendors' value='<?=$this->translate->_('Search')?>' title='<?=$this->translate->_("Click to search for the vendor")?>.'>		
-		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/system/vendors"'  title='<?=$this->translate->_("Clear all the inputs above")?>.'> | 
-		<input type=submit name='add_vendors' id='add_vendors' value='<?=$this->translate->_('Create New Vendors')?>'  title='<?=$this->translate->_("Please make sure all the required fields are entered before click to create new vendor")?>.'>		
+		<input type=button name='clear' id='clear' value='<?=$this->translate->_('Clear')?>' onclick='document.location="/admin/system/vendors"'  title='<?=$this->translate->_("Clear all the inputs above")?>.'>
+            <?if ($this->userInfo->ACLRole == "AdminSystem" || $this->userInfo->ACLRole == "Admin" ) { ?>
+                | <input type=submit name='add_vendors' id='add_vendors' value='<?=$this->translate->_('Create New Vendors')?>'  title='<?=$this->translate->_("Please make sure all the required fields are entered before click to create new vendor")?>.'>
+                <? } ?>
 		<? } ?>
 		
 		

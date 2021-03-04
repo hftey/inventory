@@ -514,16 +514,17 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
 			$db = Zend_Db_Table::getDefaultAdapter(); 
 			$sysHelper = new Venz_App_System_Helper();
 			$libDb = new Venz_App_Db_Table();
-			
+
 			/////////////////////////// DEALING WITH PAGINGS AND SORTING ///////////////////////////
 			if (!$this->userInfo){
 				$this->appMessage->setMsg(0, "Please login first before accessing this page.");
 				$this->_redirect('/auth');
-			}			
-			
-			
-			
-			$sortby = $Request->getParam('sortby');			
+			}
+
+            $this->view->optionsUsers = $libDb->getTableOptions('ACLUsers', "Name", "ID", NULL, "Name");
+
+
+            $sortby = $Request->getParam('sortby');
 			if (strlen($sortby) == 0) $sortby = 'Vendors.ID';
 				
 			$ascdesc = $Request->getParam('ascdesc');			
@@ -538,7 +539,7 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
 			$pagerPrev = $Request->getParam('Pager_prev_page');			
 			if (strlen($pagerPrev) > 0) $showPage--; 	
 			
-			$recordsPerPage = 10 ;
+			$recordsPerPage = 30 ;
 			////////////////////////////////////////////////////////////////////////////////////////
 			
 	
@@ -553,41 +554,115 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
 				$Name = $Request->getParam('Name');	
 				$Address = $Request->getParam('Address');	
 				$Phone = $Request->getParam('Phone');	
-				$Email = $Request->getParam('Email');	
-				
+				$Email = $Request->getParam('Email');
 
-				$sqlSearch .= $Name ? " and Vendors.Name LIKE '%".$Name."%'" : "";
+                $PaymentTerms = $Request->getParam('PaymentTerms');
+                $SalesContact = $Request->getParam('SalesContact');
+                $OrderProcessingName = $Request->getParam('OrderProcessingName');
+                $OrderProcessingEmail = $Request->getParam('OrderProcessingEmail');
+                $TechnicalSupportName = $Request->getParam('TechnicalSupportName');
+                $TechnicalSupportEmail = $Request->getParam('TechnicalSupportEmail');
+                $FinanceName = $Request->getParam('FinanceName');
+                $FinanceEmail = $Request->getParam('FinanceEmail');
+                $AreaManagerName = $Request->getParam('AreaManagerName');
+                $AreaManagerEmail = $Request->getParam('AreaManagerEmail');
+                $ExactSalesPersonID = $Request->getParam('ExactSalesPersonID');
+
+
+                $sqlSearch .= $Name ? " and Vendors.Name LIKE '%".$Name."%'" : "";
 				$sqlSearch .= $Phone ? " and Vendors.Phone LIKE '%".$Phone."%'" : "";
 				$sqlSearch .= $Address ? " and Vendors.Address LIKE '%".$Address."%'" : "";
 				$sqlSearch .= $Email ? " and Vendors.Email LIKE '%".$Email."%'" : "";
-				
+
+                $sqlSearch .= $PaymentTerms ? " and Vendors.PaymentTerms LIKE '%".$PaymentTerms."%'" : "";
+                $sqlSearch .= $SalesContact ? " and Vendors.SalesContact LIKE '%".$SalesContact."%'" : "";
+                $sqlSearch .= $OrderProcessingName ? " and Vendors.OrderProcessingName LIKE '%".$OrderProcessingName."%'" : "";
+                $sqlSearch .= $OrderProcessingEmail ? " and Vendors.OrderProcessingEmail LIKE '%".$OrderProcessingEmail."%'" : "";
+                $sqlSearch .= $TechnicalSupportName ? " and Vendors.TechnicalSupportName LIKE '%".$TechnicalSupportName."%'" : "";
+                $sqlSearch .= $TechnicalSupportEmail ? " and Vendors.TechnicalSupportEmail LIKE '%".$TechnicalSupportEmail."%'" : "";
+                $sqlSearch .= $FinanceName ? " and Vendors.FinanceName LIKE '%".$FinanceName."%'" : "";
+                $sqlSearch .= $FinanceEmail ? " and Vendors.FinanceEmail LIKE '%".$FinanceEmail."%'" : "";
+                $sqlSearch .= $AreaManagerName ? " and Vendors.AreaManagerName LIKE '%".$AreaManagerName."%'" : "";
+                $sqlSearch .= $AreaManagerEmail ? " and Vendors.AreaManagerEmail LIKE '%".$AreaManagerEmail."%'" : "";
+                $sqlSearch .= $ExactSalesPersonID ? " and Vendors.ExactSalesPersonID LIKE '%".$ExactSalesPersonID."%'" : "";
+
+
 				//print $sqlSearch; exit();
 				$this->view->Name = $Name ? $Name : "";				
 				$this->view->Phone = $Phone ? $Phone : "";				
 				$this->view->Address = $Address ? $Address : "";				
-				$this->view->Email = $Email ? $Email : "";			
+				$this->view->Email = $Email ? $Email : "";
 
-				$strHiddenSearch = "<input type=hidden name='search_vendors' value='true'>";
+                $this->view->PaymentTerms = $PaymentTerms ? $PaymentTerms : "";
+                $this->view->SalesContact = $SalesContact ? $SalesContact : "";
+                $this->view->OrderProcessingName = $OrderProcessingName ? $OrderProcessingName : "";
+                $this->view->OrderProcessingEmail = $OrderProcessingEmail ? $OrderProcessingEmail : "";
+                $this->view->TechnicalSupportName = $TechnicalSupportName ? $TechnicalSupportName : "";
+                $this->view->TechnicalSupportEmail = $TechnicalSupportEmail ? $TechnicalSupportEmail : "";
+                $this->view->FinanceName = $FinanceName ? $FinanceName : "";
+                $this->view->FinanceEmail = $FinanceEmail ? $FinanceEmail : "";
+                $this->view->AreaManagerName = $AreaManagerName ? $AreaManagerName : "";
+                $this->view->AreaManagerEmail = $AreaManagerEmail ? $AreaManagerEmail : "";
+                $this->view->ExactSalesPersonID = $ExactSalesPersonID ? $ExactSalesPersonID : "";
+
+                $strHiddenSearch = "<input type=hidden name='search_vendors' value='true'>";
 				$strHiddenSearch .= "<input type=hidden name='Name' value='".$Name."'>";
 				$strHiddenSearch .= "<input type=hidden name='Phone' value='".$Phone."'>";
 				$strHiddenSearch .= "<input type=hidden name='Email' value='".$Email."'>";
 				$strHiddenSearch .= "<input type=hidden name='Address' value='".$Address."'>";
 
+                $strHiddenSearch .= "<input type=hidden name='PaymentTerms' value='".$PaymentTerms."'>";
+                $strHiddenSearch .= "<input type=hidden name='SalesContact' value='".$SalesContact."'>";
+                $strHiddenSearch .= "<input type=hidden name='OrderProcessingName' value='".$OrderProcessingName."'>";
+                $strHiddenSearch .= "<input type=hidden name='OrderProcessingEmail' value='".$OrderProcessingEmail."'>";
+                $strHiddenSearch .= "<input type=hidden name='TechnicalSupportName' value='".$TechnicalSupportName."'>";
+                $strHiddenSearch .= "<input type=hidden name='TechnicalSupportEmail' value='".$TechnicalSupportEmail."'>";
+                $strHiddenSearch .= "<input type=hidden name='FinanceName' value='".$FinanceName."'>";
+                $strHiddenSearch .= "<input type=hidden name='FinanceEmail' value='".$FinanceEmail."'>";
+                $strHiddenSearch .= "<input type=hidden name='AreaManagerName' value='".$AreaManagerName."'>";
+                $strHiddenSearch .= "<input type=hidden name='AreaManagerEmail' value='".$AreaManagerEmail."'>";
+                $strHiddenSearch .= "<input type=hidden name='ExactSalesPersonID' value='".$ExactSalesPersonID."'>";
+
+
 			}
 			
-			$add_vendors = $Request->getParam('add_vendors');	
-			if ($add_vendors)
+			$add_vendors = $Request->getParam('add_vendors');
+            $save_vendors = $Request->getParam('save_vendors');
+			if ($add_vendors || $save_vendors)
 			{
 				$Name = $Request->getParam('Name') ? $Request->getParam('Name') : new Zend_Db_Expr("NULL");
 				$Address = $Request->getParam('Address') ? $Request->getParam('Address') : new Zend_Db_Expr("NULL");
 				$Phone = $Request->getParam('Phone') ? $Request->getParam('Phone') : new Zend_Db_Expr("NULL");
 				$Email = $Request->getParam('Email') ? $Request->getParam('Email') : new Zend_Db_Expr("NULL");
-				
-				$arrInsert = array("Name"=>$Name,"Address"=>$Address, "Phone"=>$Phone,"Email"=>$Email);
 
-				$db->insert("Vendors", $arrInsert);
-				$this->appMessage->setNotice(1, $this->translate->_('New vendor')." \"<B>".$Name."</B>\" ".$this->translate->_('has been created').".");
-						
+                $PaymentTerms = $Request->getParam('PaymentTerms') ? $Request->getParam('PaymentTerms') : new Zend_Db_Expr("NULL");
+                $SalesContact = $Request->getParam('SalesContact') ? $Request->getParam('SalesContact') : new Zend_Db_Expr("NULL");
+                $OrderProcessingName = $Request->getParam('OrderProcessingName') ? $Request->getParam('OrderProcessingName') : new Zend_Db_Expr("NULL");
+                $OrderProcessingEmail = $Request->getParam('OrderProcessingEmail') ? $Request->getParam('OrderProcessingEmail') : new Zend_Db_Expr("NULL");
+                $TechnicalSupportName = $Request->getParam('TechnicalSupportName') ? $Request->getParam('TechnicalSupportName') : new Zend_Db_Expr("NULL");
+                $TechnicalSupportEmail = $Request->getParam('TechnicalSupportEmail') ? $Request->getParam('TechnicalSupportEmail') : new Zend_Db_Expr("NULL");
+                $FinanceName = $Request->getParam('FinanceName') ? $Request->getParam('FinanceName') : new Zend_Db_Expr("NULL");
+                $FinanceEmail = $Request->getParam('FinanceEmail') ? $Request->getParam('FinanceEmail') : new Zend_Db_Expr("NULL");
+                $AreaManagerName = $Request->getParam('AreaManagerName') ? $Request->getParam('AreaManagerName') : new Zend_Db_Expr("NULL");
+                $AreaManagerEmail = $Request->getParam('AreaManagerEmail') ? $Request->getParam('AreaManagerEmail') : new Zend_Db_Expr("NULL");
+                $ExactSalesPersonID = $Request->getParam('ExactSalesPersonID') ? $Request->getParam('ExactSalesPersonID') : new Zend_Db_Expr("NULL");
+
+                $arrData = array("Name"=>$Name,"Address"=>$Address, "Phone"=>$Phone,"Email"=>$Email,"PaymentTerms"=>$PaymentTerms,"SalesContact"=>$SalesContact
+                ,"OrderProcessingName"=>$OrderProcessingName,"OrderProcessingEmail"=>$OrderProcessingEmail
+                ,"TechnicalSupportName"=>$TechnicalSupportName,"TechnicalSupportEmail"=>$TechnicalSupportEmail,"FinanceName"=>$FinanceName,
+                    "FinanceEmail"=>$FinanceEmail,"AreaManagerName"=>$AreaManagerName,"AreaManagerEmail"=>$AreaManagerEmail,"ExactSalesPersonID"=>$ExactSalesPersonID);
+
+                if ($add_vendors){
+                    $db->insert("Vendors", $arrData);
+                    $this->appMessage->setNotice(1, $this->translate->_('New vendor')." \"<B>".$Name."</B>\" ".$this->translate->_('has been created').".");
+
+                }else{
+                    $ID = $Request->getParam('save_vendors_id') ? $Request->getParam('save_vendors_id') : new Zend_Db_Expr("NULL");
+                    $db->update("Vendors", $arrData, "ID=".$ID);
+                    $this->appMessage->setNotice(1, $this->translate->_('Record for')." <B>".$Name."</B> ".$this->translate->_('has been updated').".");
+
+                }
+
 				$this->_redirect('/admin/system/vendors/');   				
 			}
 			
@@ -600,26 +675,40 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
 				$this->view->Name = $arrVendorDetail['Name'];			
 				$this->view->Address = $arrVendorDetail['Address'];		
 				$this->view->Email = $arrVendorDetail['Email'];		
-				$this->view->Phone = $arrVendorDetail['Phone'];		
-			}					
+				$this->view->Phone = $arrVendorDetail['Phone'];
+
+                $this->view->PaymentTerms = $arrVendorDetail['PaymentTerms'];
+                $this->view->SalesContact = $arrVendorDetail['SalesContact'];
+                $this->view->OrderProcessingName = $arrVendorDetail['OrderProcessingName'];
+                $this->view->OrderProcessingEmail = $arrVendorDetail['OrderProcessingEmail'];
+                $this->view->TechnicalSupportName = $arrVendorDetail['TechnicalSupportName'];
+                $this->view->TechnicalSupportEmail = $arrVendorDetail['TechnicalSupportEmail'];
+                $this->view->FinanceName = $arrVendorDetail['FinanceName'];
+                $this->view->FinanceEmail = $arrVendorDetail['FinanceEmail'];
+                $this->view->AreaManagerName = $arrVendorDetail['AreaManagerName'];
+                $this->view->AreaManagerEmail = $arrVendorDetail['AreaManagerEmail'];
+
+                $this->view->optionsUsers = $libDb->getTableOptions('ACLUsers', "Name", "ID", $arrVendorDetail['ExactSalesPersonID'], "Name");
+
+
+            }
 		
-			$save_vendors = $Request->getParam('save_vendors');	
-			if ($save_vendors)
-			{
-				$ID = $Request->getParam('save_vendors_id') ? $Request->getParam('save_vendors_id') : new Zend_Db_Expr("NULL");
-				
-				$Name = $Request->getParam('Name') ? $Request->getParam('Name') : new Zend_Db_Expr("NULL");
-				$Address = $Request->getParam('Address') ? $Request->getParam('Address') : new Zend_Db_Expr("NULL");
-				$Email = $Request->getParam('Email') ? $Request->getParam('Email') : new Zend_Db_Expr("NULL");
-				$Phone = $Request->getParam('Phone') ? $Request->getParam('Phone') : new Zend_Db_Expr("NULL");
-				
-				$arrUpdate = array("Name"=>$Name,"Address"=>$Address,"Email"=>$Email,"Phone"=>$Phone);
-				
-				$db->update("Vendors", $arrUpdate, "ID=".$ID);
-				$this->appMessage->setNotice(1, $this->translate->_('Record for')." <B>".$Name."</B> ".$this->translate->_('has been updated').".");
-				$this->_redirect('/admin/system/vendors/'); 
-								
-			}
+
+//			if ($save_vendors)
+//			{
+//				$ID = $Request->getParam('save_vendors_id') ? $Request->getParam('save_vendors_id') : new Zend_Db_Expr("NULL");
+//
+//				$Name = $Request->getParam('Name') ? $Request->getParam('Name') : new Zend_Db_Expr("NULL");
+//				$Address = $Request->getParam('Address') ? $Request->getParam('Address') : new Zend_Db_Expr("NULL");
+//				$Email = $Request->getParam('Email') ? $Request->getParam('Email') : new Zend_Db_Expr("NULL");
+//				$Phone = $Request->getParam('Phone') ? $Request->getParam('Phone') : new Zend_Db_Expr("NULL");
+//
+//				$arrUpdate = array("Name"=>$Name,"Address"=>$Address,"Email"=>$Email,"Phone"=>$Phone);
+//
+//				$db->update("Vendors", $arrUpdate, "ID=".$ID);
+//				$this->_redirect('/admin/system/vendors/');
+//
+//			}
 
 
 			$remove_vendors = $Request->getParam('remove_vendors');	
@@ -654,8 +743,13 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
 			function format_action($colnum, $rowdata)
 			{
 				$systemSetting = new Zend_Session_Namespace('systemSetting');
-				return "<a href='/admin/system/vendors/edit_vendors/".$rowdata[0]."'><img border=0 src='/images/icons/IconEdit.gif'></a> | <a href='javascript:void(0);' onclick='OnDeleteVendors(".$rowdata[0].")'><img border=0 src='/images/icons/IconDelete.gif'></a>";
-			}		
+
+                if ($systemSetting->userInfo->ACLRole == "AdminSystem" || $systemSetting->userInfo->ACLRole == "Admin"){
+                    return "<a href='/admin/system/vendors/edit_vendors/".$rowdata[0]."'><img border=0 src='/images/icons/IconEdit.gif'></a> | <a href='javascript:void(0);' onclick='OnDeleteVendors(".$rowdata[0].")'><img border=0 src='/images/icons/IconDelete.gif'></a>";
+                }else{
+                    return "<a href='/admin/system/vendors/edit_vendors/".$rowdata[0]."'><img border=0 src='/images/icons/IconView.png'></a>";
+                }
+			}
 
 			$sessionUsers = new Zend_Session_Namespace('sessionUsers');
 			$sessionUsers->numCounter = $recordsPerPage * ($showPage-1);
@@ -675,20 +769,22 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
 			if ($this->view->searchUsers)
 				$strSearch = "<input type=hidden name=''>";
 			
-			$arrHeader = array ('', $this->translate->_('Name'), $this->translate->_('Address'),$this->translate->_('Phone'), $this->translate->_('Email'), $this->translate->_('Action'));
+			$arrHeader = array ('', $this->translate->_('Name'), $this->translate->_('Address'),$this->translate->_('Phone'),
+                $this->translate->_('Payment<BR>Terms'),$this->translate->_('Exact Sales<BR>Person'), $this->translate->_('Sales Contact<BR>Email'),
+                $this->translate->_('Order Processing<BR>Email'), $this->translate->_('Technical Support<BR>Email'), $this->translate->_('Finance<BR>Email'), $this->translate->_('Area Manager<BR>Email'),$this->translate->_('Action'));
 			$displayTable = new Venz_App_Display_Table(
 				array (
 					 'data' => $dataVendors,
 					 'hiddenparamtop'=> $strSearch,
 					 'headings' => $arrHeader,
-					 'format' 		=> array('{format_counter}','%1%', '%2%', '%3%', '%4%', '{format_action}'),					 
-					 'sort_column' 	=> array('','Name', 'Address', 'Phone', 'Email', ''),
-					 'alllen' 		=> $arrVendors[0],
+					 'format' 		=> array('{format_counter}','%1%', '%2%', '%3%','%6%', '%5%', '%7%<BR>%4%', '%8%<BR>%9%', '%10%<BR>%11%', '%12%<BR>%13%', '%14%<BR>%15%', '{format_action}'),
+					'colparam'      => array('','','width=230px','','width=75px','','','','','','nowrap'),
+                    'alllen' 		=> $arrVendors[0],
 					 'title'		=> $this->translate->_('Vendors'),					 
-					 'aligndata' 	=> 'CLLLLC',
+					 'aligndata' 	=> 'CLLLCLLLLLLC',
 					 'pagelen' 		=> $recordsPerPage,
 					 'numcols' 		=> sizeof($arrHeader),
-					 'tablewidth' => "800px",
+					 'tablewidth' => "100%",
 					 'sortby' => $sortby,
 					 'ascdesc' => $ascdesc,
 					 'hiddenparam' => $strHiddenSearch,
