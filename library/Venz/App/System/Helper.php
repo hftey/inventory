@@ -59,11 +59,11 @@ class Venz_App_System_Helper extends Zend_Db_Table_Abstract
 		$sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
 		$count = $showPage -1;
 		$sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
-		$sqlAll = "SELECT Vendors.ID, Vendors.Name, Vendors.Address, Vendors.Phone, Vendors.Email, aclUsers.Name,
+		$sqlAll = "SELECT Vendors.ID, Vendors.Name, Vendors.Address, Vendors.Phone, Vendors.Email, ACLUsers.Name,
 		 /*6*/ PaymentTerms, SalesContact,OrderProcessingName, OrderProcessingEmail,TechnicalSupportName, TechnicalSupportEmail, 
 		 /*12*/ FinanceName, FinanceEmail, AreaManagerName, AreaManagerEmail 
 		 
-		   FROM Vendors LEFT JOIN ACLUsers ON (aclUsers.ID=Vendors.ExactSalesPersonID)  WHERE 1=1 ";
+		   FROM Vendors LEFT JOIN ACLUsers ON (ACLUsers.ID=Vendors.ExactSalesPersonID)  WHERE 1=1 ";
 		if ($searchString)
 			$sqlAll .= $searchString;
 		$sql .= $sqlAll." order by $sql_orderby $sql_limit";
