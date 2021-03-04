@@ -427,3 +427,17 @@ CREATE TABLE IF NOT EXISTS `Documents` (
   `FilePath` varchar(255) NOT NULL,
   PRIMARY KEY  (`ID`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=latin1;
+
+
+-- 2021-03-03
+ALTER TABLE `Vendors` ADD `PaymentTerms` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `SalesContact` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `OrderProcessingName` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `OrderProcessingEmail` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `TechnicalSupportName` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `TechnicalSupportEmail` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `FinanceName` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `FinanceEmail` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `AreaManagerName` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `AreaManagerEmail` varchar(255) DEFAULT NULL;
+ALTER TABLE `Vendors` ADD `ExactSalesPersonID` int(12) DEFAULT NULL;

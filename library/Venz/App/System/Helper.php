@@ -59,7 +59,11 @@ class Venz_App_System_Helper extends Zend_Db_Table_Abstract
 		$sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
 		$count = $showPage -1;
 		$sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
-		$sqlAll = "SELECT ID, Name, Address, Phone, Email FROM Vendors WHERE 1=1 ";		
+		$sqlAll = "SELECT Vendors.ID, Vendors.Name, Vendors.Address, Vendors.Phone, Vendors.Email, aclUsers.Name,
+		 /*6*/ PaymentTerms, SalesContact,OrderProcessingName, OrderProcessingEmail,TechnicalSupportName, TechnicalSupportEmail, 
+		 /*12*/ FinanceName, FinanceEmail, AreaManagerName, AreaManagerEmail 
+		 
+		   FROM Vendors LEFT JOIN aclUsers ON (aclUsers.ID=Vendors.ExactSalesPersonID)  WHERE 1=1 ";
 		if ($searchString)
 			$sqlAll .= $searchString;
 		$sql .= $sqlAll." order by $sql_orderby $sql_limit";
@@ -70,7 +74,7 @@ class Venz_App_System_Helper extends Zend_Db_Table_Abstract
 
     public function getVendorsDetail($ID = NULL, $searchString = null)
     {
-		$sql = "SELECT ID, Name, Address, Phone, Email FROM Vendors WHERE 1=1";
+		$sql = "SELECT * FROM Vendors WHERE 1=1";
 		if ($ID)
 			$sql .= " and ID=".$ID;	
 
@@ -93,7 +97,7 @@ class Venz_App_System_Helper extends Zend_Db_Table_Abstract
 		$sql_orderby .= strlen($sql_orderby) == 0 ? "" : " " . $ascdesc ;
 		$count = $showPage -1;
 		$sql_limit = isset($recordsPerPage) ? " limit " . ($count * $recordsPerPage) . ", " . $recordsPerPage : "";
-		$sqlAll = "SELECT ID, Name,Location, Address, Phone, Email FROM Branches WHERE 1=1 ";		
+		$sqlAll = "SELECT ID, Name,Location, Address, Phone, Email FROM Branches WHERE 1=1 ";
 		if ($searchString)
 			$sqlAll .= $searchString;
 		$sql .= $sqlAll." order by $sql_orderby $sql_limit";
