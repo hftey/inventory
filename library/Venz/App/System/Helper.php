@@ -63,7 +63,7 @@ class Venz_App_System_Helper extends Zend_Db_Table_Abstract
 		 /*6*/ PaymentTerms, SalesContact,OrderProcessingName, OrderProcessingEmail,TechnicalSupportName, TechnicalSupportEmail, 
 		 /*12*/ FinanceName, FinanceEmail, AreaManagerName, AreaManagerEmail 
 		 
-		   FROM Vendors LEFT JOIN aclUsers ON (aclUsers.ID=Vendors.ExactSalesPersonID)  WHERE 1=1 ";
+		   FROM Vendors LEFT JOIN ACLUsers ON (aclUsers.ID=Vendors.ExactSalesPersonID)  WHERE 1=1 ";
 		if ($searchString)
 			$sqlAll .= $searchString;
 		$sql .= $sqlAll." order by $sql_orderby $sql_limit";
