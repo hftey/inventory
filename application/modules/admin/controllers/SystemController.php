@@ -584,7 +584,7 @@ class Admin_SystemController extends Venz_Zend_Controller_Action
                 $sqlSearch .= $FinanceEmail ? " and Vendors.FinanceEmail LIKE '%".$FinanceEmail."%'" : "";
                 $sqlSearch .= $AreaManagerName ? " and Vendors.AreaManagerName LIKE '%".$AreaManagerName."%'" : "";
                 $sqlSearch .= $AreaManagerEmail ? " and Vendors.AreaManagerEmail LIKE '%".$AreaManagerEmail."%'" : "";
-                $sqlSearch .= $ExactSalesPersonID ? " and Vendors.ExactSalesPersonID LIKE '%".$ExactSalesPersonID."%'" : "";
+                $sqlSearch .= $ExactSalesPersonID ? " and Vendors.ExactSalesPersonID = '".$ExactSalesPersonID."'" : "";
 
 
 				//print $sqlSearch; exit();
