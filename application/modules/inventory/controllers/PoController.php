@@ -590,7 +590,7 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 						$disabled = "disabled";
 					
 					if (!$this->view->Locked && $this->view->allowEdit)
-						$IconDelete = " | <img border=0 src='/images/icons/IconDelete.gif' id='RemoveRowConfirm' name='RemoveRowConfirm'>";
+						$IconDelete = " <img border=0 src='/images/icons/IconDelete.gif' id='RemoveRowConfirm' name='RemoveRowConfirm'>";
 					$systemSetting = new Zend_Session_Namespace('systemSetting');
 					$imgEdit = "IconEdit.gif";
 					if ($systemSetting->userInfo->ACLRole == "User")	
@@ -625,8 +625,8 @@ class Inventory_PoController extends Venz_Zend_Controller_Action
 	<TD  nowrap class='report_odd' style='text-align:center'><input readonly style='text-align:right' type='text' name='UnitLandedCost[]' id='UnitLandedCost'  size="6" value='$UnitLandedCost' ></TD>
 	<TD  nowrap class='report_odd' style='text-align:center'><input $disableMarkup style='text-align:right' type='text' name='UnitMarkup[]' id='UnitMarkup'  size="3" value='$MarkupPercent' ></TD>
 	<TD  nowrap class='report_odd' style='text-align:center'><input readonly style='text-align:right' type='text' name='UnitRetail[]' id='UnitRetail'  size="6" value='$UnitRetail' ></TD>
-	<TD  nowrap class='report_odd' style='text-align:center' width=40px><a name='UpdateSerialNumber' href='/inventory/po/itemseries/POID/$edit_po/POItemsID/$POItemsID/ItemID/$ItemID'>
-	<img border=0 src='/images/icons/$imgEdit' id='EditPOItem' name='EditPOItem'></a> $IconDelete
+	<TD  nowrap class='report_odd' style='text-align:center; width: 135px' nowrap><a name='UpdateSerialNumber' href='/inventory/po/itemseries/POID/$edit_po/POItemsID/$POItemsID/ItemID/$ItemID'>
+	<img style='height: 25px !important; width: 25px !important; max-width: 30px;' border=0 src='/images/icons/$imgEdit' id='EditPOItem' name='EditPOItem'></a> $IconDelete
 	<input type=hidden name="POItemsID[]" id="POItemsID" value="$POItemsID">
 	
 	</TD></TR>
